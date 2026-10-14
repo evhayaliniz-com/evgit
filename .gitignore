@@ -75,3 +75,9 @@ desktop.ini
 Homestead.json
 Homestead.yaml
 .phpactor.json
+
+# 10. Yerel Geliştirme (Local Dev / Docker)
+docker-compose.yml
+docker/
+package.json
+

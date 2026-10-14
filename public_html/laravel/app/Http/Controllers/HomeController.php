@@ -20,16 +20,14 @@ class HomeController extends Controller
 
         // En popüler 6 servisi cache'den al (15 dakika)
         $services = Cache::remember('home_popular_services', 900, function () {
-            $services = Service::active()->confirmed()
-                ->with(['category', 'subCategory', 'photos'])
+            return Service::active()->confirmed()
+                ->with(['category', 'subCategory', 'photos', 'savedServices'])
+                ->withCount(['views as view_count' => function ($query) {
+                    $query->where('type', 'service');
+                }])
+                ->orderByDesc('view_count')
+                ->take(6)
                 ->get();
-
-            $serviceModel = new Service();
-            foreach ($services as $service) {
-                $service->view_count = $serviceModel->serviceViewCount($service->id);
-            }
-
-            return $services->sortByDesc('view_count')->take(6);
         });
 
         // Son 6 fikri cache'den al (10 dakika)
@@ -44,7 +42,7 @@ class HomeController extends Controller
         // Son 6 firmayı cache'den al (15 dakika)
         $companies = Cache::remember('home_featured_companies', 900, function () {
             return Company::active()
-                ->with(['ratings', 'category', 'subCategory'])
+                ->with(['ratings', 'category', 'subCategory', 'provinceInfo', 'districtInfo'])
                 ->orderByDesc('id')
                 ->limit(6)
                 ->get();

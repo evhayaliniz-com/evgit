@@ -6815,68 +6815,106 @@ div#fikirhizmetmodal .modal-body {
     padding-right: 0;
 }
 
-.hamburger {
-    position: relative;
-    width: 1em;
-    top: 3px;
-    height: 1em;
-    font-size: inherit;
-    transition: all 0.3s ease;
+/* ==========================================================================
+   Modern Sidebar Toggle Button (Navbar)
+   ========================================================================== */
+.header-left-menu.sidebar-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
     cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-.hamburger.is-sm {
-    font-size: 1rem;
+.header-left-menu.sidebar-toggle-btn:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
-.hamburger.is-md {
-    font-size: 1.5rem;
+.header-left-menu.sidebar-toggle-btn:active {
+    transform: scale(0.94);
+    background: #e2e8f0;
 }
 
-.hamburger.is-lg {
-    font-size: 2rem;
+.sidebar-toggle-btn .hamburger {
+    width: 20px;
+    height: 14px;
+    position: relative;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 0;
 }
 
-.hamburger-line {
-    position: absolute;
+.sidebar-toggle-btn .hamburger .hamburger-line {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #334155;
+    border-radius: 4px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+    left: 0;
     right: 0;
-    width: 81%;
-    height: 3px;
-    border-radius: 0.125em;
-    background: #445568;
-    transition: inherit;
+    top: 0;
 }
 
-.hamburger-line:nth-child(1) {
-    top: 0.125em;
+/* Staggered middle line for modern designer look */
+.sidebar-toggle-btn .hamburger .hamburger-line:nth-child(2) {
+    width: 65%;
 }
 
-.hamburger.is-active .hamburger-line:nth-child(1),
-.w-nav-button.w--open .hamburger-line:nth-child(1) {
-    top: 50%;
-    transform: translateY(-50%) rotateZ(-136deg);
+.sidebar-toggle-btn:hover .hamburger .hamburger-line:nth-child(2) {
+    width: 100%;
 }
 
-.hamburger-line:nth-child(2) {
-    top: 0.438em;
+/* Active / Toggle state (transforms into clean X) */
+.sidebar-toggle-btn.is-active .hamburger .hamburger-line:nth-child(1),
+.sidebar-toggle-btn .hamburger.is-active .hamburger-line:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
 }
 
-.hamburger.is-active .hamburger-line:nth-child(2),
-.w-nav-button.w--open .hamburger-line:nth-child(2) {
-    right: 50%;
-    width: 0;
+.sidebar-toggle-btn.is-active .hamburger .hamburger-line:nth-child(2),
+.sidebar-toggle-btn .hamburger.is-active .hamburger-line:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
 }
 
-.hamburger-line:nth-child(3) {
-    top: 0.75em;
+.sidebar-toggle-btn.is-active .hamburger .hamburger-line:nth-child(3),
+.sidebar-toggle-btn .hamburger.is-active .hamburger-line:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
 }
 
-.hamburger.is-active .hamburger-line:nth-child(3),
-.w-nav-button.w--open .hamburger-line:nth-child(3) {
-    top: 50%;
-    width: 88%;
-    transform: translateY(-50%) rotateZ(136deg);
+body.dark .header-left-menu.sidebar-toggle-btn {
+    background: #242424;
+    border-color: #383838;
 }
+
+body.dark .header-left-menu.sidebar-toggle-btn:hover {
+    background: #2e2e2e;
+    border-color: #4a4a4a;
+}
+
+body.dark .sidebar-toggle-btn .hamburger .hamburger-line {
+    background: #cbd5e1 !important;
+}
+
 
 .header-left img {
     width: 90%;
@@ -7171,37 +7209,109 @@ li.hlma-head:hover .hlma-dropdown {
     background-image: linear-gradient(transparent, #00000075);
 }
 
-.category-slider-box {
-    background: #fff;
-    box-shadow: 0px 0px 0px 1px #00000021;
-    border-radius: 12px;
-    margin: 2px 0px !important;
-    padding: 1px !important;
-}
-
-.csb-img img {
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    width: 100%;
-    height: 110px;
-}
-
-.csb-text {}
-
-.csb-text {
-    text-align: center;
-    padding: 6px 12px;
-}
-
-.csb-text p {
-    margin-bottom: 0;
-    color: #575e66;
-    font-weight: 500;
-    font-size: 15px;
-}
-
+/* ==========================================================================
+   Modern Category Cards (Full Image + Gradient Overlay)
+   ========================================================================== */
 .category-slider {
     padding-top: 15px;
+    margin-bottom: 22px;
+}
+
+.category-slider .cs-title {
+    margin-bottom: 16px !important;
+}
+
+.category-slider .swiper-slide.category-slide {
+    width: 145px !important;
+    flex-shrink: 0;
+}
+
+.modern-category-card {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 105px;
+    border-radius: 14px;
+    overflow: hidden;
+    text-decoration: none !important;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.28s ease;
+    border: 1px solid #e2e8f0;
+}
+
+.modern-category-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
+    border-color: #3b82f6;
+}
+
+.modern-category-card .mcc-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modern-category-card:hover .mcc-image {
+    transform: scale(1.08);
+}
+
+.modern-category-card .mcc-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(15, 23, 42, 0.2) 70%, rgba(15, 23, 42, 0.62) 100%);
+    border-radius: 12px;
+    transition: background 0.3s ease;
+    pointer-events: none;
+}
+
+.modern-category-card:hover .mcc-overlay {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 35%, rgba(15, 23, 42, 0.28) 65%, rgba(15, 23, 42, 0.72) 100%);
+}
+
+.modern-category-card .mcc-content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px 10px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.modern-category-card .mcc-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: #ffffff !important;
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.25;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    letter-spacing: -0.2px;
+    margin: 0;
+    transition: transform 0.2s ease;
+}
+
+.modern-category-card:hover .mcc-title {
+    transform: translateY(-1px);
+}
+
+body.dark .modern-category-card {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .category-slider .cs-all-link {
+    color: #94a3b8;
+}
+
+body.dark .category-slider .cs-all-link:hover {
+    color: #60a5fa;
 }
 
 .category-slider .swiper-button-next {
@@ -7475,7 +7585,1396 @@ li.hlma-head:hover .hlma-dropdown {
     z-index: 1;
 }
 
-.popular-slider .swiper {}
+.popular-slider .swiper {
+    padding: 10px 4px 22px 4px !important;
+}
+
+.popular-slider .swiper-slide {
+    height: auto !important;
+    display: flex;
+}
+
+/* ==========================================================================
+   Modern Service Card (Popüler Hizmetler Yeni Tasarımı)
+   ========================================================================== */
+.modern-service-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.modern-service-card:hover {
+    transform: translateY(-6px);
+    border-color: #cbd5e1;
+    box-shadow: 0 16px 32px -8px rgba(37, 99, 235, 0.14), 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+/* Görsel Alanı & Hover Zoom */
+.modern-service-card .msc-image-area {
+    position: relative;
+    width: 100%;
+    height: 210px;
+    overflow: hidden;
+    background: #f1f5f9;
+}
+
+.modern-service-card .msc-image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none !important;
+}
+
+.modern-service-card .msc-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block;
+    transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.modern-service-card:hover .msc-image {
+    transform: scale(1.07);
+}
+
+.modern-service-card .msc-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.28) 0%, rgba(0, 0, 0, 0) 38%, rgba(15, 23, 42, 0.52) 100%);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* Yüzen Rozetler (Dark Frosted Glass / Cam Efekti) */
+.modern-service-card .msc-badge-category {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: calc(100% - 65px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+}
+
+.modern-service-card .msc-badge-category i {
+    color: #38bdf8;
+    font-size: 10px;
+}
+
+.modern-service-card .msc-badge-subcategory {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    z-index: 2;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #f8fafc;
+    font-size: 11px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    max-width: calc(100% - 24px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+}
+
+.modern-service-card .msc-badge-subcategory i {
+    color: #93c5fd;
+    font-size: 10px;
+}
+
+.modern-service-card .msc-bookmark-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 3;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    text-decoration: none !important;
+    padding: 0;
+}
+
+.modern-service-card .msc-bookmark-btn:hover {
+    transform: scale(1.12);
+    color: #ffffff;
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+.modern-service-card .msc-bookmark-btn.is-saved {
+    color: #ffffff;
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+/* İçerik Alanı */
+.modern-service-card .msc-body {
+    padding: 14px 16px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.modern-service-card .msc-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    line-height: 1.38;
+    margin: 0 0 10px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.modern-service-card .msc-title a {
+    color: #1e293b;
+    text-decoration: none !important;
+    transition: color 0.2s ease;
+}
+
+.modern-service-card:hover .msc-title a {
+    color: #2563eb;
+}
+
+/* Başlık Altı: Firma ve Konum Aynı Satırda */
+.modern-service-card .msc-firm-location-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 6px 10px;
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 10px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.modern-service-card .msc-firm-location-row:hover {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+.modern-service-card .msc-company-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    width: auto;
+    max-width: 55%;
+    text-decoration: none !important;
+    flex-shrink: 1;
+}
+
+.modern-service-card .msc-company-avatar img {
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 1px solid #e2e8f0;
+    display: block;
+    flex-shrink: 0;
+}
+
+.modern-service-card .msc-company-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #334155;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.modern-service-card .msc-verified-badge {
+    color: #2563eb;
+    font-size: 11.5px;
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+.modern-service-card .msc-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #64748b;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 45%;
+    flex-shrink: 0;
+}
+
+.modern-service-card .msc-location i {
+    color: #94a3b8;
+    font-size: 10.5px;
+    flex-shrink: 0;
+}
+
+/* Fiyat ve Alt Aksiyon Çubuğu */
+.modern-service-card .msc-footer {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px dashed #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.modern-service-card .msc-price-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.modern-service-card .msc-price-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+}
+
+.modern-service-card .msc-old-price-box {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.modern-service-card .msc-old-price-box .fiyat-gecmisi-trigger {
+    color: #64748b;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f1f5f9;
+}
+
+.modern-service-card .msc-old-price-box .fiyat-gecmisi-trigger:hover {
+    color: #2563eb;
+    background: #e0e7ff;
+    transform: rotate(-45deg);
+}
+
+/* Fiyat ve TL Renk Tutarlılığı (Birlikte #2563eb) */
+.modern-service-card .msc-current-price {
+    font-size: 18px;
+    font-weight: 800;
+    color: #2563eb !important;
+    line-height: 1;
+    letter-spacing: -0.3px;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.modern-service-card .msc-current-price small {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2563eb !important;
+}
+
+.modern-service-card .msc-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: all 0.22s ease;
+    flex-shrink: 0;
+}
+
+.modern-service-card:hover .msc-action-btn,
+.modern-service-card .msc-action-btn:hover {
+    background: #2563eb;
+    color: #ffffff !important;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+}
+
+.modern-service-card .msc-action-btn i {
+    font-size: 11px;
+    transition: transform 0.2s ease;
+}
+
+.modern-service-card:hover .msc-action-btn i {
+    transform: translateX(2px);
+}
+
+/* Slider Navigasyon Butonlarını Gizle */
+.popular-slider .swiper-button-next,
+.popular-slider .swiper-button-prev {
+    display: none !important;
+}
+
+/* Dark Mode Uyumu */
+body.dark .modern-service-card {
+    background: #1e2430;
+    border-color: #2e384d;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .modern-service-card:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.6);
+}
+
+body.dark .modern-service-card .msc-badge-category,
+body.dark .modern-service-card .msc-badge-subcategory {
+    background: rgba(15, 23, 42, 0.85);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+body.dark .modern-service-card .msc-bookmark-btn {
+    background: rgba(15, 23, 42, 0.85);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+body.dark .modern-service-card .msc-bookmark-btn:hover,
+body.dark .modern-service-card .msc-bookmark-btn.is-saved {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}
+
+body.dark .modern-service-card .msc-title a {
+    color: #f1f5f9;
+}
+
+body.dark .modern-service-card:hover .msc-title a {
+    color: #60a5fa;
+}
+
+body.dark .modern-service-card .msc-firm-location-row {
+    background: #171d27;
+    border-color: #283344;
+}
+
+body.dark .modern-service-card .msc-firm-location-row:hover {
+    background: #1f2735;
+}
+
+body.dark .modern-service-card .msc-company-name {
+    color: #cbd5e1;
+}
+
+body.dark .modern-service-card .msc-company-avatar img {
+    border-color: #3b4758;
+}
+
+body.dark .modern-service-card .msc-location {
+    color: #94a3b8;
+}
+
+body.dark .modern-service-card .msc-footer {
+    border-top-color: #283344;
+}
+
+body.dark .modern-service-card .msc-current-price,
+body.dark .modern-service-card .msc-current-price small {
+    color: #60a5fa !important;
+}
+
+body.dark .modern-service-card .msc-old-price-box .fiyat-gecmisi-trigger {
+    background: #283344;
+    color: #94a3b8;
+}
+
+body.dark .modern-service-card .msc-old-price-box .fiyat-gecmisi-trigger:hover {
+    background: #374151;
+    color: #60a5fa;
+}
+
+body.dark .modern-service-card .msc-action-btn {
+    background: rgba(59, 130, 246, 0.16);
+    color: #60a5fa;
+}
+
+body.dark .modern-service-card:hover .msc-action-btn,
+body.dark .modern-service-card .msc-action-btn:hover {
+    background: #2563eb;
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   Modern Idea Card (Fikir Köşesi Yeni Tasarımı)
+   ========================================================================== */
+.popular-slider.fikir-kosesi .swiper {
+    padding: 10px 4px 22px 4px !important;
+}
+
+.popular-slider.fikir-kosesi .swiper-slide {
+    height: auto !important;
+    display: flex;
+}
+
+.popular-slider.fikir-kosesi .swiper-button-next,
+.popular-slider.fikir-kosesi .swiper-button-prev {
+    display: none !important;
+}
+
+.modern-idea-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.modern-idea-card:hover {
+    transform: translateY(-6px);
+    border-color: #cbd5e1;
+    box-shadow: 0 16px 32px -8px rgba(37, 99, 235, 0.14), 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+/* Görsel Alanı & Hover Zoom */
+.modern-idea-card .mic-image-area {
+    position: relative;
+    width: 100%;
+    height: 210px;
+    overflow: hidden;
+    background: #f1f5f9;
+}
+
+.modern-idea-card .mic-image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none !important;
+}
+
+.modern-idea-card .mic-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block;
+    transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.modern-idea-card:hover .mic-image {
+    transform: scale(1.07);
+}
+
+.modern-idea-card .mic-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.28) 0%, rgba(0, 0, 0, 0) 38%, rgba(15, 23, 42, 0.52) 100%);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* Yüzen Rozetler (Dark Frosted Glass) */
+.modern-idea-card .mic-badge-category {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: calc(100% - 65px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+}
+
+.modern-idea-card .mic-badge-category i {
+    color: #fbbf24;
+    font-size: 11px;
+}
+
+.modern-idea-card .mic-like-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 3;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    text-decoration: none !important;
+    padding: 0;
+}
+
+.modern-idea-card .mic-like-btn:hover {
+    transform: scale(1.12);
+    color: #ffffff;
+    background: #ef4444;
+    border-color: #ef4444;
+}
+
+.modern-idea-card .mic-like-btn.is-liked {
+    color: #ffffff;
+    background: #ef4444;
+    border-color: #ef4444;
+}
+
+/* Gövde */
+.modern-idea-card .mic-body {
+    padding: 8px 14px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.modern-idea-card .mic-title {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 0 0 8px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.modern-idea-card .mic-title a {
+    color: #1e293b;
+    text-decoration: none !important;
+    transition: color 0.2s ease;
+}
+
+.modern-idea-card:hover .mic-title a {
+    color: #2563eb;
+}
+
+/* Açıklama Metni */
+.modern-idea-card .mic-desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #64748b;
+    margin: 0 0 12px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Yazar & Görüntülenme Satırı (Açıklamanın Altında) */
+.modern-idea-card .mic-author-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 7px 10px;
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 10px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.modern-idea-card .mic-author-row:hover {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+.modern-idea-card .mic-author-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    width: auto;
+    max-width: 65%;
+    text-decoration: none !important;
+    color: inherit;
+    flex-shrink: 1;
+}
+
+.modern-idea-card .mic-author-avatar img {
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 1.5px solid #e2e8f0;
+    display: block;
+    flex-shrink: 0;
+}
+
+.modern-idea-card .mic-author-name {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #334155;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.modern-idea-card .mic-verified-badge {
+    color: #2563eb;
+    font-size: 12px;
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+.modern-idea-card .mic-views {
+    display: inline-flex;
+    align-items: center;
+    gap: 4.5px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.modern-idea-card .mic-views i {
+    color: #94a3b8;
+    font-size: 11.5px;
+}
+
+/* Alt Çubuk (Footer) & Aksiyon Butonları */
+.modern-idea-card .mic-footer {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
+.modern-idea-card .mic-actions-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.modern-idea-card .mic-action-btn-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 38px;
+    padding: 0 11px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none !important;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    line-height: 1;
+}
+
+.modern-idea-card .mic-action-btn-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+    color: #0f172a;
+    border-color: #cbd5e1;
+    background: #ffffff;
+}
+
+.modern-idea-card .mic-btn-like i {
+    color: #ef4444;
+    font-size: 14px;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modern-idea-card .mic-btn-like:hover i {
+    transform: scale(1.2);
+}
+
+.modern-idea-card .mic-btn-like.is-liked {
+    background: #fef2f2;
+    border-color: #fca5a5;
+    color: #dc2626;
+}
+
+.modern-idea-card .mic-btn-comment:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1d4ed8;
+}
+
+.modern-idea-card .mic-btn-comment i {
+    color: #64748b;
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+.modern-idea-card .mic-btn-comment:hover i {
+    color: #2563eb;
+}
+
+.modern-idea-card .mic-btn-share {
+    width: 38px;
+    padding: 0;
+}
+
+.modern-idea-card .mic-btn-share i {
+    color: #64748b;
+    font-size: 13.5px;
+    transition: color 0.2s ease;
+}
+
+.modern-idea-card .mic-btn-share:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1d4ed8;
+}
+
+.modern-idea-card .mic-btn-share:hover i {
+    color: #2563eb;
+}
+
+.modern-idea-card .mic-btn-explore {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: #ffffff !important;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+    letter-spacing: -0.1px;
+}
+
+.modern-idea-card .mic-btn-explore:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.38);
+}
+
+.modern-idea-card .mic-btn-explore i {
+    font-size: 12px;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modern-idea-card .mic-btn-explore:hover i {
+    transform: translateX(3px);
+}
+
+/* Dark Mode Uyumu */
+body.dark .modern-idea-card {
+    background: #1e2430;
+    border-color: #2e384d;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .modern-idea-card:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.6);
+}
+
+body.dark .modern-idea-card .mic-badge-category {
+    background: rgba(15, 23, 42, 0.85);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+body.dark .modern-idea-card .mic-like-btn {
+    background: rgba(15, 23, 42, 0.85);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+body.dark .modern-idea-card .mic-like-btn:hover,
+body.dark .modern-idea-card .mic-like-btn.is-liked {
+    background: #ef4444;
+    color: #ffffff;
+    border-color: #ef4444;
+}
+
+body.dark .modern-idea-card .mic-title a {
+    color: #f1f5f9;
+}
+
+body.dark .modern-idea-card:hover .mic-title a {
+    color: #60a5fa;
+}
+
+body.dark .modern-idea-card .mic-desc {
+    color: #94a3b8;
+}
+
+body.dark .modern-idea-card .mic-author-row {
+    background: #171d27;
+    border-color: #283344;
+}
+
+body.dark .modern-idea-card .mic-author-row:hover {
+    background: #1f2735;
+}
+
+body.dark .modern-idea-card .mic-author-name {
+    color: #cbd5e1;
+}
+
+body.dark .modern-idea-card .mic-author-avatar img {
+    border-color: #3b4758;
+}
+
+body.dark .modern-idea-card .mic-views {
+    color: #94a3b8;
+}
+
+body.dark .modern-idea-card .mic-footer {
+    border-top-color: #283344;
+}
+
+body.dark .modern-idea-card .mic-action-btn-item {
+    background: #171d27;
+    border-color: #2e384d;
+    color: #cbd5e1;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .modern-idea-card .mic-action-btn-item:hover {
+    background: #222b3a;
+    border-color: #3b4758;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .modern-idea-card .mic-btn-like.is-liked {
+    background: rgba(239, 68, 68, 0.16);
+    border-color: rgba(239, 68, 68, 0.35);
+    color: #ef4444;
+}
+
+body.dark .modern-idea-card .mic-btn-comment:hover {
+    background: rgba(59, 130, 246, 0.16);
+    border-color: rgba(59, 130, 246, 0.35);
+    color: #60a5fa;
+}
+
+body.dark .modern-idea-card .mic-btn-comment:hover i {
+    color: #60a5fa;
+}
+
+body.dark .modern-idea-card .mic-btn-share:hover {
+    background: rgba(59, 130, 246, 0.16);
+    border-color: rgba(59, 130, 246, 0.35);
+    color: #60a5fa;
+}
+
+body.dark .modern-idea-card .mic-btn-share:hover i {
+    color: #60a5fa;
+}
+
+body.dark .modern-idea-card .mic-btn-explore {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .modern-idea-card .mic-btn-explore:hover {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+}
+
+/* ==========================================================================
+   Modern Company Card (Öne Çıkan Firmalar Yeni Tasarımı)
+   ========================================================================== */
+.popular-slider.one-cikan-firmalar-slider .swiper {
+    padding: 10px 4px 22px 4px !important;
+}
+
+.popular-slider.one-cikan-firmalar-slider .swiper-slide {
+    height: auto !important;
+    display: flex;
+}
+
+.modern-company-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.modern-company-card:hover {
+    transform: translateY(-6px);
+    border-color: #cbd5e1;
+    box-shadow: 0 16px 32px -8px rgba(37, 99, 235, 0.14), 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+/* Üst Banner */
+.modern-company-card .mcc-banner {
+    position: relative;
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #1e3a8a 100%);
+    overflow: hidden;
+}
+
+.modern-company-card .mcc-banner-bg {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+    background-size: 10px 10px;
+    opacity: 0.6;
+}
+
+.modern-company-card .mcc-banner-badges {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    z-index: 2;
+}
+
+.modern-company-card .mcc-badge-category {
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    max-width: 65%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.modern-company-card .mcc-badge-category i {
+    color: #60a5fa;
+    font-size: 10px;
+}
+
+.modern-company-card .mcc-badge-verified {
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(16, 185, 129, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    color: #34d399;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    margin-left: auto;
+}
+
+/* Avatar & Puan Satırı */
+.modern-company-card .mcc-header-row {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 14px;
+    margin-top: -32px;
+    z-index: 3;
+}
+
+.modern-company-card .mcc-avatar-link {
+    display: inline-block;
+    text-decoration: none !important;
+}
+
+.modern-company-card .mcc-avatar {
+    width: 64px !important;
+    height: 64px !important;
+    border-radius: 14px !important;
+    border: 3px solid #ffffff !important;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12) !important;
+    object-fit: cover !important;
+    background: #ffffff;
+    display: block;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modern-company-card:hover .mcc-avatar {
+    transform: scale(1.06);
+}
+
+.modern-company-card .mcc-rating-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4.5px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background: #fef3c7;
+    border: 1px solid #fde68a;
+    color: #b45309;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    line-height: 1;
+}
+
+.modern-company-card .mcc-rating-pill i {
+    color: #f59e0b;
+    font-size: 11.5px;
+}
+
+.modern-company-card .mcc-rating-pill.is-new {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.modern-company-card .mcc-rating-pill.is-new i {
+    color: #94a3b8;
+}
+
+.modern-company-card .mcc-rating-count {
+    color: #92400e;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* Gövde */
+.modern-company-card .mcc-body {
+    padding: 10px 14px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.modern-company-card .mcc-title {
+    font-size: 15.5px;
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 4px 0 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modern-company-card .mcc-title a {
+    color: #1e293b;
+    text-decoration: none !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.2s ease;
+}
+
+.modern-company-card:hover .mcc-title a {
+    color: #2563eb;
+}
+
+.modern-company-card .mcc-verified-check {
+    color: #2563eb;
+    font-size: 13.5px;
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+/* Alt Kategori & Konum */
+.modern-company-card .mcc-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    margin-bottom: 8px;
+}
+
+.modern-company-card .mcc-subcat-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    color: #2563eb;
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.modern-company-card .mcc-subcat-badge i {
+    font-size: 10px;
+}
+
+.modern-company-card .mcc-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 4.5px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modern-company-card .mcc-location i {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+/* Açıklama Metni */
+.modern-company-card .mcc-desc {
+    font-size: 12.5px;
+    line-height: 1.48;
+    color: #64748b;
+    margin: 0 0 12px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Alt Kısım: Aksiyon Butonları */
+.modern-company-card .mcc-footer {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modern-company-card .mcc-btn-call {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 38px;
+    padding: 0 13px;
+    border-radius: 10px;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #059669;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.modern-company-card .mcc-btn-call:hover {
+    background: #059669;
+    color: #ffffff !important;
+    border-color: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+}
+
+.modern-company-card .mcc-btn-call i {
+    font-size: 12.5px;
+}
+
+.modern-company-card .mcc-btn-explore {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: #ffffff !important;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    flex: 1;
+    letter-spacing: -0.1px;
+}
+
+.modern-company-card .mcc-btn-explore:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+}
+
+.modern-company-card .mcc-btn-explore i {
+    font-size: 12px;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modern-company-card .mcc-btn-explore:hover i {
+    transform: translateX(3px);
+}
+
+/* Dark Mode Uyumu */
+body.dark .modern-company-card {
+    background: #1e2430;
+    border-color: #2e384d;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .modern-company-card:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.6);
+}
+
+body.dark .modern-company-card .mcc-avatar {
+    border-color: #1e2430 !important;
+    background: #171d27;
+}
+
+body.dark .modern-company-card .mcc-rating-pill {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #fbbf24;
+}
+
+body.dark .modern-company-card .mcc-rating-pill.is-new {
+    background: #171d27;
+    border-color: #2b3548;
+    color: #94a3b8;
+}
+
+body.dark .modern-company-card .mcc-title a {
+    color: #f1f5f9;
+}
+
+body.dark .modern-company-card:hover .mcc-title a {
+    color: #60a5fa;
+}
+
+body.dark .modern-company-card .mcc-subcat-badge {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #60a5fa;
+}
+
+body.dark .modern-company-card .mcc-location {
+    color: #94a3b8;
+}
+
+body.dark .modern-company-card .mcc-desc {
+    color: #94a3b8;
+}
+
+body.dark .modern-company-card .mcc-footer {
+    border-top-color: #283344;
+}
+
+body.dark .modern-company-card .mcc-btn-call {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #34d399;
+}
+
+body.dark .modern-company-card .mcc-btn-call:hover {
+    background: #10b981;
+    color: #ffffff !important;
+    border-color: #10b981;
+}
+
+body.dark .modern-company-card .mcc-btn-explore {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+body.dark .modern-company-card .mcc-btn-explore:hover {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+}
 
 .fikir-img {
     display: flex;
@@ -8899,10 +10398,31 @@ div#menu-trigger-web {
         margin-top: -1px;
     }
 
-    .hamburger-line {
-        position: absolute;
-        width: 81%;
-        /* background: currentColor; */
+    .header-left-menu.sidebar-toggle-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+    }
+
+    .sidebar-toggle-btn .hamburger {
+        width: 18px;
+        height: 13px;
+        top: 0;
+    }
+
+    .sidebar-toggle-btn .hamburger .hamburger-line {
+        position: relative;
+        height: 2px;
+    }
+
+    .sidebar-toggle-btn.is-active .hamburger .hamburger-line:nth-child(1),
+    .sidebar-toggle-btn .hamburger.is-active .hamburger-line:nth-child(1) {
+        transform: translateY(5.5px) rotate(45deg);
+    }
+
+    .sidebar-toggle-btn.is-active .hamburger .hamburger-line:nth-child(3),
+    .sidebar-toggle-btn .hamburger.is-active .hamburger-line:nth-child(3) {
+        transform: translateY(-5.5px) rotate(-45deg);
     }
 
     .main-slider-texts {
@@ -8928,52 +10448,38 @@ div#menu-trigger-web {
         justify-content: flex-end;
     }
 
-    .popular-slider .swiper-slide:nth-child(n) {
-        width: 100%;
+    .popular-slider .swiper,
+    .popular-slider.fikir-kosesi .swiper,
+    .popular-slider.one-cikan-firmalar-slider .swiper {
+        padding: 0 !important;
     }
 
-    .popular-slider .swiper-slide:nth-child(3n) {
-        width: 100%;
-    }
-
-    .popular-slider .swiper-slide:nth-child(2n) {
-        width: 100%;
-    }
-
-    .popular-slider .swiper-slide:nth-child(4n) {
-        width: 100%;
-    }
-
-    .popular-slider.fikir-kosesi .swiper-slide:nth-child(n) {
-        width: 100%;
-    }
-
-    .popular-slider.fikir-kosesi .swiper-slide:nth-child(3n) {
-        width: 100%;
-    }
-
-    .popular-slider.fikir-kosesi .swiper-slide:nth-child(2n) {
-        width: 100%;
-    }
-
-    .popular-slider.fikir-kosesi .swiper-slide:nth-child(4n) {
-        width: 100%;
-    }
-
+    .popular-slider .swiper-slide:nth-child(n),
+    .popular-slider.fikir-kosesi .swiper-slide:nth-child(n),
     .popular-slider.one-cikan-firmalar-slider .swiper-slide:nth-child(n) {
-        width: 80%;
+        width: 82% !important;
+        max-width: 320px;
     }
 
+    .popular-slider .swiper-slide:nth-child(3n),
+    .popular-slider.fikir-kosesi .swiper-slide:nth-child(3n),
     .popular-slider.one-cikan-firmalar-slider .swiper-slide:nth-child(3n) {
-        width: 80%;
+        width: 82% !important;
+        max-width: 320px;
     }
 
+    .popular-slider .swiper-slide:nth-child(2n),
+    .popular-slider.fikir-kosesi .swiper-slide:nth-child(2n),
     .popular-slider.one-cikan-firmalar-slider .swiper-slide:nth-child(2n) {
-        width: 80%;
+        width: 82% !important;
+        max-width: 320px;
     }
 
+    .popular-slider .swiper-slide:nth-child(4n),
+    .popular-slider.fikir-kosesi .swiper-slide:nth-child(4n),
     .popular-slider.one-cikan-firmalar-slider .swiper-slide:nth-child(4n) {
-        width: 80%;
+        width: 82% !important;
+        max-width: 320px;
     }
 }
 
@@ -9160,20 +10666,32 @@ div#menu-trigger-web {
         display: none;
     }
 
-    .category-slider .swiper-slifde:nth-child(n) {
-        width: 140px;
+    .category-slider {
+        padding-top: 10px;
+        margin-bottom: 16px;
     }
 
-    .category-slider .swiper-slide:nth-child(3n) {
-        width: 140px;
+    .category-slider .swiper-slide.category-slide {
+        width: 120px !important;
     }
 
-    .category-slider .swiper-slide:nth-child(2n) {
-        width: 140px;
+    .modern-category-card {
+        height: 86px;
+        border-radius: 12px;
     }
 
-    .category-slider .swiper-slide:nth-child(4n) {
-        width: 140px;
+    .modern-category-card .mcc-image,
+    .modern-category-card .mcc-overlay {
+        border-radius: 10px;
+    }
+
+    .modern-category-card .mcc-content {
+        padding: 8px 8px;
+    }
+
+    .modern-category-card .mcc-title {
+        font-size: 12px;
+        line-height: 1.2;
     }
 
     .header-logo {

@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}/site/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}/site/css/fancybox.css">
     <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}/site/css/swiper.css">
-    <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}/site/css/main.css?v=99999999999999">
+    <link rel="stylesheet" type="text/css" href="{{ asset('site/css/main.css') }}?v={{ file_exists(public_path('site/css/main.css')) ? filemtime(public_path('site/css/main.css')) : '1.0.0' }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -1619,7 +1619,7 @@
 <script type="text/javascript" src="{{ asset('site/js/popper.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('site/js/bootstrap.js') }}"></script>
 <script type="text/javascript" src="{{ asset('site/js/swiper.js') }}"></script>
-<script type="text/javascript" src="{{ asset('site/js/main.js') }}"></script>
+<script type="text/javascript" src="{{ asset('site/js/main.js') }}?v={{ time() }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

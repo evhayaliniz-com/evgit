@@ -3,7 +3,9 @@
 if (!function_exists('get_provinces')) {
     function get_provinces()
     {
-        return \App\Models\Province::all();
+        return \Illuminate\Support\Facades\Cache::remember('all_provinces', 86400, function () {
+            return \App\Models\Province::all();
+        });
     }
 }
 
@@ -18,7 +20,9 @@ if (!function_exists('get_categories')) {
     function get_categories($isService = false)
     {
         if (!$isService) {
-            return \App\Models\Category::whereNull('parent_id')->where('status', 1)->get();
+            return \Illuminate\Support\Facades\Cache::remember('root_categories_active', 3600, function () {
+                return \App\Models\Category::whereNull('parent_id')->where('status', 1)->get();
+            });
         } else {
             // ✅ Sadece aktif ve süresi dolmamış paketlerin kategorilerini al
             $activeCategoryIds = auth()->user()->company->purchasedPackages

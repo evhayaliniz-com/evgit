@@ -22,11 +22,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'isCompanyCompleted' => \App\Http\Middleware\IsCompanyCompletedMiddleware::class,
             'cache.images' => \App\Http\Middleware\CacheImages::class,
         ]);
-
-        // Görseller için global middleware ekle
-        $middleware->web(append: [
-            \App\Http\Middleware\CacheImages::class,
-        ]);
     })
     ->withSchedule(function (Schedule $schedule) {
         // Her gün saat 01:00'de süresi dolan paketleri ve servislerini pasif yap

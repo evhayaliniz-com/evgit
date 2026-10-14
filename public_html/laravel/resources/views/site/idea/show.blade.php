@@ -113,124 +113,12 @@
                     <div class="popular-slider hizmetdetayslider">
                         <div class="swiper mySwiper3">
                             <div class="swiper-wrapper">
-                                <!-- en üst swiper-slide referans alınacak full hali o diğerlerini silebilirsin en üsttekini mutlaka almalısın -->
                                 @foreach($lastIdeas as $lastIdea)
                                 <div class="swiper-slide">
-                                    <div class="popular-services-cards">
-                                        <div class="psc-img">
-                                            @if($lastIdea->category_id)
-                                            <div class="psc-dekor">
-                                                {{$lastIdea?->category?->name}}
-                                            </div>
-                                            @endif
-
-                                            <a href="{{route('idea.show', $lastIdea->slug)}}">
-                                                <img src="{{asset(json_decode($lastIdea->path)[0] ?? null)}}"
-                                                    alt="{{$lastIdea->title}}">
-                                            </a>
-                                        </div>
-                                        <div class="psd-texts">
-                                            <div class="fikir-texts">
-                                                <a href="{{route('idea.show', $lastIdea->slug)}}" class="fw-bold mb-1"
-                                                    style="font-size: 1.1rem">
-                                                    {{$lastIdea->title}}
-                                                </a>
-                                                <p class="mb-0 text-truncate-3">
-                                                    {{$lastIdea->content}}
-                                                </p>
-                                            </div>
-                                            <div class="psd-texts-icons">
-                                                <div class="pti-area">
-                                                    <div class="fikir-img">
-                                                        @php
-                                                        $ideaUser = auth_info($lastIdea->user_id);
-                                                        $ideaUserModel = \App\Models\User::find($lastIdea->user_id);
-                                                        @endphp
-                                                        @if($ideaUser && $ideaUserModel)
-                                                        @if($ideaUserModel->user_type === 'company' && $ideaUserModel->company)
-                                                        <a href="{{ route('companies.show', $ideaUserModel->company->slug) }}" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-                                                            <img src="{{asset($ideaUser->avatar)}}"
-                                                                alt="{{$ideaUser->name}}"
-                                                                style="width: 30px !important; height: 30px !important; border-radius: 100%; margin-right: 8px;">
-                                                            <span>{{$ideaUser->name}}</span>
-                                                        </a>
-                                                        @else
-                                                        <a href="#" onclick="alert('Kullanıcı profil sayfası yakında eklenecek!')" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-                                                            <img src="{{asset($ideaUser->avatar)}}"
-                                                                alt="{{$ideaUser->name}}"
-                                                                style="width: 30px !important; height: 30px !important; border-radius: 100%; margin-right: 8px;">
-                                                            <span>{{$ideaUser->name}}</span>
-                                                        </a>
-                                                        @endif
-                                                        @else
-                                                        <div style="display: flex; align-items: center;">
-                                                            <img src="{{ asset('default-avatar.png') }}"
-                                                                alt="Bilinmeyen Kullanıcı"
-                                                                style="width: 30px !important; height: 30px !important; border-radius: 100%; margin-right: 8px;">
-                                                            <span>Bilinmeyen Kullanıcı</span>
-                                                        </div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <div class="pti-area">
-                                                    <i class="fa-solid fa-location-dot"></i>
-                                                    <span> {{\Carbon\Carbon::parse($lastIdea->created_at)->format('d.m.Y')}} </span>
-                                                </div>
-                                            </div>
-                                            <div class="fikir-bottom-side">
-                                                <div class="fbs-left">
-                                                    <div class="fbs-boxes @if($lastIdea->ideaLikeExists($lastIdea->id)) liked @endif"
-                                                        onclick="ideaLike('{{$lastIdea->slug}}')">
-                                                        <i class="fa-solid fa-heart"></i>
-                                                        <span>
-                                                            {{$lastIdea->ideaReplyLikeCount($lastIdea->id) + $lastIdea->ideaLikeCount($lastIdea->id)}}
-                                                        </span>
-                                                    </div>
-
-                                                    <div class="fbs-boxes">
-                                                        <a href="{{route('idea.show', $lastIdea->slug)}}?comment=show">
-                                                            <i class="fa-solid fa-comment"></i>
-                                                            <span>{{$lastIdea->replies->count()}}</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="fbs-boxes">
-                                                        <i class="fa-solid fa-eye"></i>
-                                                        <span>
-                                                            {{$lastIdea->ideaViewCount($idea->id)}}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="psd-prices">
-                                                    <div class="psd-prices-left">
-                                                        <div class="fbs-right">
-                                                            <div class="fiyat-gecmisi-trigger fw-normal">
-                                                                <i class="fa-solid fa-share-nodes"></i> Paylaş
-                                                            </div>
-                                                            <div class="fiyat-gecmisi-area copy-area">
-                                                                <div class="fiyat-gecmisi-giris">
-                                                                    <div class="fiyat-gecmisi-close">
-                                                                        <i class="fa-solid fa-circle-xmark"></i>
-                                                                    </div>
-                                                                    <a href="javascript:void(0)"
-                                                                        class="share-btn fw-normal"
-                                                                        data-url="{{route('idea.show', $lastIdea->slug)}}"
-                                                                        onclick="copyToClipboard(this)">
-                                                                        <i class="fa-solid fa-share-nodes me-2 pt-1"></i>
-                                                                        Kopyala
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('site.idea.partials.single-idea-card', ['idea' => $lastIdea])
                                 </div>
                                 @endforeach
                             </div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
                             <div class="swiper-pagination"></div>
                         </div>
                     </div>

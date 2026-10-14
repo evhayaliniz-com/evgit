@@ -3,8 +3,8 @@
         <div class="row aligin-items-center">
             <div class="col-lg-3 col-md-6 col-6">
                 <div class="header-left">
-                    <div id="header-left-menu" class="header-left-menu">
-                        <div class="hamburger is-lg">
+                    <div id="header-left-menu" class="header-left-menu sidebar-toggle-btn" role="button" tabindex="0" aria-label="Menü">
+                        <div class="hamburger">
                             <span class="hamburger-line"></span>
                             <span class="hamburger-line"></span>
                             <span class="hamburger-line"></span>

@@ -700,53 +700,13 @@
           <div class="popular-slider hizmetdetayslider">
             <div class="swiper mySwiper3">
               <div class="swiper-wrapper">
-                <!-- en üst swiper-slide referans alınacak full hali o diğerlerini silebilirsin en üsttekini mutlaka almalısın --> @foreach($similarServices as $similarService) <div class="swiper-slide">
-                  <div class="popular-services-cards">
-                    <div class="psc-img">
-                      <a href="{{route('services.show', $similarService->slug)}}">
-                        <img src="{{asset($similarService->photos->first()['path'] ?? null)}}" alt="{{$similarService->title}}">
-                      </a>
-                    </div>
-                    <div class="psd-texts">
-                      <h3>
-                        <a href="{{route('services.show', $similarService->slug)}}">{{$similarService->title}}</a>
-                      </h3>
-                      <div class="psd-texts-icons">
-                        <div class="pti-area">
-                          <i class="fa-solid fa-tag"></i>
-                          <span> {{$similarService?->category?->name . ' / ' . $similarService?->subCategory?->name}} </span>
-                        </div>
-                        <div class="pti-area">
-                          <i class="fa-solid fa-location-dot"></i>
-                          <span>
-                            {{$similarService->province->name . ' / ' . $similarService->district->name}}
-                          </span>
-                        </div>
-                      </div>
-                      {{-- <p class="mb-0">{{str()->limit($service->description, 100)}}</p>--}} <div class="psd-firma">
-                        <a href="{{route('companies.show', $similarService->company->slug)}}" class=" d-flex gap-2">
-                          <img src="{{asset($similarService->company->avatar)}}" alt="{{$similarService->company->name}}" style="width: 20px; height: 20px; border-radius: 50%">
-                          <span>
-                            {{$similarService->company->name}}
-                          </span>
-                        </a>
-                      </div>
-                      <div class="psd-prices">
-                        <div class="psd-prices-left">
-                          <x-old-prices :prices="$similarService->oldPrices" />
-                          <span>
-                            {{ number_format($similarService->price, 0, ',', '.') }} TL </span>
-                        </div>
-                        <div class="psd-prices-right">
-                          {{ $similarService->payment_type == 'card' ? 'Kart' : 'Nakit' }}
-                        </div>
-                      </div>
-                    </div>
+              <div class="swiper-wrapper">
+                @foreach($similarServices as $similarService)
+                  <div class="swiper-slide">
+                    @include('site.services.partials.single-service-card', ['service' => $similarService])
                   </div>
-                </div> @endforeach
+                @endforeach
               </div>
-              <div class="swiper-button-next"></div>
-              <div class="swiper-button-prev"></div>
               <div class="swiper-pagination"></div>
             </div>
           </div>

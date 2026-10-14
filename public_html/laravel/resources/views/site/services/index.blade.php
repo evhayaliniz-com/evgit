@@ -188,59 +188,8 @@
                     <div class="tum-hizmetler-inner">
                         <div class="row">
                             @foreach($services as $service)
-                                <div class="col-lg-3">
-                                    <div class="popular-services-cards aspect-ratio-box">
-                                        <div class="psc-img">
-                                            <a href="{{route('services.show', $service->slug)}}">
-                                                <img src="{{asset($service->photos->first()['path'] ?? null)}}"
-                                                     alt="{{$service->title}}">
-                                            </a>
-                                        </div>
-                                        <div class="psd-texts">
-                                            <h3>
-                                                <a href="{{route('services.show', $service->slug)}}">{{$service->title}}</a>
-                                            </h3>
-                                            <div class="psd-texts-icons">
-                                                <div class="pti-area">
-                                                    <i class="fa-solid fa-tag"></i>
-                                                    <span> {{$service?->category?->name . ' / ' . $service?->subCategory?->name}} </span>
-
-                                                </div>
-                                                <div class="pti-area">
-                                                    <i class="fa-solid fa-location-dot"></i>
-                                                    <span>
-                                                        {{$service->province->name . ' / ' . $service->district->name}}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            {{--                                                <p class="mb-0">{{str()->limit($service->description, 100)}}</p>--}}
-                                            <div class="psd-firma">
-                                                <a href="{{route('companies.show', $service->company->slug)}}"
-                                                   class=" d-flex gap-2">
-                                                    <img src="{{asset($service->company->avatar)}}"
-                                                         alt="{{$service->company->name}}"
-                                                         style="width: 20px; height: 20px; border-radius: 50%">
-                                                    <span class="text-blue">
-                                                        {{$service->company->name}}
-                                                    </span>
-                                                </a>
-                                            </div>
-
-                                            <div class="psd-prices">
-                                                <div class="psd-prices-left">
-                                                    <x-old-prices :prices="$service->oldPrices" />
-
-                                                    <span>
-                                             {{ number_format($service->price, 0, ',', '.') }} TL
-                                         </span>
-                                                </div>
-
-                                                <div class="psd-prices-right">
-                                                    {{ $service->payment_type == 'card' ? 'Kart' : 'Nakit' }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="col-sm-6 col-md-4 col-lg-3 mb-4 d-flex">
+                                    @include('site.services.partials.single-service-card', ['service' => $service])
                                 </div>
                             @endforeach
 

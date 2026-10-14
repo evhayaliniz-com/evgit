@@ -1,5 +1,7 @@
 @php
-    $sliders = \App\Models\Slider::where('status', 1)->orderByDesc('order')->get();
+    $sliders = \Illuminate\Support\Facades\Cache::remember('active_sliders_list', 1800, function () {
+        return \App\Models\Slider::where('status', 1)->orderByDesc('order')->get();
+    });
 @endphp
 
 <style>

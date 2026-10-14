@@ -114,7 +114,11 @@ class ServiceController extends Controller
         }
 
         $serviceCount = $services->active()->confirmed()->count();
-        $services = $services->active()->confirmed()->orderByDesc('id')->paginate(20)->withQueryString();
+        $services = $services->active()->confirmed()
+            ->with(['photos', 'category', 'subCategory', 'province', 'district', 'company', 'oldPrices'])
+            ->orderByDesc('id')
+            ->paginate(20)
+            ->withQueryString();
 
         // Seçili kategorinin parametrelerini getir
         $categoryParameters = [];

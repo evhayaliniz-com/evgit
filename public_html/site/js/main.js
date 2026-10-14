@@ -639,13 +639,9 @@ $(document).ready(function () {
         }
     }
 });
-    document.querySelectorAll(".hamburger").forEach((element) => {
-        element.addEventListener("click", (event) => {
-            element.classList.toggle("is-active");
-        });
-    });
-
     $('#header-left-menu').on('click', function (e) {
+        $(this).toggleClass("is-active");
+        $(this).find('.hamburger').toggleClass("is-active");
         $('#menu-trigger-web').toggleClass("hide");
         $('#index-right-area').toggleClass("col-lg-12");
         $('#index-right-area').toggleClass("col-md-12");
@@ -786,17 +782,28 @@ $(document).ready(function () {
         }
     });
 
-    $(".fiyat-gecmisi-trigger").on("click", function (event) {
+    $(document).on("click", ".fiyat-gecmisi-trigger", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
         on();
         $(".fiyat-gecmisi-area.cloned").remove();
 
-        var $original = $(this).closest(".psd-prices-left").find(".fiyat-gecmisi-area");
+        var $original = $(this).siblings(".fiyat-gecmisi-area");
+        if (!$original.length) {
+            $original = $(this).closest(".psd-prices-left, .msc-old-price-box, .msc-price-row").find(".fiyat-gecmisi-area");
+        }
+
+        if (!$original.length) {
+            return;
+        }
+
         var $clone = $original.clone();
 
         $clone.addClass("cloned").css({
             display: "block",
-            zIndex: 9999,
-        });
+            position: "absolute",
+            zIndex: 99999
+        }).appendTo("body");
 
         var leftRes = 100, topRes = 10;
         var winWidth = $(window).width();
@@ -815,27 +822,34 @@ $(document).ready(function () {
         }
 
         var offset = $(this).offset();
-        var topPos = offset.top - $original.outerHeight() - topRes;
+        var cloneHeight = $clone.outerHeight() || 130;
+        var topPos = offset.top - cloneHeight - topRes;
 
-        if(winWidth < 991) {
+        if (winWidth < 991) {
             var leftPos = !$original.hasClass('copy-area') ? offset.left - leftRes : (offset.left - leftRes) - 170;
-
         } else {
             var leftPos = offset.left - leftRes;
+        }
+
+        // Ekranın solundan taşmayı engelle
+        if (leftPos < 10) {
+            leftPos = 10;
         }
 
         $clone.css({
             top: topPos + "px",
             left: leftPos + "px"
-        }).appendTo("body");
+        });
 
-        $clone.find(".fiyat-gecmisi-close").on("click", function () {
+        $clone.find(".fiyat-gecmisi-close").on("click", function (e) {
+            e.stopPropagation();
             off();
             $clone.remove();
         });
 
-        $(document).on("click", function (e) {
+        $(document).one("click", function (e) {
             if (!$(e.target).closest(".fiyat-gecmisi-area, .fiyat-gecmisi-trigger").length) {
+                off();
                 $clone.remove();
             }
         });

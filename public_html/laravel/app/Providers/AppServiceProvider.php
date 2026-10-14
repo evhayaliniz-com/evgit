@@ -17,6 +17,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        //
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
         URL::macro('alternateHasCorrectSignature',
             function (Request $request, $absolute = true, array $ignoreQuery = []) {
                 $ignoreQuery[] = 'signature';
@@ -50,13 +58,7 @@ class AppServiceProvider extends ServiceProvider
         Request::macro('hasValidSignature', function ($absolute = true, array $ignoreQuery = []) {
             return URL::alternateHasValidSignature($this, $absolute, $ignoreQuery);
         });
-    }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
         Paginator::useBootstrapFive();
         if (!app()->environment('local')) {
             URL::forceScheme('https');
@@ -64,7 +66,9 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         view()->composer('*', function ($view) {
-            $view->with('siteSettings', Setting::first());
+            $view->with('siteSettings', \Illuminate\Support\Facades\Cache::remember('site_settings_first', 3600, function () {
+                return Setting::first();
+            }));
         });
 
         // Manuel helpers.php yükleme (composer autoload sorunu için)

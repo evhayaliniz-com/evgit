@@ -43,7 +43,11 @@ class IdeaController extends Controller
         }
 
         $ideaCount = $ideas->active()->confirmed()->count();
-        $ideas = $ideas->active()->confirmed()->orderByDesc('id')->paginate(8)->withQueryString();
+        $ideas = $ideas->active()->confirmed()
+            ->with(['category', 'subCategory', 'user.company', 'user.informations'])
+            ->orderByDesc('id')
+            ->paginate(8)
+            ->withQueryString();
 
 
         return view('site.idea.index', compact('ideas', 'ideaCount'));
