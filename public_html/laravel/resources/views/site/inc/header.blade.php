@@ -23,35 +23,29 @@
             <div class="col-lg-6 col-md-6 md-mobile-none">
                 <div class="header-mid">
                     <div class="header-search modern-header-search">
-                        <div class="header-search-icon-left">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </div>
                         <input id="header-search-input" type="text" class="searchInput"
                             placeholder="Hizmet veya firma ara..." autocomplete="off">
-                        <div class="header-search-badge" title="Arama">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </div>
+                        <i class="fa-solid fa-magnifying-glass search-icon-btn"></i>
                     </div>
-                    <style>
-                        #resultsArea .h6 {
-                            font-size: 15px;
-                            font-weight: 500;
-
-                        }
-
-                        #resultsArea .search-scroll {
-                            font-size: 14px;
-
-                        }
-                    </style>
                     <div class="header-search-area" id="resultsArea">
-                        <h6 class="text-primary  fw-normal mt-3">Hizmetler</h6>
-                        <div id="services" class="search-scroll">Yeni</div>
-                        <h6 class="text-primary fw-normal mt-3">Fikirler</h6>
-                        <div id="ideas" class="search-scroll">Fikir Bulunamadı </div>
-                        <h6 class="text-primary fw-normal mt-3">Firmalar</h6>
-                        <div id="companies" class="search-scroll">Firma Bulunamadı </div>
-
+                        <div id="search-initial-hint" class="search-empty-hint">
+                            <i class="fa-solid fa-magnifying-glass me-2"></i>
+                            <span>Aramak istediğiniz hizmet, firma veya fikri yazın...</span>
+                        </div>
+                        <div id="search-results-groups" style="display: none;">
+                            <div class="search-group" id="services-group">
+                                <h6 class="search-group-title text-primary"><i class="fa-solid fa-briefcase me-1"></i> Hizmetler</h6>
+                                <div id="services" class="search-scroll"></div>
+                            </div>
+                            <div class="search-group" id="ideas-group">
+                                <h6 class="search-group-title text-primary"><i class="fa-regular fa-lightbulb me-1"></i> Fikirler</h6>
+                                <div id="ideas" class="search-scroll"></div>
+                            </div>
+                            <div class="search-group" id="companies-group">
+                                <h6 class="search-group-title text-primary"><i class="fa-regular fa-building me-1"></i> Firmalar</h6>
+                                <div id="companies" class="search-scroll"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

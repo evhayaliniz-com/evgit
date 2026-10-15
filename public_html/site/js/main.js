@@ -345,26 +345,28 @@ const mobileSearchIcon = document.querySelector('.hmsa-search i');
 
 
 if (searchInput && searchIcon) {
-
     searchInput.addEventListener('input', function() {
         if (this.value.length > 0) {
-  
-            searchIcon.className = 'fa-solid fa-xmark';
+            searchIcon.className = 'fa-solid fa-xmark search-icon-btn';
         } else {
-        
-            searchIcon.className = 'fa-solid fa-magnifying-glass';
+            searchIcon.className = 'fa-solid fa-magnifying-glass search-icon-btn';
         }
     });
 
- 
     searchIcon.addEventListener('click', function() {
-     
         if (this.classList.contains('fa-xmark')) {
-         
             searchInput.value = '';
-          
-            this.className = 'fa-solid fa-magnifying-glass';
-         
+            this.className = 'fa-solid fa-magnifying-glass search-icon-btn';
+            const initialHint = document.getElementById('search-initial-hint');
+            const resultsGroups = document.getElementById('search-results-groups');
+            if (initialHint) initialHint.style.display = 'block';
+            if (resultsGroups) resultsGroups.style.display = 'none';
+            const companiesDiv = document.getElementById('companies');
+            const servicesDiv = document.getElementById('services');
+            const ideasDiv = document.getElementById('ideas');
+            if (companiesDiv) companiesDiv.innerHTML = '';
+            if (servicesDiv) servicesDiv.innerHTML = '';
+            if (ideasDiv) ideasDiv.innerHTML = '';
             searchInput.focus();
         }
     });
@@ -385,13 +387,15 @@ if (mobileSearchInput && mobileSearchIcon) {
 
  
     mobileSearchIcon.addEventListener('click', function() {
-     
         if (this.classList.contains('fa-xmark')) {
-          
             mobileSearchInput.value = '';
-         
             this.className = 'fa-solid fa-magnifying-glass';
-        
+            const companiesMobile = document.getElementById('companies-mobile');
+            const servicesMobile = document.getElementById('services-mobile');
+            const ideasMobile = document.getElementById('ideas-mobile');
+            if (companiesMobile) companiesMobile.innerHTML = '';
+            if (servicesMobile) servicesMobile.innerHTML = '';
+            if (ideasMobile) ideasMobile.innerHTML = '';
             mobileSearchInput.focus();
         }
     });
@@ -547,44 +551,63 @@ document.addEventListener('click', toggleMobileMenu);
 
 document.addEventListener('DOMContentLoaded', function () {
     const inputs = document.querySelectorAll('.searchInput');
-    let companiesDiv = document.getElementById('companies');
-    let servicesDiv = document.getElementById('services');
-    let ideasDiv = document.getElementById('ideas');
 
     inputs.forEach(input => {
         input.addEventListener('input', function () {
-            const query = this.value;
+            const query = this.value.trim();
+            const isMobile = window.innerWidth < 992;
+            const companiesDiv = isMobile ? document.getElementById('companies-mobile') : document.getElementById('companies');
+            const servicesDiv = isMobile ? document.getElementById('services-mobile') : document.getElementById('services');
+            const ideasDiv = isMobile ? document.getElementById('ideas-mobile') : document.getElementById('ideas');
 
-            if (window.innerWidth < 992) {
-                companiesDiv = document.getElementById('companies-mobile');
-                servicesDiv = document.getElementById('services-mobile');
-                ideasDiv = document.getElementById('ideas-mobile');
+            const initialHint = document.getElementById('search-initial-hint');
+            const resultsGroups = document.getElementById('search-results-groups');
+
+            if (query.length < 2) {
+                if (initialHint) initialHint.style.display = 'flex';
+                if (resultsGroups) resultsGroups.style.display = 'none';
+                if (companiesDiv) companiesDiv.innerHTML = '';
+                if (servicesDiv) servicesDiv.innerHTML = '';
+                if (ideasDiv) ideasDiv.innerHTML = '';
+                return;
+            }
+
+            if (initialHint) initialHint.style.display = 'none';
+            if (resultsGroups) resultsGroups.style.display = 'block';
+
+            if (!isMobile) {
+                $('.header-search-area').addClass('show');
             }
 
             fetch(`/search?q=${encodeURIComponent(query)}`)
                 .then(response => response.json())
                 .then(data => {
-                    companiesDiv.innerHTML = data.companies.length
-                        ? data.companies.map(c => `<a href="/companies/${c.slug}" class="text-truncate d-block">
-                        ${c.name.length > 50 ? c.name.slice(0, 50) + '...' : c.name}
-                    </a>`).join('')
-                        : '<div class="text-muted">Firma bulunamadı.</div>';
+                    if (companiesDiv) {
+                        companiesDiv.innerHTML = data.companies.length
+                            ? data.companies.map(c => `<a href="/companies/${c.slug}" class="text-truncate d-block">
+                            <i class="fa-regular fa-building me-1 opacity-75"></i> ${c.name.length > 50 ? c.name.slice(0, 50) + '...' : c.name}
+                        </a>`).join('')
+                            : '<div class="text-muted search-not-found">Firma bulunamadı.</div>';
+                    }
 
-                    servicesDiv.innerHTML = data.services.length
-                        ? data.services.map(s => `<a href="/services/${s.slug}" class="text-truncate d-block">
-                        ${s.title.length > 50 ? s.title.slice(0, 50) + '...' : s.title}
-                    </a>`).join('')
-                        : '<div class="text-muted">Hizmet bulunamadı.</div>';
+                    if (servicesDiv) {
+                        servicesDiv.innerHTML = data.services.length
+                            ? data.services.map(s => `<a href="/services/${s.slug}" class="text-truncate d-block">
+                            <i class="fa-solid fa-briefcase me-1 opacity-75"></i> ${s.title.length > 50 ? s.title.slice(0, 50) + '...' : s.title}
+                        </a>`).join('')
+                            : '<div class="text-muted search-not-found">Hizmet bulunamadı.</div>';
+                    }
 
-                    ideasDiv.innerHTML = data.ideas.length
-                        ? data.ideas.map(i => `<a href="/idea/${i.slug}" class="text-truncate d-block">
-                        ${i.content.length > 50 ? i.content.slice(0, 50) + '...' : i.content}
-                    </a>`).join('')
-                        : '<div class="text-muted">Fikir bulunamadı.</div>';
+                    if (ideasDiv) {
+                        ideasDiv.innerHTML = data.ideas.length
+                            ? data.ideas.map(i => `<a href="/idea/${i.slug}" class="text-truncate d-block">
+                            <i class="fa-regular fa-lightbulb me-1 opacity-75"></i> ${i.content.length > 50 ? i.content.slice(0, 50) + '...' : i.content}
+                        </a>`).join('')
+                            : '<div class="text-muted search-not-found">Fikir bulunamadı.</div>';
+                    }
                 });
         });
-    })
-
+    });
 });
 
 
@@ -667,8 +690,26 @@ $(document).ready(function () {
         on();
 
     });
-    $('#header-search-input').on('click', function (e) {
-        $('.header-search-area').toggleClass("show");
+    $('#header-search-input').on('click focus', function (e) {
+        e.stopPropagation();
+        $('.header-search-area').addClass("show");
+    });
+
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.header-search, .header-search-area').length) {
+            $('.header-search-area').removeClass('show');
+        }
+    });
+
+    $(document).on('keydown', function (e) {
+        if (e.key === 'Escape') {
+            $('.header-search-area').removeClass('show');
+            $('#header-search-input').blur();
+        }
+    });
+
+    $('.header-search-area').on('click', function (e) {
+        e.stopPropagation();
     });
     $('#user-messages-trigger').on('click', function (e) {
         on();
