@@ -11,6 +11,16 @@ class NotificationController extends Controller
 {
     public function markAsRead(Request $request): JsonResponse
     {
+        $all = $request->boolean('all') || $request->input('all') === 'true' || $request->input('ids') === 'all';
+
+        if ($all) {
+            Notification::where('to_id', auth()->id())
+                ->where('is_read', 0)
+                ->update(['is_read' => 1]);
+
+            return response()->json(['status' => 'ok', 'marked_all' => true]);
+        }
+
         $ids = $request->input('ids', []);
 
         if (!is_array($ids)) {

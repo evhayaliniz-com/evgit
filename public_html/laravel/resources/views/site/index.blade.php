@@ -36,6 +36,7 @@
                 padding-left: 10px;
                 padding-right: 10px;
                 padding-bottom: 16px;
+                overflow-x: clip;
             }
         }
     </style>

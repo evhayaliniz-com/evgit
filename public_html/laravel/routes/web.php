@@ -68,6 +68,10 @@ Route::post('admin/notifications/read', [\App\Http\Controllers\Admin\Notificatio
     ->name('admin.notifications.read')
     ->middleware('auth');
 
+Route::post('notifications/read', [\App\Http\Controllers\Admin\NotificationController::class, 'markAsRead'])
+    ->name('notifications.read')
+    ->middleware('auth');
+
 Route::middleware(['auth'])->get('/eplan', [SiteController::class, 'eplan'])->name('company.eplan');
 
 Route::middleware(['auth'])->get('/eplan/{plan}', [SiteController::class, 'eplanShow'])->name('company.eplan.show');

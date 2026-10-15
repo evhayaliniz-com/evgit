@@ -1916,13 +1916,7 @@
 </script>
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', _ => {
-        if (window.innerWidth < 992) {
-            document.querySelector('.web-menu-col.menuminshow.hide').classList.remove('hide')
-        }
-    });
-</script>
+
 
 <script>
     const btns = document.querySelectorAll('.share-btn');

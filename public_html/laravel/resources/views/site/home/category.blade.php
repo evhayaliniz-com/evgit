@@ -1,8 +1,4 @@
 <div class="category-slider">
-    <div class="cs-title d-flex" style="margin-bottom: 16px;">
-        <i class="fa-solid fa-table-cells-large"></i>
-        <h2>Kategoriler</h2>
-    </div>
 
     <div class="swiper mySwiper2">
         <div class="swiper-wrapper">

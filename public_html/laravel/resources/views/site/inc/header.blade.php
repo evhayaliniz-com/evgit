@@ -10,7 +10,7 @@
                             <span class="hamburger-line"></span>
                         </div>
                     </div>
-                    <div class="header-logo m-0 mt-md-2">
+                    <div class="header-logo m-0">
                         <a class="web-logo" href="/">
                             <img src="{{asset(\App\Models\Setting::first()?->logo)}}" alt="Site Logo">
                         </a>
@@ -136,6 +136,23 @@
 
                             $sharedUnreadMsgCount = $allMessages->where('is_read', false)->count();
                             $sharedUnreadNotifCount = user_notifications()['unread_count'] ?? 0;
+
+                            $user = auth()->user();
+                            $avatarPath = 'site/images/default_avatar.jpg';
+
+                            if ($user->user_type == 'user' && $user->informations?->avatar) {
+                                $avatarPath = $user->informations->avatar;
+                            } elseif ($user->user_type == 'company' && $user->company?->avatar) {
+                                $avatarPath = $user->company->avatar;
+                            }
+
+                            $isCompany = $user->user_type == 'company';
+                            $profileName = $isCompany
+                                ? ($user->company?->name ?: $user->name)
+                                : ($user->informations?->name ?: $user->name);
+                            $profileEmail = $user->email;
+                            $profileRoleBadge = $isCompany ? 'Kurumsal Firma' : 'Bireysel Kullanıcı';
+                            $dashboardRoute = route($isCompany ? 'company.dashboard' : 'user.dashboard');
                         @endphp
 
                         @if(auth()->user()->user_type != 'admin')
@@ -150,16 +167,9 @@
                                 <div id="user-messages-dropdown2" class="user-messages-dropdown ums-mobil modern-dropdown-mobile">
                                     <div class="mobile-dropdown-sheet">
                                         <div class="mobile-dropdown-header">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="dropdown-header-icon msg-icon">
-                                                    <i class="fa-regular fa-comment-dots"></i>
-                                                </div>
-                                                <div>
-                                                    <h5 class="mobile-header-title">Mesajlar</h5>
-                                                    <span class="mobile-header-subtitle">
-                                                        {{ $sharedUnreadMsgCount > 0 ? $sharedUnreadMsgCount . ' yeni mesaj' : 'Gelen kutusu' }}
-                                                    </span>
-                                                </div>
+                                            <div class="mobile-header-text-group">
+                                                <h5 class="mobile-header-title m-0 p-0">Mesajlar</h5>
+                                                <span class="mobile-header-subtitle m-0 p-0">{{ $sharedUnreadMsgCount > 0 ? $sharedUnreadMsgCount . ' yeni mesaj' : 'Gelen kutusu' }}</span>
                                             </div>
                                             <button type="button" class="mobile-dropdown-close usm-mobil-close" aria-label="Kapat">
                                                 <i class="fa-solid fa-xmark"></i>
@@ -236,20 +246,18 @@
                                 <div id="user-natif-dropdown2" class="user-messages-dropdown ums-mobil modern-dropdown-mobile">
                                     <div class="mobile-dropdown-sheet">
                                         <div class="mobile-dropdown-header">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <div class="dropdown-header-icon notif-icon">
-                                                    <i class="fa-regular fa-bell"></i>
-                                                </div>
-                                                <div>
-                                                    <h5 class="mobile-header-title">Bildirimler</h5>
-                                                    <span class="mobile-header-subtitle">
-                                                        {{ $sharedUnreadNotifCount > 0 ? $sharedUnreadNotifCount . ' yeni bildirim' : 'Tümü okundu' }}
-                                                    </span>
-                                                </div>
+                                            <div class="mobile-header-text-group">
+                                                <h5 class="mobile-header-title m-0 p-0">Bildirimler</h5>
+                                                <span class="mobile-header-subtitle m-0 p-0">{{ $sharedUnreadNotifCount > 0 ? $sharedUnreadNotifCount . ' yeni bildirim' : 'Tümü okundu' }}</span>
                                             </div>
-                                            <button type="button" class="mobile-dropdown-close usm-mobil-close" aria-label="Kapat">
-                                                <i class="fa-solid fa-xmark"></i>
-                                            </button>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <button type="button" class="dropdown-mark-read-btn mark-all-notifications-btn" title="Tümünü Okundu Yap" @if($sharedUnreadNotifCount == 0) disabled @endif>
+                                                    <span>Tümünü Okundu Yap</span>
+                                                </button>
+                                                <button type="button" class="mobile-dropdown-close usm-mobil-close" aria-label="Kapat">
+                                                    <i class="fa-solid fa-xmark"></i>
+                                                </button>
+                                            </div>
                                         </div>
 
                                         <div class="mobile-dropdown-body">
@@ -269,15 +277,17 @@
                                                     <div class="dropdown-item-content">
                                                         <div class="dropdown-item-top">
                                                             <span class="dropdown-item-name text-truncate">{{ $notifUserName }}</span>
-                                                            <span class="dropdown-item-time">
-                                                                {{\Carbon\Carbon::parse($notification->created_at)->setTimezone('Europe/Istanbul')->format('H:i')}}
-                                                            </span>
+                                                            <div class="dropdown-item-meta">
+                                                                <span class="dropdown-item-time">
+                                                                    {{\Carbon\Carbon::parse($notification->created_at)->setTimezone('Europe/Istanbul')->format('H:i')}}
+                                                                </span>
+                                                                <span class="dropdown-item-date">
+                                                                    {{\Carbon\Carbon::parse($notification->created_at)->setTimezone('Europe/Istanbul')->format('d.m.Y')}}
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                         <div class="dropdown-item-message">
                                                             {{$notification->message}}
-                                                        </div>
-                                                        <div class="dropdown-item-date-sub">
-                                                            {{\Carbon\Carbon::parse($notification->created_at)->setTimezone('Europe/Istanbul')->format('d.m.Y')}}
                                                         </div>
                                                     </div>
                                                     @if(!$notification->is_read)
@@ -300,6 +310,13 @@
                         </div>
 
                         @endif
+
+                        <div class="header-mobil-profile">
+                            <a id="mobile-profile-trigger" class="hr-logo navbar-avatar-btn" role="button" aria-label="Profilim">
+                                <img src="{{asset($avatarPath)}}" alt="Avatar">
+                                <span class="navbar-avatar-status" title="Çevrimiçi"></span>
+                            </a>
+                        </div>
                         @endauth
 
                         @guest()
@@ -328,16 +345,11 @@
                         </a>
                         <div id="user-messages-dropdown" class="user-messages-dropdown modern-dropdown">
                             <div class="modern-dropdown-header">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="dropdown-header-icon msg-icon">
-                                        <i class="fa-regular fa-comment-dots"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="dropdown-header-title">Mesajlar</h6>
-                                        <span class="dropdown-header-subtitle">
-                                            {{ $sharedUnreadMsgCount > 0 ? $sharedUnreadMsgCount . ' yeni mesaj' : 'Gelen kutusu' }}
-                                        </span>
-                                    </div>
+                                <div>
+                                    <h6 class="dropdown-header-title">Mesajlar</h6>
+                                    <span class="dropdown-header-subtitle">
+                                        {{ $sharedUnreadMsgCount > 0 ? $sharedUnreadMsgCount . ' yeni mesaj' : 'Gelen kutusu' }}
+                                    </span>
                                 </div>
                                 <a href="{{route('chat.show')}}" class="dropdown-header-action" title="Tüm Mesajları Aç">
                                     <span>Tümü</span>
@@ -412,18 +424,15 @@
                         </a>
                         <div id="user-natif-dropdown" class="user-messages-dropdown modern-dropdown">
                             <div class="modern-dropdown-header">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="dropdown-header-icon notif-icon">
-                                        <i class="fa-regular fa-bell"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="dropdown-header-title">Bildirimler</h6>
-                                        <span class="dropdown-header-subtitle">
-                                            {{ $sharedUnreadNotifCount > 0 ? $sharedUnreadNotifCount . ' yeni bildirim' : 'Tümü okundu' }}
-                                        </span>
-                                    </div>
+                                <div>
+                                    <h6 class="dropdown-header-title">Bildirimler</h6>
+                                    <span class="dropdown-header-subtitle">
+                                        {{ $sharedUnreadNotifCount > 0 ? $sharedUnreadNotifCount . ' yeni bildirim' : 'Tümü okundu' }}
+                                    </span>
                                 </div>
-                                <span class="header-badge-pill">{{ $sharedUnreadNotifCount }}</span>
+                                <button type="button" class="dropdown-mark-read-btn mark-all-notifications-btn" title="Tümünü Okundu Yap" @if($sharedUnreadNotifCount == 0) disabled @endif>
+                                    <span>Tümünü Okundu Yap</span>
+                                </button>
                             </div>
 
                             <div class="modern-dropdown-body">
@@ -440,20 +449,22 @@
                                             <img src="{{ asset($notifAvatar) }}" alt="{{ $notifUserName }}">
                                             <span class="avatar-sub-icon notif"><i class="fa-solid fa-bell"></i></span>
                                         </div>
-                                        <div class="dropdown-item-content">
-                                            <div class="dropdown-item-top">
-                                                <span class="dropdown-item-name text-truncate">{{ $notifUserName }}</span>
-                                                <span class="dropdown-item-time">
-                                                    {{\Carbon\Carbon::parse($notification->created_at)->setTimezone('Europe/Istanbul')->format('H:i')}}
-                                                </span>
+                                            <div class="dropdown-item-content">
+                                                <div class="dropdown-item-top">
+                                                    <span class="dropdown-item-name text-truncate">{{ $notifUserName }}</span>
+                                                    <div class="dropdown-item-meta">
+                                                        <span class="dropdown-item-time">
+                                                            {{\Carbon\Carbon::parse($notification->created_at)->setTimezone('Europe/Istanbul')->format('H:i')}}
+                                                        </span>
+                                                        <span class="dropdown-item-date">
+                                                            {{\Carbon\Carbon::parse($notification->created_at)->setTimezone('Europe/Istanbul')->format('d.m.Y')}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="dropdown-item-message">
+                                                    {{$notification->message}}
+                                                </div>
                                             </div>
-                                            <div class="dropdown-item-message">
-                                                {{$notification->message}}
-                                            </div>
-                                            <div class="dropdown-item-date-sub">
-                                                {{\Carbon\Carbon::parse($notification->created_at)->setTimezone('Europe/Istanbul')->format('d.m.Y')}}
-                                            </div>
-                                        </div>
                                         @if(!$notification->is_read)
                                             <span class="unread-dot"></span>
                                         @endif
@@ -472,7 +483,7 @@
                     </div>
 
                     <div class="hr-box mobile-header-avatar">
-                        <a class="hr-logo navbar-avatar-btn" role="button" aria-label="Profilim">
+                        <a id="desktop-profile-trigger" class="hr-logo navbar-avatar-btn d-none d-lg-inline-flex" role="button" aria-label="Profilim">
                             @php
                             $user = auth()->user();
                             $avatarPath = 'site/images/default_avatar.jpg';
@@ -497,13 +508,7 @@
 
                         <div id="login-right-dropdown" class="login-right-dropdown modern-profile-dropdown">
                             <div class="profile-dropdown-sheet">
-                                <div class="profile-mobile-header d-flex d-lg-none align-items-center justify-content-between p-3 pb-2 border-bottom">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="dropdown-header-icon profile-icon">
-                                            <i class="fa-regular fa-user"></i>
-                                        </div>
-                                        <h6 class="m-0 fw-bold">Hesabım</h6>
-                                    </div>
+                                <div class="profile-mobile-header d-flex d-lg-none align-items-center justify-content-end">
                                     <button type="button" class="mobile-dropdown-close profile-mobile-close" aria-label="Kapat">
                                         <i class="fa-solid fa-xmark"></i>
                                     </button>
@@ -997,55 +1002,103 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Bildirim dropdown açıldığında tüm bildirimleri okundu yap
-        const notificationTriggers = document.querySelectorAll('#user-notif-trigger, #user-notif-trigger2');
+        const markAllBtns = document.querySelectorAll('.mark-all-notifications-btn');
 
-        notificationTriggers.forEach(trigger => {
-            trigger.addEventListener('click', function(e) {
-                // Tüm okunmamış bildirimlerin ID'lerini topla
-                const notificationLinks = document.querySelectorAll('.notification-link');
-                const notificationIds = [];
+        markAllBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
 
-                notificationLinks.forEach(link => {
-                    const notificationId = link.getAttribute('data-notification-id');
-                    if (notificationId) {
-                        notificationIds.push(parseInt(notificationId));
-                    }
+                if (btn.disabled) return;
+
+                btn.disabled = true;
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>İşleniyor...</span>';
+
+                fetch('{{ route("notifications.read") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ all: true })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Tüm okunmamış kartları okundu olarak güncelle
+                    document.querySelectorAll('.notification-link').forEach(link => {
+                        link.classList.remove('unread');
+                    });
+                    document.querySelectorAll('.unread-dot').forEach(dot => {
+                        dot.remove();
+                    });
+
+                    // Badge sayılarını sıfırla ve gizle
+                    document.querySelectorAll('.notification-count').forEach(badge => {
+                        badge.textContent = '0';
+                    });
+                    document.querySelectorAll('#user-notif .hr-count, #user-notif-trigger .hr-count, #user-notif-trigger2 .hr-count').forEach(el => {
+                        el.style.display = 'none';
+                    });
+
+                    // Başlık altındaki yazıyı güncelle
+                    document.querySelectorAll('#user-natif-dropdown .dropdown-header-subtitle, #user-natif-dropdown2 .mobile-header-subtitle').forEach(sub => {
+                        sub.textContent = 'Tümü okundu';
+                    });
+
+                    // Butonları güncelle
+                    markAllBtns.forEach(b => {
+                        b.disabled = true;
+                        b.classList.add('is-read');
+                        b.innerHTML = '<span>Tümü Okundu</span>';
+                    });
+                })
+                .catch(error => {
+                    console.error('Bildirimler okundu işaretlenemedi:', error);
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
                 });
+            });
+        });
 
-                // Eğer okunmamış bildirim varsa, hepsini okundu yap
-                if (notificationIds.length > 0) {
-                    fetch('/notifications/read', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                ids: notificationIds
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            // Badge sayısını sıfırla ve gizle
-                            const badges = document.querySelectorAll('.hr-count span, .notification-count');
-                            badges.forEach(badge => {
-                                badge.textContent = '0';
-                            });
-                            const notifCounts = document.querySelectorAll('#user-notif .hr-count, #user-notif-trigger .hr-count, #user-notif-trigger2 .hr-count');
-                            notifCounts.forEach(el => {
+        // Tekil bildirime tıklandığında okundu yap
+        document.querySelectorAll('.notification-link').forEach(link => {
+            link.addEventListener('click', function() {
+                const notificationId = this.getAttribute('data-notification-id');
+                if (notificationId && this.classList.contains('unread')) {
+                    this.classList.remove('unread');
+                    const dot = this.querySelector('.unread-dot');
+                    if (dot) dot.remove();
+
+                    // Sayacı azalt
+                    const badge = document.querySelector('.notification-count');
+                    if (badge) {
+                        let count = parseInt(badge.textContent) || 0;
+                        count = Math.max(0, count - 1);
+                        document.querySelectorAll('.notification-count').forEach(b => b.textContent = count);
+                        if (count === 0) {
+                            document.querySelectorAll('#user-notif .hr-count, #user-notif-trigger .hr-count, #user-notif-trigger2 .hr-count').forEach(el => {
                                 el.style.display = 'none';
                             });
-
-                            // Actived class'larını kaldır
-                            const activedNotifications = document.querySelectorAll('.ums-area.actived');
-                            activedNotifications.forEach(notif => {
-                                notif.classList.remove('actived');
+                            document.querySelectorAll('#user-natif-dropdown .dropdown-header-subtitle, #user-natif-dropdown2 .mobile-header-subtitle').forEach(sub => {
+                                sub.textContent = 'Tümü okundu';
                             });
-                        })
-                        .catch(error => {
-                            console.error('Bildirimler okundu işaretlenemedi:', error);
-                        });
+                            markAllBtns.forEach(b => {
+                                b.disabled = true;
+                                b.classList.add('is-read');
+                                b.innerHTML = '<span>Tümü Okundu</span>';
+                            });
+                        }
+                    }
+
+                    fetch('{{ route("notifications.read") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ ids: [parseInt(notificationId)] })
+                    }).catch(err => console.error(err));
                 }
             });
         });
