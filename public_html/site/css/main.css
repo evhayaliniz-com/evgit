@@ -6915,6 +6915,602 @@ body.dark .sidebar-toggle-btn .hamburger .hamburger-line {
     background: #cbd5e1 !important;
 }
 
+/* ==========================================================================
+   Modern Navbar Icons & Action Buttons System (Web & Mobile)
+   ========================================================================== */
+
+/* Universal action button base (matches sidebar-toggle-btn perfectly) */
+.navbar-icon-btn,
+.header-m-search-trigger,
+.header-right-trigger,
+#user-messages-trigger,
+#user-messages-trigger2,
+#user-notif-trigger,
+#user-notif-trigger2,
+.hmsa-close.navbar-icon-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    outline: none !important;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    position: relative !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+    text-decoration: none !important;
+    color: #475569 !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+    bottom: auto !important;
+    top: auto !important;
+}
+
+.navbar-icon-btn:hover,
+.header-m-search-trigger:hover,
+.header-right-trigger:hover,
+#user-messages-trigger:hover,
+#user-messages-trigger2:hover,
+#user-notif-trigger:hover,
+#user-notif-trigger2:hover,
+.hmsa-close.navbar-icon-btn:hover {
+    background: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #4068e2 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+}
+
+.navbar-icon-btn:active,
+.header-m-search-trigger:active,
+.header-right-trigger:active,
+#user-messages-trigger:active,
+#user-messages-trigger2:active,
+#user-notif-trigger:active,
+#user-notif-trigger2:active,
+.hmsa-close.navbar-icon-btn:active {
+    transform: scale(0.94) !important;
+    background: #e2e8f0 !important;
+}
+
+/* Icon Sizing & Clean Alignment */
+.navbar-icon-btn i,
+.header-m-search-trigger i,
+.header-right-trigger i,
+#user-messages-trigger i,
+#user-messages-trigger2 i,
+#user-notif-trigger i,
+#user-notif-trigger2 i,
+.hmsa-close.navbar-icon-btn i {
+    font-size: 16px !important;
+    transition: all 0.2s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+    color: inherit !important;
+    margin: 0 !important;
+}
+
+/* Micro-animations on hover */
+@keyframes navbarBellShake {
+    0% { transform: rotate(0); }
+    15% { transform: rotate(14deg); }
+    30% { transform: rotate(-12deg); }
+    45% { transform: rotate(10deg); }
+    60% { transform: rotate(-6deg); }
+    75% { transform: rotate(3deg); }
+    100% { transform: rotate(0); }
+}
+
+#user-notif-trigger:hover i,
+#user-notif-trigger2:hover i,
+.navbar-btn-notif:hover i {
+    animation: navbarBellShake 0.6s ease !important;
+    color: #4068e2 !important;
+}
+
+#user-messages-trigger:hover i,
+#user-messages-trigger2:hover i,
+.navbar-btn-message:hover i {
+    color: #4068e2 !important;
+    transform: scale(1.1) !important;
+}
+
+.header-m-search-trigger:hover i {
+    color: #4068e2 !important;
+    transform: scale(1.08) !important;
+}
+
+.header-right-trigger:hover i,
+.navbar-btn-login:hover i {
+    color: #4068e2 !important;
+    transform: scale(1.08) !important;
+}
+
+/* Modern Pill Badge for Messages & Notifications */
+.navbar-icon-btn .hr-count,
+#user-messages-trigger .hr-count,
+#user-messages-trigger2 .hr-count,
+#user-notif-trigger .hr-count,
+#user-notif-trigger2 .hr-count {
+    position: absolute !important;
+    top: -4px !important;
+    right: -4px !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    padding: 0 4px !important;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    border-radius: 9999px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.35) !important;
+    pointer-events: none !important;
+    z-index: 2 !important;
+    box-sizing: border-box !important;
+}
+
+.navbar-icon-btn .hr-count span,
+#user-messages-trigger .hr-count span,
+#user-messages-trigger2 .hr-count span,
+#user-notif-trigger .hr-count span,
+#user-notif-trigger2 .hr-count span {
+    position: static !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+    color: #ffffff !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    display: inline !important;
+}
+
+/* Modern Avatar Button */
+.navbar-avatar-btn,
+.mobile-header-avatar .hr-logo {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    padding: 2px !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+    text-decoration: none !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.navbar-avatar-btn:hover,
+.mobile-header-avatar .hr-logo:hover {
+    border-color: #4068e2 !important;
+    box-shadow: 0 2px 6px rgba(64, 104, 226, 0.25) !important;
+    transform: scale(1.02) !important;
+}
+
+.navbar-avatar-btn:active,
+.mobile-header-avatar .hr-logo:active {
+    transform: scale(0.95) !important;
+}
+
+.navbar-avatar-btn img,
+.mobile-header-avatar .hr-logo img {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 8px !important;
+    object-fit: cover !important;
+    margin: 0 !important;
+    border: none !important;
+    padding: 0 !important;
+    display: block !important;
+}
+
+/* Online status dot */
+.navbar-avatar-status {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    background: #10b981;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    z-index: 2;
+}
+
+/* Modern Guest Auth Button on Desktop */
+.navbar-guest-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    height: 40px !important;
+    padding: 0 18px !important;
+    background: linear-gradient(135deg, #4068e2 0%, #2f55cc 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(64, 104, 226, 0.8) !important;
+    border-radius: 10px !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    box-shadow: 0 2px 6px rgba(64, 104, 226, 0.25);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+}
+
+.navbar-guest-btn:hover {
+    background: linear-gradient(135deg, #4d74ee 0%, #375dd8 100%) !important;
+    box-shadow: 0 4px 12px rgba(64, 104, 226, 0.35);
+    transform: translateY(-1px) !important;
+    color: #ffffff !important;
+}
+
+.navbar-guest-btn:active {
+    transform: scale(0.97) !important;
+}
+
+.navbar-guest-btn i {
+    font-size: 14px !important;
+}
+
+/* Modern Desktop Search Bar */
+.header-search.modern-header-search {
+    position: relative !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.modern-header-search .header-search-icon-left {
+    position: absolute !important;
+    left: 14px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #94a3b8 !important;
+    font-size: 14px !important;
+    pointer-events: none !important;
+    transition: all 0.2s ease !important;
+    z-index: 1 !important;
+    line-height: 1 !important;
+}
+
+.modern-header-search input#header-search-input {
+    width: 100% !important;
+    height: 40px !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    font-size: 13.5px !important;
+    padding: 0 42px 0 38px !important;
+    color: #1e293b !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+    outline: none !important;
+}
+
+.modern-header-search input#header-search-input::placeholder {
+    color: #94a3b8 !important;
+    font-size: 13.5px !important;
+}
+
+.modern-header-search input#header-search-input:hover {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+}
+
+.modern-header-search input#header-search-input:focus {
+    background: #ffffff !important;
+    border-color: #4068e2 !important;
+    box-shadow: 0 0 0 3px rgba(64, 104, 226, 0.12) !important;
+}
+
+.modern-header-search:focus-within .header-search-icon-left {
+    color: #4068e2 !important;
+}
+
+.modern-header-search .header-search-badge {
+    position: absolute !important;
+    right: 14px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #94a3b8 !important;
+    font-size: 13px !important;
+    pointer-events: none !important;
+    transition: all 0.2s ease !important;
+}
+
+.modern-header-search:focus-within .header-search-badge {
+    color: #4068e2 !important;
+}
+
+/* Header Alignment Cleanups */
+header {
+    display: flex;
+    align-items: center;
+}
+
+.header-right {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    margin-top: 0 !important;
+    height: 100% !important;
+}
+
+.header-right .hr-box.hr-msg {
+    margin: 0 !important;
+    top: 0 !important;
+    position: relative !important;
+}
+
+.header-right .hr-box.mobile-header-avatar {
+    margin: 0 !important;
+    top: 0 !important;
+    position: relative !important;
+}
+
+.header-right .hr-box.service-link a {
+    height: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 0 16px !important;
+    border-radius: 10px !important;
+    font-size: 13.5px !important;
+    font-weight: 600 !important;
+}
+
+.header-mid {
+    margin: 0 auto !important;
+    width: 90% !important;
+}
+
+/* Mobile Search Drawer Polish */
+.header-mobil-search-area .hmsa-title.d-flex {
+    height: 56px !important;
+    padding: 0 16px !important;
+    align-items: center !important;
+    gap: 12px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.hmsa-search {
+    flex: 1 !important;
+    width: auto !important;
+    position: relative !important;
+}
+
+.hmsa-search input {
+    height: 38px !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    padding: 0 38px 0 14px !important;
+    font-size: 14px !important;
+    width: 100% !important;
+    transition: all 0.2s ease !important;
+}
+
+.hmsa-search input:focus {
+    background: #ffffff !important;
+    border-color: #4068e2 !important;
+    box-shadow: 0 0 0 3px rgba(64, 104, 226, 0.12) !important;
+}
+
+.hmsa-search i {
+    right: 12px !important;
+    font-size: 15px !important;
+    color: #94a3b8 !important;
+}
+
+/* Responsive Rules for Mobile (<= 991px) */
+@media (max-width: 991px) {
+    .header-right-mobile {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 8px !important;
+        margin: 0 !important;
+    }
+
+    .navbar-icon-btn,
+    .header-m-search-trigger,
+    .header-right-trigger,
+    #user-messages-trigger2,
+    #user-notif-trigger2,
+    .navbar-avatar-btn,
+    .mobile-header-avatar .hr-logo,
+    .hmsa-close.navbar-icon-btn {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        border-radius: 8px !important;
+        bottom: 0 !important;
+        top: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .navbar-avatar-btn,
+    .mobile-header-avatar .hr-logo {
+        padding: 1.5px !important;
+    }
+
+    .navbar-avatar-btn img,
+    .mobile-header-avatar .hr-logo img {
+        border-radius: 6px !important;
+    }
+
+    .navbar-avatar-status {
+        width: 8px !important;
+        height: 8px !important;
+        bottom: -1px !important;
+        right: -1px !important;
+    }
+
+    .navbar-icon-btn i,
+    .header-m-search-trigger i,
+    .header-right-trigger i,
+    #user-messages-trigger2 i,
+    #user-notif-trigger2 i,
+    .hmsa-close.navbar-icon-btn i {
+        font-size: 14.5px !important;
+    }
+
+    .navbar-icon-btn .hr-count,
+    #user-messages-trigger2 .hr-count,
+    #user-notif-trigger2 .hr-count {
+        top: -3px !important;
+        right: -3px !important;
+        min-width: 16px !important;
+        height: 16px !important;
+        font-size: 9px !important;
+        padding: 0 3px !important;
+    }
+
+    .navbar-icon-btn .hr-count span,
+    #user-messages-trigger2 .hr-count span,
+    #user-notif-trigger2 .hr-count span {
+        font-size: 9px !important;
+    }
+
+    .header-mobil-login {
+        display: inline-flex !important;
+    }
+}
+
+/* Dark Mode Support */
+body.dark .navbar-icon-btn,
+body.dark .header-m-search-trigger,
+body.dark .header-right-trigger,
+body.dark #user-messages-trigger,
+body.dark #user-messages-trigger2,
+body.dark #user-notif-trigger,
+body.dark #user-notif-trigger2,
+body.dark .navbar-avatar-btn,
+body.dark .mobile-header-avatar .hr-logo,
+body.dark .hmsa-close.navbar-icon-btn {
+    background: #242424 !important;
+    border-color: #383838 !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark .navbar-icon-btn:hover,
+body.dark .header-m-search-trigger:hover,
+body.dark .header-right-trigger:hover,
+body.dark #user-messages-trigger:hover,
+body.dark #user-messages-trigger2:hover,
+body.dark #user-notif-trigger:hover,
+body.dark #user-notif-trigger2:hover,
+body.dark .navbar-avatar-btn:hover,
+body.dark .mobile-header-avatar .hr-logo:hover,
+body.dark .hmsa-close.navbar-icon-btn:hover {
+    background: #2e2e2e !important;
+    border-color: #4a4a4a !important;
+    color: #60a5fa !important;
+}
+
+body.dark .navbar-icon-btn i,
+body.dark .header-m-search-trigger i,
+body.dark .header-right-trigger i,
+body.dark #user-messages-trigger i,
+body.dark #user-messages-trigger2 i,
+body.dark #user-notif-trigger i,
+body.dark #user-notif-trigger2 i,
+body.dark .hmsa-close.navbar-icon-btn i {
+    color: #cbd5e1 !important;
+}
+
+body.dark .navbar-icon-btn:hover i,
+body.dark .header-m-search-trigger:hover i,
+body.dark .header-right-trigger:hover i,
+body.dark #user-messages-trigger:hover i,
+body.dark #user-messages-trigger2:hover i,
+body.dark #user-notif-trigger:hover i,
+body.dark #user-notif-trigger2:hover i,
+body.dark .hmsa-close.navbar-icon-btn:hover i {
+    color: #60a5fa !important;
+}
+
+body.dark .navbar-icon-btn .hr-count,
+body.dark #user-messages-trigger .hr-count,
+body.dark #user-messages-trigger2 .hr-count,
+body.dark #user-notif-trigger .hr-count,
+body.dark #user-notif-trigger2 .hr-count {
+    border-color: #242424 !important;
+}
+
+body.dark .modern-header-search input#header-search-input {
+    background: #242424 !important;
+    border-color: #383838 !important;
+    color: #f1f5f9 !important;
+}
+
+body.dark .modern-header-search input#header-search-input::placeholder {
+    color: #64748b !important;
+}
+
+body.dark .modern-header-search input#header-search-input:hover {
+    background: #282828 !important;
+    border-color: #4a4a4a !important;
+}
+
+body.dark .modern-header-search input#header-search-input:focus {
+    background: #1e1e1e !important;
+    border-color: #4068e2 !important;
+    box-shadow: 0 0 0 3px rgba(64, 104, 226, 0.25) !important;
+}
+
+body.dark .modern-header-search .header-search-icon-left,
+body.dark .modern-header-search .header-search-badge {
+    color: #64748b !important;
+}
+
+body.dark .modern-header-search:focus-within .header-search-icon-left,
+body.dark .modern-header-search:focus-within .header-search-badge {
+    color: #60a5fa !important;
+}
+
+body.dark .navbar-avatar-status {
+    border-color: #242424 !important;
+}
+
+body.dark .header-mobil-search-area .hmsa-title.d-flex {
+    border-bottom-color: #383838 !important;
+}
+
+body.dark .hmsa-search input {
+    background: #242424 !important;
+    border-color: #383838 !important;
+    color: #f1f5f9 !important;
+}
 
 .header-left img {
     width: 90%;

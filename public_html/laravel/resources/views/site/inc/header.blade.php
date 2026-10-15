@@ -1,6 +1,6 @@
 <header>
     <div class="container-fluid">
-        <div class="row aligin-items-center">
+        <div class="row align-items-center">
             <div class="col-lg-3 col-md-6 col-6">
                 <div class="header-left">
                     <div id="header-left-menu" class="header-left-menu sidebar-toggle-btn" role="button" tabindex="0" aria-label="Menü">
@@ -22,10 +22,15 @@
             </div>
             <div class="col-lg-6 col-md-6 md-mobile-none">
                 <div class="header-mid">
-                    <div class="header-search">
+                    <div class="header-search modern-header-search">
+                        <div class="header-search-icon-left">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
                         <input id="header-search-input" type="text" class="searchInput"
-                            placeholder="Hizmet veya firma ara...">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                            placeholder="Hizmet veya firma ara..." autocomplete="off">
+                        <div class="header-search-badge" title="Arama">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
                     </div>
                     <style>
                         #resultsArea .h6 {
@@ -58,14 +63,14 @@
                     {{-- header-web md-mobile-none--}}
 
                     <div class="header-right-mobile">
-                        <div class="header-mobil-search" @guest() style="position:relative; top: 3px;" @endguest>
-                            <div class="header-m-search-trigger">
+                        <div class="header-mobil-search">
+                            <div class="header-m-search-trigger navbar-icon-btn" role="button" tabindex="0" aria-label="Arama">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </div>
                             <div class="header-mobil-search-area">
-                                <div class="hmsa-title d-flex">
-                                    <div class="hmsa-close">
-                                        <i class="fa-solid fa-angle-left"></i>
+                                <div class="hmsa-title d-flex align-items-center">
+                                    <div class="hmsa-close navbar-icon-btn" role="button" aria-label="Geri">
+                                        <i class="fa-solid fa-arrow-left"></i>
                                     </div>
                                     <div class="hmsa-search">
                                         <input type="text" class="searchInput" placeholder="Hizmet veya Firma ara...">
@@ -123,15 +128,14 @@
                         @auth()
                         @if(auth()->user()->user_type != 'admin')
                         <div class="header-mobil-message">
-                            <div id="user-messages" class="hr-box hr-msg">
-                                <a id="user-messages-trigger2" href="#" data-bs-container="body"
-                                    data-bs-trigger="hover focus" data-bs-toggle="popover"
-                                    data-bs-placement="bottom" data-bs-content="Bottom popover">
-                                    <i class="fa-solid fa-envelope"></i>
-                                    <div class="hr-count">
-                                        <span class="unread-msg-count">
-                                            {{ \App\Models\Message::where('receiver_id', Auth::id())
-                                                    ->where('is_read', false)->count() }}
+                            <div id="user-messages" class="hr-box hr-msg m-0 p-0">
+                                <a id="user-messages-trigger2" href="#" class="navbar-icon-btn navbar-btn-message" role="button" aria-label="Mesajlar">
+                                    <i class="fa-regular fa-comment-dots"></i>
+                                    @php
+                                        $mobileUnreadMsgCount = \App\Models\Message::where('receiver_id', Auth::id())->where('is_read', false)->count();
+                                    @endphp
+                                    <div class="hr-count" @if($mobileUnreadMsgCount == 0) style="display:none;" @endif>
+                                        <span class="unread-msg-count">{{ $mobileUnreadMsgCount }}</span>
                                     </div>
                                 </a>
                                 <div id="user-messages-dropdown2" class="user-messages-dropdown ums-mobil">
@@ -209,16 +213,21 @@
 
 
                         <div class="header-mobil-notif">
-                            <div id="user-notif" class="hr-box hr-msg">
-                                <a id="user-notif-trigger2" href="#"
+                            <div id="user-notif" class="hr-box hr-msg m-0 p-0">
+                                <a id="user-notif-trigger2" href="#" class="navbar-icon-btn navbar-btn-notif"
                                     data-bs-container="body"
                                     data-bs-trigger="click"
                                     data-bs-toggle="popover"
                                     data-bs-placement="bottom"
-                                    data-bs-content="Bildirimler">
-                                    <i class="fa-solid fa-bell"></i>
-                                    <div class="hr-count">
-                                        <span> {{user_notifications()['unread_count']}} </span>
+                                    data-bs-content="Bildirimler"
+                                    role="button"
+                                    aria-label="Bildirimler">
+                                    <i class="fa-regular fa-bell"></i>
+                                    @php
+                                        $mobileUnreadNotifCount = user_notifications()['unread_count'] ?? 0;
+                                    @endphp
+                                    <div class="hr-count" @if($mobileUnreadNotifCount == 0) style="display:none;" @endif>
+                                        <span class="notification-count">{{ $mobileUnreadNotifCount }}</span>
                                     </div>
                                 </a>
                                 <div id="user-natif-dropdown2" class="user-messages-dropdown ums-mobil">
@@ -290,59 +299,18 @@
                             </div>
                         </div>
 
-                        <!-- header-mobil-login login öncesi -->
+                        @endif
+                        @endauth
 
-                        <div class="header-mobil-login d-none">
-                            {{-- <div class="header-right-trigger">--}}
-                            {{-- <i class="fa-solid fa-user"></i>--}}
-                            {{-- </div>--}}
-
-                            <!-- login-right-dropdown login sonrası -->
-                            {{-- <div id="login-right-dropdown" class="login-right-dropdown" style="display: none;">--}}
-                            {{-- <ul>--}}
-                            {{-- <li>--}}
-                            {{-- <a href="{{route(auth()->user()->user_type == 'user' ? 'user.dashboard' : 'company.dashboard')}}">--}}
-                            {{-- Profilim--}}
-                            {{-- </a>--}}
-                            {{-- </li>--}}
-                            {{-- <li>--}}
-                            {{-- <a href="{{route('chat.show')}}">--}}
-                            {{-- Mesajlarım--}}
-                            {{-- </a>--}}
-                            {{-- </li>--}}
-                            {{-- <li>--}}
-                            {{-- <a href="#">--}}
-                            {{-- Analizler--}}
-                            {{-- </a>--}}
-                            {{-- </li>--}}
-                            {{-- <li>--}}
-                            {{-- <a href="#">--}}
-                            {{-- Kaydedilenler--}}
-                            {{-- </a>--}}
-                            {{-- </li>--}}
-                            {{-- <li>--}}
-                            {{-- <form action="{{route('logout')}}" method="POST">--}}
-
-                            {{-- @csrf--}}
-                            {{-- <a href="#" style="color: red" onclick="this.closest('form').submit()">--}}
-                            {{-- Çıkış Yap--}}
-                            {{-- </a>--}}
-                            {{-- </form>--}}
-                            {{-- </li>--}}
-                            {{-- </ul>--}}
-                            {{-- </div>--}}
-                            <!-- // -->
-                            @endif
-                            @endauth
-
-                            @guest()
-                            <div class="header-right-trigger" data-bs-toggle="modal"
-                                href="#exampleModalToggle">
-                                <i class="fa-solid fa-user"></i>
+                        @guest()
+                        <div class="header-mobil-login">
+                            <div class="header-right-trigger navbar-icon-btn navbar-btn-login" data-bs-toggle="modal"
+                                href="#exampleModalToggle" role="button" tabindex="0" aria-label="Giriş Yap">
+                                <i class="fa-regular fa-user"></i>
                             </div>
-                            @endguest
-
                         </div>
+                        @endguest
+
                     </div>
 
 
@@ -350,17 +318,15 @@
                     @if(auth()->user()->user_type != 'admin')
                     <div id="user-messages" class="hr-box hr-msg d-none d-lg-block">
                         <a id="user-messages-trigger" href="#"
-                            data-bs-container="body"
-                            data-bs-toggle="popover"
-                            data-bs-placement="bottom"
-                            data-bs-content="Mesajlar"
-                            data-bs-trigger="hover"
-                            class="position-relative">
-                            <i class="fa-solid fa-envelope"></i>
-                            <div class="hr-count">
-                                <span class="unread-msg-count">
-                                    {{ \App\Models\Message::where('receiver_id', Auth::id())->where('is_read', false)->count() }}
-                                </span>
+                            class="navbar-icon-btn navbar-btn-message position-relative"
+                            role="button"
+                            aria-label="Mesajlar">
+                            <i class="fa-regular fa-comment-dots"></i>
+                            @php
+                                $desktopUnreadMsgCount = \App\Models\Message::where('receiver_id', Auth::id())->where('is_read', false)->count();
+                            @endphp
+                            <div class="hr-count" @if($desktopUnreadMsgCount == 0) style="display:none;" @endif>
+                                <span class="unread-msg-count">{{ $desktopUnreadMsgCount }}</span>
                             </div>
                         </a>
                         <div id="user-messages-dropdown" class="user-messages-dropdown">
@@ -437,16 +403,16 @@
 
                     <div id="user-notif" class="hr-box hr-msg d-none d-lg-block">
                         <a id="user-notif-trigger" href="#"
-                            data-bs-container="body"
-                            data-bs-toggle="popover"
-                            data-bs-placement="bottom"
-                            data-bs-trigger="hover"
-
-                            data-bs-content="Bildirimler" class="position-relative"
-                            onclick="notificationToggle(event)">
-                            <i class="fa-solid fa-bell"></i>
-                            <div class="hr-count">
-                                <span> {{user_notifications()['unread_count']}} </span>
+                            class="navbar-icon-btn navbar-btn-notif position-relative"
+                            onclick="notificationToggle(event)"
+                            role="button"
+                            aria-label="Bildirimler">
+                            <i class="fa-regular fa-bell"></i>
+                            @php
+                                $desktopUnreadNotifCount = user_notifications()['unread_count'] ?? 0;
+                            @endphp
+                            <div class="hr-count" @if($desktopUnreadNotifCount == 0) style="display:none;" @endif>
+                                <span class="notification-count">{{ $desktopUnreadNotifCount }}</span>
                             </div>
                         </a>
                         <div id="user-natif-dropdown" class="user-messages-dropdown">
@@ -507,8 +473,8 @@
                     </div>
 
                     <div class="hr-box mobile-header-avatar">
-                        <a class="hr-logo" data-bs-container="body" data-bs-trigger="hover focus"
-                            data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Profilim">
+                        <a class="hr-logo navbar-avatar-btn" data-bs-container="body" data-bs-trigger="hover focus"
+                            data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Profilim" role="button" aria-label="Profilim">
                             @php
                             $user = auth()->user();
                             $avatarPath = 'site/images/default_avatar.jpg';
@@ -519,7 +485,8 @@
                             $avatarPath = $user->company->avatar;
                             }
                             @endphp
-                            <img src="{{asset($avatarPath)}}" class="me-0 me-lg-3" alt="Avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                            <img src="{{asset($avatarPath)}}" alt="Avatar">
+                            <span class="navbar-avatar-status" title="Çevrimiçi"></span>
                         </a>
 
                         <!-- login-right-dropdown classı login sonrası -->
@@ -587,21 +554,27 @@
 
                     @if(auth()->user()->user_type == 'company')
                     <div class="hr-box service-link d-none d-lg-block">
-                        <a href="{{route('company.services.create')}}"> Hizmet Ekle </a>
+                        <a href="{{route('company.services.create')}}">
+                            <i class="fa-solid fa-plus me-1"></i> Hizmet Ekle
+                        </a>
                     </div>
 
                     @elseif(auth()->user()->user_type == 'user')
                     <div class="hr-box service-link d-none d-lg-block">
-                        <a href="{{route('idea.create')}}"> Fikir Ekle </a>
+                        <a href="{{route('idea.create')}}">
+                            <i class="fa-solid fa-plus me-1"></i> Fikir Ekle
+                        </a>
                     </div>
                     @endif
                     @endif
                     @endauth
 
                     @guest()
-                    <div class="hr-box service-link mt-2 float-end d-none d-lg-block" data-bs-toggle="modal"
-                        href="#exampleModalToggle">
-                        <a href="#">Giriş Yap / Kayıt Ol</a>
+                    <div class="hr-box d-none d-lg-block ms-2">
+                        <a href="#exampleModalToggle" data-bs-toggle="modal" class="navbar-guest-btn" role="button">
+                            <i class="fa-regular fa-user"></i>
+                            <span>Giriş Yap / Kayıt Ol</span>
+                        </a>
                     </div>
                     @endguest
                 </div>
@@ -1018,10 +991,14 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            // Badge sayısını sıfırla
+                            // Badge sayısını sıfırla ve gizle
                             const badges = document.querySelectorAll('.hr-count span, .notification-count');
                             badges.forEach(badge => {
                                 badge.textContent = '0';
+                            });
+                            const notifCounts = document.querySelectorAll('#user-notif .hr-count, #user-notif-trigger .hr-count, #user-notif-trigger2 .hr-count');
+                            notifCounts.forEach(el => {
+                                el.style.display = 'none';
                             });
 
                             // Actived class'larını kaldır
