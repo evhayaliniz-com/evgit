@@ -684,12 +684,24 @@ $(document).ready(function () {
     $('.header-right-trigger').on('click', function (e) {
         $('.header-right-dropdown').toggleClass("show");
     });
-    $('.hr-logo').on('click', function (e) {
-        $('#header-right-dropdown').toggleClass("show");
-        $('#login-right-dropdown').toggleClass("show");
-        on();
+    function closeAllHeaderDropdowns() {
+        $('.user-messages-dropdown, .login-right-dropdown').removeClass('show');
+        off();
+    }
 
+    // Avatar / Profilim Toggle (Desktop & Mobile)
+    $('.navbar-avatar-btn, .mobile-header-avatar .hr-logo').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const $dropdown = $('#login-right-dropdown');
+        const willShow = !$dropdown.hasClass('show');
+        closeAllHeaderDropdowns();
+        if (willShow) {
+            $dropdown.addClass('show');
+            on();
+        }
     });
+
     $('#header-search-input').on('click focus', function (e) {
         e.stopPropagation();
         $('.header-search-area').addClass("show");
@@ -705,43 +717,81 @@ $(document).ready(function () {
         if (e.key === 'Escape') {
             $('.header-search-area').removeClass('show');
             $('#header-search-input').blur();
+            closeAllHeaderDropdowns();
         }
     });
 
     $('.header-search-area').on('click', function (e) {
         e.stopPropagation();
     });
-    $('#user-messages-trigger').on('click', function (e) {
-        on();
-        $('#user-messages-dropdown').toggleClass("show");
-    });
-    $('.header-right-trigger').on('click', function (e) {
-        on();
-        $('.login-right-dropdown').toggleClass("show");
-    });
-    $('#user-messages-trigger2').on('click', function (e) {
-        $('#user-messages-dropdown2').toggleClass("show");
-    });
-    $('.usm-mobil-close').on('click', function (e) {
-        $('#user-messages-dropdown2').removeClass("show");
-    });
-    $('#user-notif-trigger').on('click', function (e) {
-        if ($('#user-natif-dropdown').hasClass("show")) {
-            $('#user-natif-dropdown').removeClass("show");
-            off();
 
-        } else {
-            $('#user-natif-dropdown').addClass("show");
+    // Desktop Messages Toggle
+    $('#user-messages-trigger').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const $dropdown = $('#user-messages-dropdown');
+        const willShow = !$dropdown.hasClass('show');
+        closeAllHeaderDropdowns();
+        if (willShow) {
+            $dropdown.addClass('show');
             on();
         }
     });
 
-    $('#user-notif-trigger2').on('click', function (e) {
-        $('#user-natif-dropdown2').toggleClass("show");
+    // Mobile Messages Toggle
+    $('#user-messages-trigger2').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const $dropdown = $('#user-messages-dropdown2');
+        const willShow = !$dropdown.hasClass('show');
+        closeAllHeaderDropdowns();
+        if (willShow) {
+            $dropdown.addClass('show');
+        }
     });
 
-    $('.usm-mobil-close').on('click', function (e) {
-        $('#user-natif-dropdown2').removeClass("show");
+    // Desktop Notifications Toggle
+    $('#user-notif-trigger').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const $dropdown = $('#user-natif-dropdown');
+        const willShow = !$dropdown.hasClass('show');
+        closeAllHeaderDropdowns();
+        if (willShow) {
+            $dropdown.addClass('show');
+            on();
+        }
+    });
+
+    // Mobile Notifications Toggle
+    $('#user-notif-trigger2').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const $dropdown = $('#user-natif-dropdown2');
+        const willShow = !$dropdown.hasClass('show');
+        closeAllHeaderDropdowns();
+        if (willShow) {
+            $dropdown.addClass('show');
+        }
+    });
+
+    // Mobile Dropdown Close Buttons
+    $(document).on('click', '.usm-mobil-close, .profile-mobile-close', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeAllHeaderDropdowns();
+    });
+
+    // Prevent clicks inside dropdown content from bubbling up to document
+    $(document).on('click', '.user-messages-dropdown .mobile-dropdown-sheet, .user-messages-dropdown.modern-dropdown, .login-right-dropdown .profile-dropdown-sheet, .login-right-dropdown.modern-profile-dropdown', function (e) {
+        e.stopPropagation();
+    });
+
+    // Mobile backdrop click to close
+    $(document).on('click', '.user-messages-dropdown.ums-mobil, .login-right-dropdown.modern-profile-dropdown', function (e) {
+        if ($(e.target).is('.user-messages-dropdown.ums-mobil, .login-right-dropdown.modern-profile-dropdown')) {
+            closeAllHeaderDropdowns();
+        }
     });
     $('.header-m-search-trigger').on('click', function (e) {
         $('.header-mobil-search-area').toggleClass("show");
@@ -776,50 +826,9 @@ $(document).ready(function () {
     });
 
 
-    $(document).mouseup(function (e) {
-        var divSelect = $(".header-right-trigger");
-        if (!divSelect.is(e.target) && divSelect.has(e.target).length === 0) {
-            $('.header-right-dropdown ').removeClass("show");
-            off();
-        }
-    });
-    $(document).mouseup(function (e) {
-        var divSelect = $(".login-right-dropdown");
-        if (!divSelect.is(e.target) && divSelect.has(e.target).length === 0) {
-            $('.login-right-dropdown').removeClass("show");
-            off();
-        }
-    });
-    $(document).mouseup(function (e) {
-        var divSelect = $("#user-messages-dropdown");
-        if (!divSelect.is(e.target) && divSelect.has(e.target).length === 0) {
-            $('#user-messages-dropdown').removeClass("show");
-            off();
-        }
-    });
-    $('#user-notif').on('click', function (e) {
-      
-        $('#user-natif-dropdown').toggleClass("show");
-    });
-    $(document).mouseup(function (e) {
-        var divSelect = $("#user-natif-dropdown");
-        if (!divSelect.is(e.target) && divSelect.has(e.target).length === 0) {
-            $('#user-natif-dropdown').removeClass("show");
-            off();
-        }
-    });
-    $(document).mouseup(function (e) {
-        var divSelect = $("#header-right-dropdown");
-        if (!divSelect.is(e.target) && divSelect.has(e.target).length === 0) {
-            $('#header-right-dropdown').removeClass("show");
-            off();
-        }
-    });
-    $(document).mouseup(function (e) {
-        var divSelect = $("#login-right-dropdown");
-        if (!divSelect.is(e.target) && divSelect.has(e.target).length === 0) {
-            $('#login-right-dropdown').removeClass("show");
-            off();
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('#user-messages, #user-notif, .mobile-header-avatar, .header-mobil-message, .header-mobil-notif, .user-messages-dropdown, .login-right-dropdown').length) {
+            closeAllHeaderDropdowns();
         }
     });
 
@@ -1108,11 +1117,18 @@ var swiper = new Swiper(".mySwiper2", {
 
 
 function on() {
-    document.getElementById("overlay").style.display = "block";
+    var overlay = document.getElementById("overlay");
+    if (overlay) {
+        overlay.style.display = "block";
+    }
 }
 
 function off() {
-    document.getElementById("overlay").style.display = "none";
+    var overlay = document.getElementById("overlay");
+    if (overlay) {
+        overlay.style.display = "none";
+    }
+    $('.user-messages-dropdown, .login-right-dropdown').removeClass('show');
 }
 
 $(".toggle-password").click(function () {

@@ -120,86 +120,103 @@
                         </div>
 
                         @auth()
+                        @php
+                            $currentAuthId = Auth::id();
+                            $allMessages = \App\Models\Message::with(['sender.informations', 'sender.company'])
+                                ->where('receiver_id', $currentAuthId)
+                                ->orderBy('created_at', 'desc')
+                                ->get();
+
+                            $groupedMessages = $allMessages->groupBy('sender_id')->map(function ($messages) {
+                                return [
+                                    'latest_message' => $messages->first(),
+                                    'unread_count' => $messages->where('is_read', false)->count(),
+                                ];
+                            });
+
+                            $sharedUnreadMsgCount = $allMessages->where('is_read', false)->count();
+                            $sharedUnreadNotifCount = user_notifications()['unread_count'] ?? 0;
+                        @endphp
+
                         @if(auth()->user()->user_type != 'admin')
                         <div class="header-mobil-message">
-                            <div id="user-messages" class="hr-box hr-msg m-0 p-0">
+                            <div id="user-messages-m" class="hr-box hr-msg m-0 p-0">
                                 <a id="user-messages-trigger2" href="#" class="navbar-icon-btn navbar-btn-message" role="button" aria-label="Mesajlar">
                                     <i class="fa-regular fa-comment-dots"></i>
-                                    @php
-                                        $mobileUnreadMsgCount = \App\Models\Message::where('receiver_id', Auth::id())->where('is_read', false)->count();
-                                    @endphp
-                                    <div class="hr-count" @if($mobileUnreadMsgCount == 0) style="display:none;" @endif>
-                                        <span class="unread-msg-count">{{ $mobileUnreadMsgCount }}</span>
+                                    <div class="hr-count" @if($sharedUnreadMsgCount == 0) style="display:none;" @endif>
+                                        <span class="unread-msg-count">{{ $sharedUnreadMsgCount }}</span>
                                     </div>
                                 </a>
-                                <div id="user-messages-dropdown2" class="user-messages-dropdown ums-mobil">
-                                    <div class="um-dropdown-head d-flex">
-                                        <h4>
-                                            <a href="{{route('chat.show')}}">Mesajlar <span
-                                                    class="unread-msg-count">
-                                                    {{ '(' . \App\Models\Message::where('receiver_id', Auth::id())->where('is_read', false)->count() . ')' }}
-                                            </a>
-                                        </h4>
-                                        <div class="usm-mobil-close">
-                                            x
-                                        </div>
-                                    </div>
-                                    <div class="ums-box msg-ums-box">
-                                        @php
-                                        $allMessages = \App\Models\Message::with(['sender.informations', 'sender.company'])
-                                        ->where('receiver_id', Auth::id())
-                                        ->orderBy('created_at', 'desc')
-                                        ->get();
-
-                                        // Mesajları gönderenlere göre grupla
-                                        $groupedMessages = $allMessages->groupBy('sender_id')->map(function ($messages) {
-                                        return [
-                                        'latest_message' => $messages->first(),
-                                        'unread_count' => $messages->where('is_read', false)->count(),
-                                        ];
-                                        });
-                                        @endphp
-
-                                        @foreach($groupedMessages as $senderId => $data)
-                                        @php
-                                        $message = $data['latest_message'];
-                                        $unreadCount = $data['unread_count'];
-                                        @endphp
-                                        <div class="ums-area d-flex actived">
-                                            <a href="{{ route('chat.show', $message->sender_id) }}" style="width: 100%; position: relative;">
-                                                <div class="ums-img">
-                                                    <img src="{{ asset($message->sender->user_type === 'user' ?
-                                                                                            $message?->sender?->informations?->avatar :
-                                                                                            $message?->sender?->company?->avatar) }}"
-                                                        alt="Avatar" style="width: 40px; height: 40px">
+                                <div id="user-messages-dropdown2" class="user-messages-dropdown ums-mobil modern-dropdown-mobile">
+                                    <div class="mobile-dropdown-sheet">
+                                        <div class="mobile-dropdown-header">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="dropdown-header-icon msg-icon">
+                                                    <i class="fa-regular fa-comment-dots"></i>
                                                 </div>
-                                                <div class="ums-text d-flex" style="flex: 1;">
-                                                    <h5>
-                                                        {{ $message->sender->user_type === 'user' ?
-                                                                        $message->sender->informations?->name :
-                                                                        $message->sender->company?->name }}
-                                                    </h5>
-                                                    <div class="ums-dates d-flex">
-                                                        <span>
-                                                            {{ \Carbon\Carbon::parse($message->created_at)
-                                                                                                    ->setTimezone('Europe/Istanbul')
-                                                                                                    ->format('H:i') }}
-                                                        </span>
-                                                        <span>
-                                                            {{ \Carbon\Carbon::parse($message->created_at)
-                                                                                                    ->setTimezone('Europe/Istanbul')
-                                                                                                    ->format('d-m-Y') }}
-                                                        </span>
+                                                <div>
+                                                    <h5 class="mobile-header-title">Mesajlar</h5>
+                                                    <span class="mobile-header-subtitle">
+                                                        {{ $sharedUnreadMsgCount > 0 ? $sharedUnreadMsgCount . ' yeni mesaj' : 'Gelen kutusu' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="mobile-dropdown-close usm-mobil-close" aria-label="Kapat">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </button>
+                                        </div>
+
+                                        <div class="mobile-dropdown-body">
+                                            @forelse($groupedMessages as $senderId => $data)
+                                                @php
+                                                    $message = $data['latest_message'];
+                                                    $unreadCount = $data['unread_count'];
+                                                    $senderName = $message->sender->user_type === 'user'
+                                                        ? ($message->sender?->informations?->name ?: $message->sender?->name)
+                                                        : ($message->sender?->company?->name ?: $message->sender?->name);
+                                                    $senderAvatar = $message->sender->user_type === 'user'
+                                                        ? ($message?->sender?->informations?->avatar ?: 'site/images/default_avatar.jpg')
+                                                        : ($message?->sender?->company?->avatar ?: 'site/images/default_avatar.jpg');
+                                                @endphp
+                                                <a href="{{ route('chat.show', $message->sender_id) }}" class="modern-dropdown-item {{ $unreadCount > 0 ? 'unread' : '' }}">
+                                                    <div class="dropdown-item-avatar">
+                                                        <img src="{{ asset($senderAvatar) }}" alt="{{ $senderName }}">
+                                                        @if($unreadCount > 0)
+                                                            <span class="avatar-unread-badge">{{ $unreadCount }}</span>
+                                                        @endif
                                                     </div>
+                                                    <div class="dropdown-item-content">
+                                                        <div class="dropdown-item-top">
+                                                            <span class="dropdown-item-name text-truncate">{{ $senderName }}</span>
+                                                            <span class="dropdown-item-time">
+                                                                {{ \Carbon\Carbon::parse($message->created_at)->setTimezone('Europe/Istanbul')->format('H:i') }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="dropdown-item-preview text-truncate">
+                                                            {{ $message->message ?: 'Dosya eki gönderildi' }}
+                                                        </div>
+                                                    </div>
+                                                    @if($unreadCount > 0)
+                                                        <span class="unread-dot"></span>
+                                                    @endif
+                                                </a>
+                                            @empty
+                                                <div class="modern-dropdown-empty">
+                                                    <div class="empty-icon">
+                                                        <i class="fa-regular fa-comment-dots"></i>
+                                                    </div>
+                                                    <h6>Henüz Mesajınız Yok</h6>
+                                                    <p>Yeni bir mesaj aldığınızda burada listelenecektir.</p>
                                                 </div>
-                                                @if($unreadCount > 0)
-                                                <span style="position: absolute; right: 10px; top: 10px; background-color: #4068e2; color: white; border-radius: 50%; min-width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; padding: 0 5px;">
-                                                    {{ $unreadCount }}
-                                                </span>
-                                                @endif
+                                            @endforelse
+                                        </div>
+
+                                        <div class="mobile-dropdown-footer">
+                                            <a href="{{route('chat.show')}}" class="dropdown-footer-btn">
+                                                <span>Tüm Mesajları Görüntüle</span>
+                                                <i class="fa-solid fa-arrow-right-long ms-1"></i>
                                             </a>
                                         </div>
-                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -207,87 +224,76 @@
 
 
                         <div class="header-mobil-notif">
-                            <div id="user-notif" class="hr-box hr-msg m-0 p-0">
+                            <div id="user-notif-m" class="hr-box hr-msg m-0 p-0">
                                 <a id="user-notif-trigger2" href="#" class="navbar-icon-btn navbar-btn-notif"
-                                    data-bs-container="body"
-                                    data-bs-trigger="click"
-                                    data-bs-toggle="popover"
-                                    data-bs-placement="bottom"
-                                    data-bs-content="Bildirimler"
                                     role="button"
                                     aria-label="Bildirimler">
                                     <i class="fa-regular fa-bell"></i>
-                                    @php
-                                        $mobileUnreadNotifCount = user_notifications()['unread_count'] ?? 0;
-                                    @endphp
-                                    <div class="hr-count" @if($mobileUnreadNotifCount == 0) style="display:none;" @endif>
-                                        <span class="notification-count">{{ $mobileUnreadNotifCount }}</span>
+                                    <div class="hr-count" @if($sharedUnreadNotifCount == 0) style="display:none;" @endif>
+                                        <span class="notification-count">{{ $sharedUnreadNotifCount }}</span>
                                     </div>
                                 </a>
-                                <div id="user-natif-dropdown2" class="user-messages-dropdown ums-mobil">
-                                    <div class="um-dropdown-head d-flex">
-                                        <h4>
-                                            Bildirimler (<span class="notification-count">
-                                                {{user_notifications()['unread_count']}}
-                                            </span>)
-                                        </h4>
-                                        <div class="usm-mobil-close">
-                                            x
+                                <div id="user-natif-dropdown2" class="user-messages-dropdown ums-mobil modern-dropdown-mobile">
+                                    <div class="mobile-dropdown-sheet">
+                                        <div class="mobile-dropdown-header">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="dropdown-header-icon notif-icon">
+                                                    <i class="fa-regular fa-bell"></i>
+                                                </div>
+                                                <div>
+                                                    <h5 class="mobile-header-title">Bildirimler</h5>
+                                                    <span class="mobile-header-subtitle">
+                                                        {{ $sharedUnreadNotifCount > 0 ? $sharedUnreadNotifCount . ' yeni bildirim' : 'Tümü okundu' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="mobile-dropdown-close usm-mobil-close" aria-label="Kapat">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </button>
                                         </div>
-                                    </div>
-                                    <div class="ums-box">
-                                        @forelse(user_notifications()['values'] as $notification)
-                                        <div @class(["ums-area d-flex", "actived"=> !$notification->is_read])>
-                                            <a href="{{$notification->link ?? 'javascript:void(0)'}}"
-                                                class="notification-link"
-                                                data-notification-id="{{$notification->id}}">
-                                                <div class="ums-img">
-                                                    @php
-                                                    $user = auth_info($notification->user_id);
-                                                    @endphp
 
-                                                    @if($user)
-                                                    <img src="{{ asset($user->avatar) }}" alt="{{ $user->name }}">
-                                                    @else
-                                                    <img src="{{ asset('default-avatar.png') }}" alt="Kullanıcı bulunamadı">
+                                        <div class="mobile-dropdown-body">
+                                            @forelse(user_notifications()['values'] as $notification)
+                                                @php
+                                                    $notifUser = auth_info($notification->user_id);
+                                                    $notifUserName = $notifUser?->name ?? 'Sistem Bildirimi';
+                                                    $notifAvatar = $notifUser?->avatar ?? 'site/images/default_avatar.jpg';
+                                                @endphp
+                                                <a href="{{$notification->link ?? 'javascript:void(0)'}}"
+                                                    class="modern-dropdown-item notification-link {{ !$notification->is_read ? 'unread' : '' }}"
+                                                    data-notification-id="{{$notification->id}}">
+                                                    <div class="dropdown-item-avatar">
+                                                        <img src="{{ asset($notifAvatar) }}" alt="{{ $notifUserName }}">
+                                                        <span class="avatar-sub-icon notif"><i class="fa-solid fa-bell"></i></span>
+                                                    </div>
+                                                    <div class="dropdown-item-content">
+                                                        <div class="dropdown-item-top">
+                                                            <span class="dropdown-item-name text-truncate">{{ $notifUserName }}</span>
+                                                            <span class="dropdown-item-time">
+                                                                {{\Carbon\Carbon::parse($notification->created_at)->setTimezone('Europe/Istanbul')->format('H:i')}}
+                                                            </span>
+                                                        </div>
+                                                        <div class="dropdown-item-message">
+                                                            {{$notification->message}}
+                                                        </div>
+                                                        <div class="dropdown-item-date-sub">
+                                                            {{\Carbon\Carbon::parse($notification->created_at)->setTimezone('Europe/Istanbul')->format('d.m.Y')}}
+                                                        </div>
+                                                    </div>
+                                                    @if(!$notification->is_read)
+                                                        <span class="unread-dot"></span>
                                                     @endif
-
+                                                </a>
+                                            @empty
+                                                <div class="modern-dropdown-empty">
+                                                    <div class="empty-icon">
+                                                        <i class="fa-regular fa-bell-slash"></i>
+                                                    </div>
+                                                    <h6>Bildiriminiz Yok</h6>
+                                                    <p>Yeni bir bildirim aldığınızda burada görüntülenecektir.</p>
                                                 </div>
-                                                <div class="ums-text d-flex">
-                                                    <h5>
-                                                        @php
-                                                        $user = auth_info($notification->user_id);
-                                                        @endphp
-
-                                                        {{ $user?->name ?? 'Bilinmeyen Kullanıcı' }}
-
-                                                    </h5>
-                                                    <p>
-                                                        {{$notification->message}}
-                                                    </p>
-                                                </div>
-                                                <div class="ums-dates d-flex">
-                                                    <span>
-                                                        {{\Carbon\Carbon::parse($notification->created_at)
-                                                                    ->setTimezone('Europe/Istanbul')->format('H:i')}}
-                                                    </span>
-                                                    <span>
-                                                        {{\Carbon\Carbon::parse($notification->created_at)
-                                                                    ->setTimezone('Europe/Istanbul')->format('d-m-Y')}}
-                                                    </span>
-                                                </div>
-                                            </a>
+                                            @endforelse
                                         </div>
-
-                                        @empty
-                                        <div class="ums-area d-flex actived">
-                                            <a href="javascript:void(0)">
-                                                <div class="ums-text d-flex">
-                                                    <p>Bildirim bulunmamaktadır.</p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        @endforelse
                                     </div>
                                 </div>
                             </div>
@@ -316,80 +322,79 @@
                             role="button"
                             aria-label="Mesajlar">
                             <i class="fa-regular fa-comment-dots"></i>
-                            @php
-                                $desktopUnreadMsgCount = \App\Models\Message::where('receiver_id', Auth::id())->where('is_read', false)->count();
-                            @endphp
-                            <div class="hr-count" @if($desktopUnreadMsgCount == 0) style="display:none;" @endif>
-                                <span class="unread-msg-count">{{ $desktopUnreadMsgCount }}</span>
+                            <div class="hr-count" @if($sharedUnreadMsgCount == 0) style="display:none;" @endif>
+                                <span class="unread-msg-count">{{ $sharedUnreadMsgCount }}</span>
                             </div>
                         </a>
-                        <div id="user-messages-dropdown" class="user-messages-dropdown">
-                            <div class="um-dropdown-head d-flex">
-                                <h4>
-                                    Mesajlar <span class="unread-msg-count">
-                                        {{ '(' . \App\Models\Message::where('receiver_id', Auth::id())
-                                                    ->where('is_read', false)->count() . ')' }}
-                                    </span>
-                                </h4>
-
-                                <a href="{{route('chat.show')}}">Tüm Mesajlar</a>
+                        <div id="user-messages-dropdown" class="user-messages-dropdown modern-dropdown">
+                            <div class="modern-dropdown-header">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="dropdown-header-icon msg-icon">
+                                        <i class="fa-regular fa-comment-dots"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="dropdown-header-title">Mesajlar</h6>
+                                        <span class="dropdown-header-subtitle">
+                                            {{ $sharedUnreadMsgCount > 0 ? $sharedUnreadMsgCount . ' yeni mesaj' : 'Gelen kutusu' }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <a href="{{route('chat.show')}}" class="dropdown-header-action" title="Tüm Mesajları Aç">
+                                    <span>Tümü</span>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </a>
                             </div>
-                            <div class="ums-box msg-ums-box">
-                                @php
-                                $allMessages = \App\Models\Message::with(['sender.informations', 'sender.company'])
-                                ->where('receiver_id', Auth::id())
-                                ->orderBy('created_at', 'desc')
-                                ->get();
 
-                                // Mesajları gönderenlere göre grupla
-                                $groupedMessages = $allMessages->groupBy('sender_id')->map(function ($messages) {
-                                return [
-                                'latest_message' => $messages->first(),
-                                'unread_count' => $messages->where('is_read', false)->count(),
-                                ];
-                                });
-                                @endphp
-
-                                @foreach($groupedMessages as $senderId => $data)
-                                @php
-                                $message = $data['latest_message'];
-                                $unreadCount = $data['unread_count'];
-                                @endphp
-                                <div class="ums-area d-flex actived">
-                                    <a href="{{ route('chat.show', $message->sender_id) }}" style="width: 100%; position: relative;">
-                                        <div class="ums-img">
-                                            <img src="{{ asset($message->sender->user_type === 'user'
-                                                            ? $message?->sender?->informations?->avatar
-                                                            : $message?->sender?->company?->avatar) }}"
-                                                alt="Avatar" style="width: 40px; height: 40px">
+                            <div class="modern-dropdown-body">
+                                @forelse($groupedMessages as $senderId => $data)
+                                    @php
+                                        $message = $data['latest_message'];
+                                        $unreadCount = $data['unread_count'];
+                                        $senderName = $message->sender->user_type === 'user'
+                                            ? ($message->sender?->informations?->name ?: $message->sender?->name)
+                                            : ($message->sender?->company?->name ?: $message->sender?->name);
+                                        $senderAvatar = $message->sender->user_type === 'user'
+                                            ? ($message?->sender?->informations?->avatar ?: 'site/images/default_avatar.jpg')
+                                            : ($message?->sender?->company?->avatar ?: 'site/images/default_avatar.jpg');
+                                    @endphp
+                                    <a href="{{ route('chat.show', $message->sender_id) }}" class="modern-dropdown-item {{ $unreadCount > 0 ? 'unread' : '' }}">
+                                        <div class="dropdown-item-avatar">
+                                            <img src="{{ asset($senderAvatar) }}" alt="{{ $senderName }}">
+                                            @if($unreadCount > 0)
+                                                <span class="avatar-unread-badge">{{ $unreadCount }}</span>
+                                            @endif
                                         </div>
-                                        <div class="ums-text d-flex" style="flex: 1;">
-                                            <h5>
-                                                {{ $message->sender->user_type === 'user'
-                                                                ? $message->sender?->informations?->name
-                                                                : $message->sender?->company?->name }}
-                                            </h5>
-                                            <div class="ums-dates d-flex">
-                                                <span>
-                                                    {{ \Carbon\Carbon::parse($message->created_at)
-                                                                    ->setTimezone('Europe/Istanbul')
-                                                                    ->format('H:i') }}
+                                        <div class="dropdown-item-content">
+                                            <div class="dropdown-item-top">
+                                                <span class="dropdown-item-name text-truncate">{{ $senderName }}</span>
+                                                <span class="dropdown-item-time">
+                                                    {{ \Carbon\Carbon::parse($message->created_at)->setTimezone('Europe/Istanbul')->format('H:i') }}
                                                 </span>
-                                                <span>
-                                                    {{ \Carbon\Carbon::parse($message->created_at)
-                                                                    ->setTimezone('Europe/Istanbul')
-                                                                    ->format('d-m-Y') }}
-                                                </span>
+                                            </div>
+                                            <div class="dropdown-item-preview text-truncate">
+                                                {{ $message->message ?: 'Dosya eki gönderildi' }}
                                             </div>
                                         </div>
                                         @if($unreadCount > 0)
-                                        <span style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background-color: #4068e2; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">
-                                            {{ $unreadCount }}
-                                        </span>
+                                            <span class="unread-dot"></span>
                                         @endif
                                     </a>
-                                </div>
-                                @endforeach
+                                @empty
+                                    <div class="modern-dropdown-empty">
+                                        <div class="empty-icon">
+                                            <i class="fa-regular fa-comment-dots"></i>
+                                        </div>
+                                        <h6>Henüz Mesajınız Yok</h6>
+                                        <p>Yeni bir mesaj aldığınızda burada listelenecektir.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+
+                            <div class="modern-dropdown-footer">
+                                <a href="{{route('chat.show')}}" class="dropdown-footer-btn">
+                                    <span>Tüm Mesajları Görüntüle</span>
+                                    <i class="fa-solid fa-arrow-right-long ms-1"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -398,152 +403,189 @@
                     <div id="user-notif" class="hr-box hr-msg d-none d-lg-block">
                         <a id="user-notif-trigger" href="#"
                             class="navbar-icon-btn navbar-btn-notif position-relative"
-                            onclick="notificationToggle(event)"
                             role="button"
                             aria-label="Bildirimler">
                             <i class="fa-regular fa-bell"></i>
-                            @php
-                                $desktopUnreadNotifCount = user_notifications()['unread_count'] ?? 0;
-                            @endphp
-                            <div class="hr-count" @if($desktopUnreadNotifCount == 0) style="display:none;" @endif>
-                                <span class="notification-count">{{ $desktopUnreadNotifCount }}</span>
+                            <div class="hr-count" @if($sharedUnreadNotifCount == 0) style="display:none;" @endif>
+                                <span class="notification-count">{{ $sharedUnreadNotifCount }}</span>
                             </div>
                         </a>
-                        <div id="user-natif-dropdown" class="user-messages-dropdown">
-                            <div class="um-dropdown-head d-flex">
-                                <h4>
-                                    Bildirimler (<span class="notification-count">
-                                        {{user_notifications()['unread_count']}}
-                                    </span>)
-                                </h4>
+                        <div id="user-natif-dropdown" class="user-messages-dropdown modern-dropdown">
+                            <div class="modern-dropdown-header">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="dropdown-header-icon notif-icon">
+                                        <i class="fa-regular fa-bell"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="dropdown-header-title">Bildirimler</h6>
+                                        <span class="dropdown-header-subtitle">
+                                            {{ $sharedUnreadNotifCount > 0 ? $sharedUnreadNotifCount . ' yeni bildirim' : 'Tümü okundu' }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <span class="header-badge-pill">{{ $sharedUnreadNotifCount }}</span>
                             </div>
-                            <div class="ums-box">
+
+                            <div class="modern-dropdown-body">
                                 @forelse(user_notifications()['values'] as $notification)
-                                <div @class(["ums-area d-flex", "actived"=> !$notification->is_read])>
+                                    @php
+                                        $notifUser = auth_info($notification->user_id);
+                                        $notifUserName = $notifUser?->name ?? 'Sistem Bildirimi';
+                                        $notifAvatar = $notifUser?->avatar ?? 'site/images/default_avatar.jpg';
+                                    @endphp
                                     <a href="{{$notification->link ?? 'javascript:void(0)'}}"
-                                        class="notification-link"
+                                        class="modern-dropdown-item notification-link {{ !$notification->is_read ? 'unread' : '' }}"
                                         data-notification-id="{{$notification->id}}">
-                                        <div class="ums-img">
-                                            @php
-                                            $user = auth_info($notification->user_id);
-                                            @endphp
-                                            <img src="{{ asset($user?->avatar ?? 'assets/img/default-avatar.png') }}"
-                                                alt="{{ $user?->name ?? 'Bilinmeyen Kullanıcı' }}">
-
+                                        <div class="dropdown-item-avatar">
+                                            <img src="{{ asset($notifAvatar) }}" alt="{{ $notifUserName }}">
+                                            <span class="avatar-sub-icon notif"><i class="fa-solid fa-bell"></i></span>
                                         </div>
-                                        <div class="ums-text d-flex">
-                                            <h5>
-                                                {{ auth_info($notification->user_id)?->name ?? 'Bilinmeyen Kullanıcı' }}
-                                            </h5>
-
-                                            <p>
+                                        <div class="dropdown-item-content">
+                                            <div class="dropdown-item-top">
+                                                <span class="dropdown-item-name text-truncate">{{ $notifUserName }}</span>
+                                                <span class="dropdown-item-time">
+                                                    {{\Carbon\Carbon::parse($notification->created_at)->setTimezone('Europe/Istanbul')->format('H:i')}}
+                                                </span>
+                                            </div>
+                                            <div class="dropdown-item-message">
                                                 {{$notification->message}}
-                                            </p>
+                                            </div>
+                                            <div class="dropdown-item-date-sub">
+                                                {{\Carbon\Carbon::parse($notification->created_at)->setTimezone('Europe/Istanbul')->format('d.m.Y')}}
+                                            </div>
                                         </div>
-                                        <div class="ums-dates d-flex">
-                                            <span  style="margin-top:15px !important;">
-                                                {{\Carbon\Carbon::parse($notification->created_at)
-                                                            ->setTimezone('Europe/Istanbul')->format('H:i')}}
-                                            </span>
-                                            <span style="margin-top:15px !important;">
-                                                {{\Carbon\Carbon::parse($notification->created_at)
-                                                            ->setTimezone('Europe/Istanbul')->format('d-m-Y')}}
-                                            </span>
-                                        </div>
+                                        @if(!$notification->is_read)
+                                            <span class="unread-dot"></span>
+                                        @endif
                                     </a>
-                                </div>
-
                                 @empty
-                                <div class="ums-area d-flex actived">
-                                    <a href="javascript:void(0)">
-                                        <div class="ums-text d-flex">
-                                            <p>Bildirim bulunmamaktadır.</p>
+                                    <div class="modern-dropdown-empty">
+                                        <div class="empty-icon">
+                                            <i class="fa-regular fa-bell-slash"></i>
                                         </div>
-                                    </a>
-                                </div>
+                                        <h6>Bildiriminiz Yok</h6>
+                                        <p>Yeni bir bildirim aldığınızda burada görüntülenecektir.</p>
+                                    </div>
                                 @endforelse
                             </div>
                         </div>
                     </div>
 
                     <div class="hr-box mobile-header-avatar">
-                        <a class="hr-logo navbar-avatar-btn" data-bs-container="body" data-bs-trigger="hover focus"
-                            data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Profilim" role="button" aria-label="Profilim">
+                        <a class="hr-logo navbar-avatar-btn" role="button" aria-label="Profilim">
                             @php
                             $user = auth()->user();
                             $avatarPath = 'site/images/default_avatar.jpg';
 
                             if ($user->user_type == 'user' && $user->informations?->avatar) {
-                            $avatarPath = $user->informations->avatar;
+                                $avatarPath = $user->informations->avatar;
                             } elseif ($user->user_type == 'company' && $user->company?->avatar) {
-                            $avatarPath = $user->company->avatar;
+                                $avatarPath = $user->company->avatar;
                             }
+
+                            $isCompany = $user->user_type == 'company';
+                            $profileName = $isCompany
+                                ? ($user->company?->name ?: $user->name)
+                                : ($user->informations?->name ?: $user->name);
+                            $profileEmail = $user->email;
+                            $profileRoleBadge = $isCompany ? 'Kurumsal Firma' : 'Bireysel Kullanıcı';
+                            $dashboardRoute = route($isCompany ? 'company.dashboard' : 'user.dashboard');
                             @endphp
                             <img src="{{asset($avatarPath)}}" alt="Avatar">
                             <span class="navbar-avatar-status" title="Çevrimiçi"></span>
                         </a>
 
-                        <!-- login-right-dropdown classı login sonrası -->
+                        <div id="login-right-dropdown" class="login-right-dropdown modern-profile-dropdown">
+                            <div class="profile-dropdown-sheet">
+                                <div class="profile-mobile-header d-flex d-lg-none align-items-center justify-content-between p-3 pb-2 border-bottom">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="dropdown-header-icon profile-icon">
+                                            <i class="fa-regular fa-user"></i>
+                                        </div>
+                                        <h6 class="m-0 fw-bold">Hesabım</h6>
+                                    </div>
+                                    <button type="button" class="mobile-dropdown-close profile-mobile-close" aria-label="Kapat">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
 
-                        <div id="login-right-dropdown" class="login-right-dropdown">
-                            <ul>
-                                <li>
-                                    <a href="{{route(auth()->user()->user_type == 'user' ? 'user.dashboard' : 'company.dashboard')}}">
-                                        <i class="fa-solid fa-user"></i>
-                                        Profilim
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{route('chat.show')}}">
-                                        <i class="fa-solid fa-message"></i>
-                                        Mesajlarım
-                                    </a>
-                                </li>
-                                @if(auth()->user()->user_type == 'company')
-                                <li>
-                                    <a href="{{route('company.services.index')}}">
-                                        <i class="fa-solid fa-business-time"></i>
-                                        Hizmetlerim
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{route('company.subscriptions.index')}}">
-                                        <i class="fa-solid fa-box"></i>
-                                        Aboneliğim
-                                    </a>
-                                </li>
-                                @endif
-                                <li>
-                                    <a href="{{route('idea.profile.index')}}">
-                                        <i class="fa-solid fa-comment"></i>
-                                        Fikirlerim
-                                    </a>
-                                </li>
-                                {{-- <li>--}}
-                                {{-- <a href="#">--}}
-                                {{-- Analizler--}}
-                                {{-- </a>--}}
-                                {{-- </li>--}}
-                                <li>
-                                    <a href="{{ auth()->user()->user_type == 'user' ? route('user.saved-services')
-                                                : route('company.saved-services') }}">
-                                        <i class="fa-solid fa-floppy-disk"></i>
-                                        Kaydedilenler
-                                    </a>
-                                </li>
-                                <li>
+                                <div class="profile-dropdown-user-card">
+                                    <div class="profile-user-avatar">
+                                        <img src="{{ asset($avatarPath) }}" alt="{{ $profileName }}">
+                                    </div>
+                                    <div class="profile-user-info">
+                                        <div class="profile-user-name text-truncate" title="{{ $profileName }}">{{ $profileName }}</div>
+                                        <div class="profile-user-email text-truncate">{{ $profileEmail }}</div>
+                                        <div class="profile-user-badge {{ $isCompany ? 'company' : 'individual' }}">
+                                            <i class="fa-solid {{ $isCompany ? 'fa-building' : 'fa-circle-check' }} me-1"></i>
+                                            {{ $profileRoleBadge }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="profile-dropdown-divider"></div>
+
+                                <ul class="profile-dropdown-menu">
+                                    <li>
+                                        <a href="{{ $dashboardRoute }}" class="profile-menu-link">
+                                            <span class="profile-menu-icon"><i class="fa-regular fa-user"></i></span>
+                                            <span class="profile-menu-label">Profilim ve Panel</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('chat.show')}}" class="profile-menu-link">
+                                            <span class="profile-menu-icon"><i class="fa-regular fa-comment-dots"></i></span>
+                                            <span class="profile-menu-label">Mesajlarım</span>
+                                            @if($sharedUnreadMsgCount > 0)
+                                                <span class="profile-badge-pill">{{ $sharedUnreadMsgCount }}</span>
+                                            @endif
+                                        </a>
+                                    </li>
+
+                                    @if($isCompany)
+                                    <li>
+                                        <a href="{{route('company.services.index')}}" class="profile-menu-link">
+                                            <span class="profile-menu-icon"><i class="fa-solid fa-briefcase"></i></span>
+                                            <span class="profile-menu-label">Hizmetlerim</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('company.subscriptions.index')}}" class="profile-menu-link">
+                                            <span class="profile-menu-icon"><i class="fa-solid fa-gem"></i></span>
+                                            <span class="profile-menu-label">Aboneliğim</span>
+                                        </a>
+                                    </li>
+                                    @endif
+
+                                    <li>
+                                        <a href="{{route('idea.profile.index')}}" class="profile-menu-link">
+                                            <span class="profile-menu-icon"><i class="fa-regular fa-lightbulb"></i></span>
+                                            <span class="profile-menu-label">Fikirlerim</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ $isCompany ? route('company.saved-services') : route('user.saved-services') }}" class="profile-menu-link">
+                                            <span class="profile-menu-icon"><i class="fa-regular fa-bookmark"></i></span>
+                                            <span class="profile-menu-label">Kaydedilenler</span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="profile-dropdown-divider"></div>
+
+                                <div class="profile-dropdown-footer">
                                     <form action="{{route('logout')}}" method="POST">
                                         @csrf
                                         <input type="hidden" name="redirect" value="{{ url()->current() }}">
-                                        <a href="#" style="color: red" onclick="this.closest('form').submit()">
-                                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                                            Çıkış Yap
-                                        </a>
+                                        <button type="submit" class="profile-logout-btn">
+                                            <span class="profile-menu-icon logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+                                            <span>Çıkış Yap</span>
+                                        </button>
                                     </form>
-                                </li>
-                            </ul>
+                                </div>
+                            </div>
                         </div>
-                        <!-- // -->
                     </div>
 
                     @if(auth()->user()->user_type == 'company')
