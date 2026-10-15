@@ -8,6 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="csrf-token" content="{{csrf_token()}}">
 
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8168100361388093"
+         crossorigin="anonymous"></script>
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{env('APP_URL')}}/favicon.ico">
     <link rel="shortcut icon" type="image/png" href="{{env('APP_URL')}}/favicon.ico">
@@ -29,6 +33,21 @@
     <!-- ✨ Livewire CSS -->
     @livewireStyles
     <style>
+        /* AdSense Header Leaderboard */
+        .header-leaderboard-ad {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90px;
+            width: 100%;
+            overflow: hidden;
+        }
+        @media (max-width: 768px) {
+            .header-leaderboard-ad {
+                min-height: 50px;
+            }
+        }
+
         /* Sonradan css dosyasına eklenecekler */
         .select2-selection--multiple {
             min-height: 46px !important;

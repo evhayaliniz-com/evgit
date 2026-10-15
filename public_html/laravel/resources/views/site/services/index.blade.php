@@ -5,8 +5,10 @@
         <div class="col-lg-12 col-md-12 col-sm-12 pr-0 col-12 mobile-pl-0 pl-0" id="index-right-area">
             <div class="tum-hizmetler">
                 <div class="tum-hizmetler-box index-right">
-                    <div class="tum-hizmetler-slider tum-hizmetler-top"></div>
-                    <x-slider/>
+                    {{-- Header Altı İnce (Leaderboard) Reklam Alanı --}}
+                    <div class="tum-hizmetler-slider tum-hizmetler-top header-leaderboard-ad text-center mb-3">
+                        <x-ad-slot format="horizontal" class="leaderboard-ad-top" />
+                    </div>
 
                     <h5 class="mobile-small-title" style="top: 16px">Hizmetler</h5>
                 </div>
@@ -191,7 +193,21 @@
                                 <div class="col-sm-6 col-md-4 col-lg-3 mb-4 d-flex">
                                     @include('site.services.partials.single-service-card', ['service' => $service])
                                 </div>
+
+                                {{-- Mobilde her 4 içerikten sonra duyarlı reklam --}}
+                                @if($loop->iteration % 4 == 0)
+                                    <div class="col-12 d-block d-md-none mb-4 text-center">
+                                        <div class="p-2 bg-light rounded">
+                                            <x-ad-slot format="auto" />
+                                        </div>
+                                    </div>
+                                @endif
                             @endforeach
+
+                            {{-- Web/Masaüstü: Sayfa altı yatay reklam --}}
+                            <div class="col-12 d-none d-md-block my-4 text-center">
+                                <x-ad-slot format="auto" />
+                            </div>
 
                             {{$services->links()}}
                         </div>

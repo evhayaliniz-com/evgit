@@ -51,6 +51,12 @@
                     @include('site.home.popular-services', ['services' => $services])
                     @include('site.home.fikir', ['ideas' => $ideas])
                     @include('site.home.firmalar', ['companies' => $companies])
+                    
+                    {{-- Anasayfa Öne Çıkan Firmalar Altı Reklam Alanı --}}
+                    <div class="my-4 text-center">
+                        <x-ad-slot format="auto" class="home-firms-bottom-ad" />
+                    </div>
+
                     @include('site.home.footer')
                 </div>
             </div>
