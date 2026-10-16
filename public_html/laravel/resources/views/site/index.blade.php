@@ -26,6 +26,8 @@
             .home-index-right .main-slider img,
             .home-index-right .main-slider .swiper,
             .home-index-right .main-slider .swiper-slide,
+            .home-index-right .main-slider .main-slider-item,
+            .home-index-right .main-slider .main-slider-overlay,
             .home-index-right .main-slider:after {
                 border-radius: 0 !important;
                 width: 100% !important;

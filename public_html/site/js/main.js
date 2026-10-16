@@ -1043,82 +1043,57 @@ $(document).ready(function () {
     });
 
 
+    var mainSlideCount = document.querySelectorAll(".mySwiper .swiper-slide").length;
     var swiper = new Swiper(".mySwiper", {
-        loop: true,
+        loop: mainSlideCount > 1,
+        speed: 650,
+        grabCursor: mainSlideCount > 1,
+        watchOverflow: true,
         pagination: {
-            el: ".swiper-pagination",
+            el: ".main-slider .swiper-pagination",
+            clickable: true,
         },
-        autoplay: {
-            delay: 2500,
+        navigation: {
+            nextEl: ".main-slider .main-slider-next",
+            prevEl: ".main-slider .main-slider-prev",
+        },
+        autoplay: mainSlideCount > 1 ? {
+            delay: 4500,
             disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+        } : false,
+    });
+    var swiper = new Swiper(".mySwiper2", {
+        slidesPerView: "auto",
+        spaceBetween: 10,
+        speed: 500,
+        freeMode: {
+            enabled: true,
+            sticky: false,
+            momentumBounce: false,
+        },
+        watchOverflow: true,
+        centeredSlides: false,
+        loop: false,
+        allowTouchMove: true,
+        grabCursor: true,
+        resistance: true,
+        resistanceRatio: 0.45,
+        observer: true,
+        observeParents: true,
+        navigation: {
+            nextEl: ".category-slider .category-slider-next",
+            prevEl: ".category-slider .category-slider-prev",
+        },
+        breakpoints: {
+            992: {
+                slidesPerView: "auto",
+                 slidesPerGroup: 3,
+                spaceBetween: 14,
+                freeMode: false,
+            },
         },
     });
-var swiper = new Swiper(".mySwiper2", {
-    slidesPerView: "auto",
-    spaceBetween: 16,
-    freeMode: false, 
-    watchOverflow: true,
-    centeredSlides: false,
-    loop: false,
-    allowTouchMove: true,
-    grabCursor: true,
-    resistance: true,
-    resistanceRatio: 0, 
-    navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-    },
-    breakpoints: {
-        768: {
-            slidesPerView: 4,
-        },
-        1024: {
-            slidesPerView: 7,
-        },
-    },
-    on: {
-        init: function() {
-    
-            this.maxWidth = 0;
-            this.slides.forEach(slide => {
-                this.maxWidth += slide.offsetWidth + this.params.spaceBetween;
-            });
-            this.maxWidth -= this.params.spaceBetween; 
-        },
-        touchStart: function() {
-            this.startTranslate = this.getTranslate();
-        },
-        touchMove: function() {
-            var currentTranslate = this.getTranslate();
-            var containerWidth = this.width;
-            var maxTranslate = -(this.maxWidth - containerWidth);
-            
-   
-            if (currentTranslate < maxTranslate) {
-                this.setTranslate(maxTranslate);
-                return false;
-            }
-            
-            // Solda sınır kontrolü
-            if (currentTranslate > 0) {
-                this.setTranslate(0);
-                return false;
-            }
-        },
-        touchEnd: function() {
-            var currentTranslate = this.getTranslate();
-            var containerWidth = this.width;
-            var maxTranslate = -(this.maxWidth - containerWidth);
-            
-            // Son pozisyonu düzelt
-            if (currentTranslate < maxTranslate) {
-                this.setTranslate(maxTranslate);
-            } else if (currentTranslate > 0) {
-                this.setTranslate(0);
-            }
-        }
-    }
-});
     var swiper = new Swiper(".mySwiper3", {
         slidesPerView: "auto",
         spaceBetween: 16,
