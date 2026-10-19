@@ -33,18 +33,34 @@
     <!-- ✨ Livewire CSS -->
     @livewireStyles
     <style>
-        /* AdSense Header Leaderboard */
+        /* AdSense Header Leaderboard (Web: 120px, Mobil: 80px) */
         .header-leaderboard-ad {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 90px;
+            height: 120px;
+            max-height: 120px;
             width: 100%;
             overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .header-leaderboard-ad .google-ad-wrapper,
+        .header-leaderboard-ad ins.adsbygoogle {
+            height: 120px !important;
+            max-height: 120px !important;
+            width: 100% !important;
+            display: block !important;
         }
         @media (max-width: 768px) {
             .header-leaderboard-ad {
-                min-height: 50px;
+                height: 80px;
+                max-height: 80px;
+                margin-bottom: 8px;
+            }
+            .header-leaderboard-ad .google-ad-wrapper,
+            .header-leaderboard-ad ins.adsbygoogle {
+                height: 80px !important;
+                max-height: 80px !important;
             }
         }
 
