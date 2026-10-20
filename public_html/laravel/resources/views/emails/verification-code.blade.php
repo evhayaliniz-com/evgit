@@ -9,7 +9,7 @@
 
     <!-- Logo -->
     <div style="text-align: center; margin-bottom: 30px;">
-        <img src="https://{{str_replace(['http://', 'https://'], '', env('APP_URL'))}}/site/images/settings/1745669004_logo.svg" alt="Ev Hayaliniz" style="max-width: 180px;">
+        <img src="{{ rtrim(config('app.url'), '/') }}/site/images/settings/1745669004_logo.svg" alt="Ev Hayaliniz" style="max-width: 180px;">
     </div>
 
     <!-- Başlık -->

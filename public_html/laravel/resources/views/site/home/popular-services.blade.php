@@ -10,7 +10,7 @@
             </a>
         </div>
     </div>
-    <div class="popular-slider">
+    <div class="popular-slider popular-services-slider">
         <div class="swiper mySwiper3">
             <div class="swiper-wrapper">
                 @foreach($services as $service)
@@ -19,7 +19,8 @@
                     </div>
                 @endforeach
             </div>
-            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev popular-slider-nav popular-services-prev" aria-label="Önceki hizmetler"></div>
+            <div class="swiper-button-next popular-slider-nav popular-services-next" aria-label="Sonraki hizmetler"></div>
         </div>
     </div>
 </div>

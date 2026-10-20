@@ -21,7 +21,8 @@ class VerificationCodeMail extends Mailable
 
     public function build()
     {
-        return $this->subject('E-posta Doğrulama Kodunuz – ' . parse_url(env('APP_URL'), PHP_URL_HOST))
-            ->markdown('emails.verification-code');
+        $siteName = config('app.name', 'Ev Hayaliniz');
+        return $this->subject("E-posta Doğrulama Kodunuz – {$siteName}")
+            ->view('emails.verification-code');
     }
 }

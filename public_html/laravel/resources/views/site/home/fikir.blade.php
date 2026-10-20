@@ -19,7 +19,8 @@
                     </div>
                 @endforeach
             </div>
-            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev popular-slider-nav fikir-kosesi-prev" aria-label="Önceki fikirler"></div>
+            <div class="swiper-button-next popular-slider-nav fikir-kosesi-next" aria-label="Sonraki fikirler"></div>
         </div>
     </div>
 </div>

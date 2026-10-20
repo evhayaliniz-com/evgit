@@ -2,10 +2,6 @@
 
 @section('css')
     <style>
-        .popular-slider.one-cikan-firmalar-slider img {
-            border: 2px solid #fff !important;
-        }
-
         @media (max-width: 991px) {
             body > .container-fluid {
                 padding-left: 0 !important;
@@ -66,4 +62,3 @@
         </div>
     </div>
 @endsection
-

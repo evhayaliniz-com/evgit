@@ -1096,29 +1096,89 @@ $(document).ready(function () {
     });
     var swiper = new Swiper(".mySwiper3", {
         slidesPerView: "auto",
-        spaceBetween: 16,
-        loop: true,
+        spaceBetween: 12,
+        speed: 550,
+        freeMode: {
+            enabled: true,
+            sticky: false,
+            momentumBounce: false,
+        },
+        watchOverflow: true,
+        loop: false,
+        grabCursor: true,
+        resistance: true,
+        resistanceRatio: 0.45,
+        observer: true,
+        observeParents: true,
         navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            nextEl: ".popular-services-slider .popular-services-next",
+            prevEl: ".popular-services-slider .popular-services-prev",
+        },
+        breakpoints: {
+            992: {
+                slidesPerView: "auto",
+                slidesPerGroup: 2,
+                spaceBetween: 16,
+                freeMode: false,
+            },
         },
     });
     var swiper = new Swiper(".mySwiper4", {
         slidesPerView: "auto",
-        spaceBetween: 16,
-        loop: true,
+        spaceBetween: 12,
+        speed: 550,
+        freeMode: {
+            enabled: true,
+            sticky: false,
+            momentumBounce: false,
+        },
+        watchOverflow: true,
+        loop: false,
+        grabCursor: true,
+        resistance: true,
+        resistanceRatio: 0.45,
+        observer: true,
+        observeParents: true,
         navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            nextEl: ".fikir-kosesi .fikir-kosesi-next",
+            prevEl: ".fikir-kosesi .fikir-kosesi-prev",
+        },
+        breakpoints: {
+            992: {
+                slidesPerView: "auto",
+                slidesPerGroup: 2,
+                spaceBetween: 16,
+                freeMode: false,
+            },
         },
     });
     var swiper = new Swiper(".mySwiper5", {
         slidesPerView: "auto",
-        spaceBetween: 16,
-        loop: true,
+        spaceBetween: 12,
+        speed: 550,
+        freeMode: {
+            enabled: true,
+            sticky: false,
+            momentumBounce: false,
+        },
+        watchOverflow: true,
+        loop: false,
+        grabCursor: true,
+        resistance: true,
+        resistanceRatio: 0.45,
+        observer: true,
+        observeParents: true,
         navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            nextEl: ".one-cikan-firmalar-slider .firmalar-slider-next",
+            prevEl: ".one-cikan-firmalar-slider .firmalar-slider-prev",
+        },
+        breakpoints: {
+            992: {
+                slidesPerView: "auto",
+                slidesPerGroup: 2,
+                spaceBetween: 16,
+                freeMode: false,
+            },
         },
     });
     var swiper = new Swiper(".mySwiper6", {

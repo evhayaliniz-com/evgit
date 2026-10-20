@@ -18,7 +18,8 @@
                     </div>
                 @endforeach
             </div>
-            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev popular-slider-nav firmalar-slider-prev" aria-label="Önceki firmalar"></div>
+            <div class="swiper-button-next popular-slider-nav firmalar-slider-next" aria-label="Sonraki firmalar"></div>
         </div>
     </div>
 </div>
