@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}/site/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}/site/css/fancybox.css">
     <link rel="stylesheet" type="text/css" href="{{env('APP_URL')}}/site/css/swiper.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('site/css/main.css') }}?v={{ file_exists(public_path('site/css/main.css')) ? filemtime(public_path('site/css/main.css')) : '1.0.0' }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('site/css/main.css') }}?v={{ file_exists(base_path('../site/css/main.css')) ? filemtime(base_path('../site/css/main.css')) : (file_exists(public_path('site/css/main.css')) ? filemtime(public_path('site/css/main.css')) : time()) }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
