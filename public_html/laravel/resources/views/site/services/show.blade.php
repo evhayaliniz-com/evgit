@@ -1116,6 +1116,7 @@
   /* --- İletişim Bilgileri Popup Stilleri --- */
   .iletisim-popup {
     position: fixed;
+    padding: 0 !important;
     background: var(--sd-surface, #fff);
     border: 1px solid var(--sd-border, #e2e8f0);
     border-radius: 14px;
@@ -1123,13 +1124,17 @@
     z-index: 1060;
     min-width: 280px;
     max-width: 340px;
-    overflow: hidden;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
   }
 
   .iletisim-popup-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100% !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
     padding: 12px 16px;
     border-bottom: 1px solid var(--sd-border, #e9ecef);
     background: var(--sd-bg, #f8f9fa);

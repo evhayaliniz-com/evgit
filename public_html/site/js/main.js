@@ -911,77 +911,141 @@ $(document).ready(function () {
         }
     });
 
+    function closeFiyatGecmisiPopup() {
+        var $cloned = $(".fiyat-gecmisi-area.cloned");
+        var $backdrop = $(".fiyat-gecmisi-backdrop");
+        if ($cloned.length) {
+            $cloned.removeClass("is-open");
+            $backdrop.removeClass("show");
+            setTimeout(function () {
+                $cloned.remove();
+                $backdrop.remove();
+                if (typeof off === "function") {
+                    off();
+                }
+            }, 200);
+        }
+    }
+
     $(document).on("click", ".fiyat-gecmisi-trigger", function (event) {
         event.preventDefault();
         event.stopPropagation();
-        on();
+
+        // Onceki acik popup varsa kaldir
         $(".fiyat-gecmisi-area.cloned").remove();
+        $(".fiyat-gecmisi-backdrop").remove();
 
         var $original = $(this).siblings(".fiyat-gecmisi-area");
         if (!$original.length) {
             $original = $(this).closest(".psd-prices-left, .msc-old-price-box, .msc-price-row").find(".fiyat-gecmisi-area");
         }
-
         if (!$original.length) {
             return;
         }
 
         var $clone = $original.clone();
+        var winWidth = $(window).width();
+        var isMobile = winWidth <= 991;
+
+        var $backdrop = $('<div class="fiyat-gecmisi-backdrop"></div>').appendTo("body");
 
         $clone.addClass("cloned").css({
-            display: "block",
-            position: "absolute",
-            zIndex: 99999
+            display: "block"
         }).appendTo("body");
 
-        var leftRes = 100, topRes = 10;
-        var winWidth = $(window).width();
-        if (winWidth < 575) {
-            leftRes = 10;
-            topRes = 5;
-        } else if (winWidth < 768) {
-            leftRes = 10;
-            topRes = 5;
-        } else if (winWidth < 991) {
-            leftRes = 50;
-            topRes = 5;
-        } else if (winWidth < 1199) {
-            leftRes = 50;
-            topRes = 5;
-        }
+        if (isMobile) {
+            var hasStickyBar = $(".sd-mobile-sticky-bar:visible").length > 0;
+            var bottomPos = hasStickyBar ? "67px" : "24px";
 
-        var offset = $(this).offset();
-        var cloneHeight = $clone.outerHeight() || 130;
-        var topPos = offset.top - cloneHeight - topRes;
+            $clone.css({
+                position: "fixed",
+                bottom: bottomPos,
+                top: "auto",
+                left: "14px",
+                right: "14px",
+                width: "calc(100% - 28px)",
+                maxWidth: "380px",
+                margin: "0 auto",
+                zIndex: 100005
+            });
 
-        if (winWidth < 991) {
-            var leftPos = !$original.hasClass('copy-area') ? offset.left - leftRes : (offset.left - leftRes) - 170;
+            setTimeout(function () {
+                $backdrop.addClass("show");
+                $clone.addClass("is-open");
+            }, 10);
         } else {
-            var leftPos = offset.left - leftRes;
+            var triggerOffset = $(this).offset();
+            var triggerWidth = $(this).outerWidth();
+            var triggerHeight = $(this).outerHeight();
+            var cloneWidth = $clone.outerWidth() || 310;
+            var cloneHeight = $clone.outerHeight() || 180;
+            var scrollTop = $(window).scrollTop();
+
+            var leftPos = triggerOffset.left + (triggerWidth / 2) - (cloneWidth / 2);
+            if (leftPos < 15) leftPos = 15;
+            if (leftPos + cloneWidth > winWidth - 15) leftPos = winWidth - cloneWidth - 15;
+
+            var topPos = triggerOffset.top - cloneHeight - 10;
+            if (topPos < scrollTop + 15) {
+                topPos = triggerOffset.top + triggerHeight + 10;
+            }
+
+            $clone.css({
+                position: "absolute",
+                top: topPos + "px",
+                left: leftPos + "px",
+                zIndex: 100005
+            });
+
+            setTimeout(function () {
+                $clone.addClass("is-open");
+            }, 10);
         }
 
-        // Ekranın solundan taşmayı engelle
-        if (leftPos < 10) {
-            leftPos = 10;
-        }
-
-        $clone.css({
-            top: topPos + "px",
-            left: leftPos + "px"
-        });
-
+        // Kapat butonu
         $clone.find(".fiyat-gecmisi-close").on("click", function (e) {
             e.stopPropagation();
-            off();
-            $clone.remove();
+            closeFiyatGecmisiPopup();
         });
 
-        $(document).one("click", function (e) {
-            if (!$(e.target).closest(".fiyat-gecmisi-area, .fiyat-gecmisi-trigger").length) {
-                off();
-                $clone.remove();
-            }
+        // Giris yap butonu
+        $clone.find(".fg-guest-btn").on("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeFiyatGecmisiPopup();
+            setTimeout(function () {
+                var modalEl = document.getElementById("exampleModalToggle");
+                if (modalEl) {
+                    if (window.bootstrap && bootstrap.Modal) {
+                        var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                        modal.show();
+                    } else if (window.$ && $.fn.modal) {
+                        $("#exampleModalToggle").modal("show");
+                    }
+                }
+            }, 150);
         });
+
+        // Backdrop tiklandiginda kapat
+        $backdrop.on("click", function (e) {
+            e.stopPropagation();
+            closeFiyatGecmisiPopup();
+        });
+
+        // Disariya tiklandiginda kapat
+        setTimeout(function () {
+            $(document).one("click", function (e) {
+                if (!$(e.target).closest(".fiyat-gecmisi-area, .fiyat-gecmisi-trigger").length) {
+                    closeFiyatGecmisiPopup();
+                }
+            });
+        }, 50);
+    });
+
+    $(document).on("keydown", function (e) {
+        if (e.key === "Escape") {
+            closeFiyatGecmisiPopup();
+        }
     });
 
     //$('.fiyat-gecmisi-trigger').on('click', function(e) {
