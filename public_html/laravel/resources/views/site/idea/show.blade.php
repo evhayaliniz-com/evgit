@@ -14,6 +14,7 @@
     display: none !important;
   }
 
+  :root,
   .sd-page-wrapper {
     --sd-primary: #2563eb;
     --sd-primary-hover: #1d4ed8;
@@ -27,14 +28,9 @@
     --sd-radius-md: 12px;
     --sd-radius-sm: 8px;
     --sd-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
-    background-color: var(--sd-bg) !important;
-    padding: 20px 24px 40px !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    min-height: 100vh;
-    border: none !important;
   }
 
+  body.dark,
   body.dark .sd-page-wrapper {
     --sd-primary: #3b82f6;
     --sd-primary-hover: #60a5fa;
@@ -45,6 +41,15 @@
     --sd-text-main: #f4f4f5;
     --sd-text-muted: #a1a1aa;
     --sd-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  }
+
+  .sd-page-wrapper {
+    background-color: var(--sd-bg) !important;
+    padding: 20px 24px 40px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    min-height: 100vh;
+    border: none !important;
   }
 
   .sd-container {
@@ -140,22 +145,27 @@
   /* --- Main Two-Column Grid --- */
   .sd-main-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 360px;
-    gap: 24px;
+    grid-template-columns: minmax(0, 1fr) 420px;
+    gap: 20px;
     align-items: start;
   }
 
   .sd-left-col {
     min-width: 0;
-  }
-
-  /* --- Gallery Card --- */
-  .sd-gallery-card {
     background: var(--sd-surface);
     border-radius: var(--sd-radius-lg);
     border: 1px solid var(--sd-border);
     box-shadow: var(--sd-shadow);
-    padding: 16px;
+    overflow: hidden;
+  }
+
+  /* --- Gallery Card --- */
+  .sd-gallery-card {
+    background: transparent;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    padding: 16px 16px 8px 16px;
     position: relative;
     overflow: hidden;
   }
@@ -450,14 +460,14 @@
     color: #a1a1aa;
   }
 
-  /* --- Idea Info & Quick Specs Header Card --- */
+  /* --- Idea Info & Quick Specs Header Area --- */
   .sd-header-card {
-    background: var(--sd-surface);
-    border-radius: var(--sd-radius-lg);
-    border: 1px solid var(--sd-border);
-    box-shadow: var(--sd-shadow);
-    padding: 22px 24px;
-    margin-top: 20px;
+    background: transparent !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 4px 16px 14px 16px !important;
+    margin: 0 !important;
   }
 
   .sd-badges-row {
@@ -465,20 +475,26 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 12px;
+    margin-bottom: 0;
   }
 
   .sd-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 12px;
+    padding: 6px 14px;
     border-radius: 999px;
-    font-size: 12.5px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 500;
     background: var(--sd-primary-soft);
     color: var(--sd-primary);
     text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  a.sd-badge:hover {
+    background: var(--sd-primary);
+    color: #ffffff !important;
   }
 
   .sd-title {
@@ -554,14 +570,11 @@
     text-overflow: ellipsis;
   }
 
-  /* --- Content Tabs Card (Açıklama, Yorumlar, Bilgiler) --- */
-  .sd-tabs-card {
-    background: var(--sd-surface);
-    border-radius: var(--sd-radius-lg);
-    border: 1px solid var(--sd-border);
-    box-shadow: var(--sd-shadow);
-    margin-top: 20px;
-    overflow: hidden;
+  /* --- Content Description Area --- */
+  .sd-desc-card {
+    background: transparent;
+    border-top: 1px solid var(--sd-border);
+    padding: 16px 20px 24px;
   }
 
   .sd-nav-tabs {
@@ -946,67 +959,448 @@
     border: 1px solid var(--sd-border);
   }
 
+  /* --- Sidebar Comments & Actions Unified Card --- */
+  .sd-comments-card {
+    background: var(--sd-surface);
+    border-radius: var(--sd-radius-lg);
+    border: 1px solid var(--sd-border);
+    box-shadow: var(--sd-shadow);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .sd-comments-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--sd-border);
+  }
+
+  .sd-comments-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--sd-text-main);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  /* --- Professional Sorting Anchored Popup & Trigger Button (Firma Profili ile Aynı) --- */
+  .sd-sort-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .sd-sort-trigger-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    background: var(--sd-surface);
+    border: 1px solid var(--sd-border);
+    border-radius: var(--sd-radius-sm);
+    color: var(--sd-text-main);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    text-decoration: none;
+    user-select: none;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .sd-sort-trigger-btn:hover {
+    border-color: var(--sd-primary);
+    color: var(--sd-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+  }
+
+  .sd-sort-trigger-btn.is-active,
+  .sd-sort-trigger-btn[aria-expanded="true"] {
+    border-color: var(--sd-primary);
+    background: var(--sd-primary-soft);
+    color: var(--sd-primary);
+  }
+
+  .sd-sort-icon {
+    font-size: 14px;
+    color: var(--sd-text-muted);
+    transition: color 0.2s;
+  }
+
+  .sd-sort-trigger-btn:hover .sd-sort-icon,
+  .sd-sort-trigger-btn.is-active .sd-sort-icon,
+  .sd-sort-trigger-btn[aria-expanded="true"] .sd-sort-icon {
+    color: var(--sd-primary);
+  }
+
+  .sd-sort-active-dot {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--sd-primary);
+  }
+
+  /* Anchored Popup directly underneath trigger button */
+  .sd-sort-popup {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 190px;
+    width: max-content;
+    max-width: calc(100vw - 32px);
+    background: var(--sd-surface);
+    border: 1px solid var(--sd-border);
+    border-radius: var(--sd-radius-md);
+    box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.14), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
+    z-index: 1050;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px) scale(0.97);
+    transform-origin: top right;
+    transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s;
+    pointer-events: none;
+    padding: 6px;
+    overflow: hidden;
+  }
+
+  .sd-sort-popup.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .sd-sort-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sd-sort-option-item {
+    display: flex;
+    align-items: center;
+    padding: 9px 12px;
+    border-radius: var(--sd-radius-sm);
+    color: var(--sd-text-main);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .sd-sort-option-item:hover {
+    background: var(--sd-bg);
+    color: var(--sd-primary);
+  }
+
+  .sd-sort-option-item.is-selected {
+    background: var(--sd-primary-soft);
+    color: var(--sd-primary);
+    font-weight: 600;
+  }
+
+  .sd-sort-option-name {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .sd-comments-scroll-area {
+    max-height: 480px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  .sd-comments-scroll-area::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .sd-comments-scroll-area::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .sd-comments-scroll-area::-webkit-scrollbar-thumb {
+    background: var(--sd-border);
+    border-radius: 999px;
+  }
+
+  .sd-comments-card .sd-qa-form-card {
+    padding: 12px;
+    margin-bottom: 0;
+    border-radius: var(--sd-radius-sm);
+  }
+
+  .sd-comments-card .sd-qa-textarea {
+    min-height: 70px;
+    padding: 10px 12px;
+    font-size: 13.5px;
+  }
+
+  .sd-comments-card .sd-qa-item {
+    padding: 12px 14px;
+  }
+
+  .sd-comments-card .sd-qa-user img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .sd-comments-card .sd-qa-user-name {
+    font-size: 13.5px;
+  }
+
+  .sd-comments-card .sd-qa-question-text {
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+
+  .sd-comments-card .sd-qa-list {
+    gap: 12px;
+  }
+
+  .sd-comments-card .sd-guest-login-banner {
+    padding: 10px 14px;
+    margin-bottom: 0;
+  }
+
+  .sd-comments-card .sd-guest-login-banner-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  /* --- Modern Giriş Yap Pop-up (Fiyat Geçmişi Tasarımı ile Birebir) --- */
+  .sd-auth-popup-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 100004;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+
+  .sd-auth-popup-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sd-auth-popup {
+    display: none;
+    position: fixed;
+    width: 320px;
+    max-width: calc(100vw - 28px);
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    background: var(--sd-surface, #ffffff) !important;
+    border: 1px solid #e2e8f0 !important;
+    border: 1px solid var(--sd-border, #e2e8f0) !important;
+    border-radius: 16px !important;
+    border-radius: var(--sd-radius-lg, 16px) !important;
+    box-shadow: 0 16px 40px -4px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.04) !important;
+    z-index: 100005;
+    overflow: hidden !important;
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+    transform-origin: center center;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+    box-sizing: border-box !important;
+  }
+
+  .sd-auth-popup.is-open {
+    display: block;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  body.dark .sd-auth-popup {
+    background-color: #18181b !important;
+    background: #18181b !important;
+    background: var(--sd-surface, #18181b) !important;
+    border-color: #27272a !important;
+    border-color: var(--sd-border, #27272a) !important;
+    box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.65) !important;
+  }
+
+  .sd-auth-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f8f9fa !important;
+    background: var(--sd-bg, #f8f9fa) !important;
+    border-bottom: 1px solid #e9ecef !important;
+    border-bottom: 1px solid var(--sd-border, #e9ecef) !important;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  body.dark .sd-auth-popup-header {
+    background: #202024 !important;
+    border-bottom-color: #27272a !important;
+    border-bottom-color: var(--sd-border, #27272a) !important;
+  }
+
+  .sd-auth-popup-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #0f172a !important;
+    color: var(--sd-text-main, #0f172a) !important;
+  }
+
+  body.dark .sd-auth-popup-title {
+    color: #f4f4f5 !important;
+  }
+
+  .sd-auth-popup-close {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.05);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    color: var(--sd-text-muted, #64748b);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .sd-auth-popup-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #0f172a;
+    color: var(--sd-text-main, #0f172a);
+  }
+
+  body.dark .sd-auth-popup-close {
+    background: rgba(255, 255, 255, 0.08);
+    color: #a1a1aa;
+  }
+
+  body.dark .sd-auth-popup-close:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+  }
+
+  .sd-auth-popup-body {
+    padding: 18px 18px 16px;
+    text-align: center;
+    box-sizing: border-box;
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    background: var(--sd-surface, #ffffff) !important;
+  }
+
+  body.dark .sd-auth-popup-body {
+    background-color: #18181b !important;
+    background: #18181b !important;
+    background: var(--sd-surface, #18181b) !important;
+  }
+
   /* --- Right Sidebar: Stats Card & Author Card --- */
   .sd-sidebar {
     position: sticky;
     top: 76px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
   }
 
-  .sd-price-card {
-    background: var(--sd-surface);
-    border-radius: var(--sd-radius-lg);
-    border: 1px solid var(--sd-border);
-    box-shadow: var(--sd-shadow);
-    padding: 22px 24px;
+  .sd-side-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    align-items: center;
   }
 
-  .sd-idea-like-btn {
-    width: 100%;
-    padding: 14px 20px;
-    border-radius: var(--sd-radius-md);
-    background: var(--sd-primary-soft);
-    border: 1.5px solid var(--sd-primary);
-    color: var(--sd-primary);
-    font-size: 16px;
-    font-weight: 700;
+  .sd-side-action-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 6px;
+    padding: 10px 4px;
+    border-radius: var(--sd-radius-md, 10px);
+    background: var(--sd-bg);
+    border: 1px solid var(--sd-border);
+    color: var(--sd-text-main);
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
+    text-decoration: none;
     transition: all 0.2s ease;
+    width: 100%;
+    min-width: 0;
+    white-space: nowrap;
+    user-select: none;
+    box-sizing: border-box;
   }
 
-  .sd-idea-like-btn:hover,
-  .sd-idea-like-btn.is-liked {
-    background: #ef4444;
+  .sd-side-action-btn i {
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .sd-side-action-btn span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sd-side-action-btn.sd-action-like:hover,
+  .sd-side-action-btn.sd-action-like.is-liked {
+    background: rgba(239, 68, 68, 0.1);
     border-color: #ef4444;
-    color: #fff;
-    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+    color: #ef4444;
   }
 
-  .sd-idea-stats-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 14px 0 0;
-    margin-top: 14px;
-    border-top: 1px solid var(--sd-border);
-    font-size: 13.5px;
+  .sd-side-action-btn.sd-action-comment:hover {
+    background: var(--sd-primary-soft);
+    border-color: var(--sd-primary);
+    color: var(--sd-primary);
+  }
+
+  .sd-side-action-btn.sd-action-share:hover {
+    background: var(--sd-primary-soft);
+    border-color: var(--sd-primary);
+    color: var(--sd-primary);
+  }
+
+  .sd-side-action-btn.sd-action-view {
+    cursor: default;
     color: var(--sd-text-muted);
   }
 
-  .sd-idea-stats-row span {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+  body.dark .sd-side-action-btn {
+    background: #27272a;
+    border-color: #3f3f46;
+    color: #f4f4f5;
   }
 
-  .sd-idea-stats-row strong {
-    color: var(--sd-text-main);
+  body.dark .sd-side-action-btn.sd-action-view {
+    color: #a1a1aa;
   }
 
   .sd-cta-stack {
@@ -1264,14 +1658,26 @@
       width: 100%;
     }
 
-    /* Ana Görsel Alanı: 4:3 Altın Oran ve Kusursuz Merkezlenmiş Kadraj */
+    /* Ana Görsel Alanı: Ekranın 5'te 3'ünü (%60 Viewport / 60dvh) Kesintisiz ve Tam Dolduran Yükseklik */
     .sd-main-swiper {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      height: auto !important;
-      max-height: 48dvh;
-      border-radius: 0;
+      width: 100% !important;
+      height: 60vh !important;
+      height: 60dvh !important;
+      min-height: 60vh !important;
+      min-height: 60dvh !important;
+      max-height: 60vh !important;
+      max-height: 60dvh !important;
+      aspect-ratio: unset !important;
+      border-radius: 0 !important;
       background: #0f172a;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sd-main-swiper .swiper-wrapper {
+      height: 100% !important;
+      width: 100% !important;
+      display: flex !important;
     }
 
     .sd-main-swiper .swiper-slide {
@@ -1280,30 +1686,44 @@
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
+      overflow: hidden !important;
     }
 
-    .sd-main-swiper .swiper-slide a.sd-slide-link {
+    .sd-main-swiper .swiper-slide a.sd-slide-link,
+    .sd-main-swiper .sd-slide-link {
       width: 100% !important;
       height: 100% !important;
-      display: block !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      position: relative !important;
+      overflow: hidden !important;
     }
 
-    .sd-main-swiper .swiper-slide img {
-      aspect-ratio: 4 / 3 !important;
+    .sd-main-swiper .swiper-slide img,
+    .sd-main-swiper .sd-slide-link img {
       width: 100% !important;
       height: 100% !important;
-      max-height: none !important;
+      min-height: 100% !important;
+      max-height: 100% !important;
+      aspect-ratio: unset !important;
       object-fit: cover !important;
       object-position: center center !important;
       display: block !important;
+      margin: auto !important;
     }
 
-    .sd-main-swiper .swiper-slide video {
-      aspect-ratio: 4 / 3 !important;
+    .sd-main-swiper .swiper-slide video,
+    .sd-main-swiper .sd-slide-link video {
       width: 100% !important;
       height: 100% !important;
+      min-height: 100% !important;
+      max-height: 100% !important;
+      aspect-ratio: unset !important;
       object-fit: cover !important;
+      object-position: center center !important;
       display: block !important;
+      margin: auto !important;
     }
 
     .sd-gallery-nav-btn {
@@ -1421,113 +1841,92 @@
       width: 100% !important;
       border-radius: 0 !important;
       border: none !important;
-      border-bottom: none !important;
       box-shadow: none !important;
+      background: var(--sd-surface) !important;
     }
 
     .sd-header-card .sd-badges-row {
-      display: none !important;
-    }
-
-    /* Başlık Altındaki Özellik Kartları: Tek Satır, Yatay Kaydırmalı, İkonsuz, Ultra Modern Tasarım */
-    .sd-quick-specs {
       display: flex !important;
       flex-wrap: nowrap !important;
       overflow-x: auto !important;
       -webkit-overflow-scrolling: touch !important;
-      scroll-snap-type: x mandatory;
-      gap: 10px !important;
-      margin-top: 0 !important;
-      padding-top: 0 !important;
-      padding-bottom: 4px !important;
-      margin-left: -14px !important;
-      margin-right: -14px !important;
-      padding-left: 14px !important;
-      padding-right: 14px !important;
-      border-top: none !important;
       scrollbar-width: none !important;
+      gap: 8px !important;
+      margin-bottom: 0 !important;
+      padding-bottom: 2px !important;
     }
 
-    .sd-quick-specs::-webkit-scrollbar {
+    .sd-header-card .sd-badges-row::-webkit-scrollbar {
       display: none !important;
     }
 
-    .sd-spec-chip {
+    .sd-header-card .sd-badge {
       flex: 0 0 auto !important;
-      padding: 7px 14px !important;
-      border-radius: 999px !important;
-      background: rgba(37, 99, 235, 0.08) !important;
-      border: 1px solid rgba(37, 99, 235, 0.22) !important;
-      box-shadow: none !important;
-      scroll-snap-align: start;
-      display: inline-flex !important;
-      flex-direction: row !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 0 !important;
-      transition: all 0.2s ease !important;
-    }
-
-    body.dark .sd-spec-chip {
-      background: rgba(59, 130, 246, 0.12) !important;
-      border-color: rgba(59, 130, 246, 0.28) !important;
-    }
-
-    .sd-chip-dot {
-      display: inline-block !important;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--sd-primary, #2563eb);
-      margin-right: 7px;
-      flex-shrink: 0;
-    }
-
-    body.dark .sd-chip-dot {
-      background: #60a5fa !important;
-    }
-
-    .sd-spec-chip .sd-spec-chip-icon,
-    .sd-spec-chip .sd-spec-chip-label {
-      display: none !important;
-    }
-
-    .sd-spec-chip-content {
-      display: inline-flex !important;
-      align-items: center !important;
-      width: auto !important;
-      min-width: 0 !important;
-    }
-
-    .sd-spec-chip-value {
-      font-size: 13px !important;
-      font-weight: 600 !important;
-      color: #1d4ed8 !important;
       white-space: nowrap !important;
-      line-height: 1.2 !important;
-      display: inline-block !important;
+      padding: 6px 12px !important;
+      font-size: 12px !important;
     }
 
-    body.dark .sd-spec-chip-value {
-      color: #93c5fd !important;
-    }
-
-    /* 2 & 4) Açıklama / Sekmeler Kartı: Başlık kartı ile arasında hiç boşluk ve border yok (order: 3) */
+    /* 2 & 4) Açıklama Kartı: Başlık ve yorumlar kartı ile arasında hiç boşluk, border ve gölge yok (order: 3) */
+    .sd-desc-card,
     .sd-tabs-card {
       order: 3 !important;
-      margin: 0 0 10px 0 !important;
-      padding: 0 !important;
+      margin: 0 !important;
+      padding: 6px 16px !important;
       width: 100% !important;
+      border-radius: 0 !important;
+      border: none !important;
+      border-top: none !important;
+      border-bottom: none !important;
+      box-shadow: none !important;
+      background: var(--sd-surface) !important;
+    }
+
+    /* 3) Yorumlar Kartı: Açıklama kartının altında, aralarında hiç boşluk, border ve gölge yok (order: 4) */
+    .sd-comments-card {
+      order: 4 !important;
+      margin: 0 0 10px 0 !important;
+      padding: 16px !important;
       border-radius: 0 !important;
       border: none !important;
       border-top: none !important;
       border-bottom: 1px solid var(--sd-border) !important;
       box-shadow: none !important;
+      width: 100% !important;
+      background: var(--sd-surface) !important;
     }
 
-    /* 3) Yazar / Paylaşan Kartı: Açıklama kartının altında (order: 4), genişlik tam ekran, border yok, sağ/sol boşluk sıfır */
+    .sd-comments-scroll-area {
+      max-height: none !important;
+      overflow-y: visible !important;
+      padding-right: 0 !important;
+    }
+
+    .sd-sort-trigger-btn {
+      width: 32px !important;
+      height: 32px !important;
+      border-radius: 8px !important;
+    }
+
+    .sd-sort-icon {
+      font-size: 13px !important;
+    }
+
+    .sd-sort-active-dot {
+      top: 4px !important;
+      right: 4px !important;
+      width: 5px !important;
+      height: 5px !important;
+    }
+
+    .sd-sort-popup {
+      right: 0;
+      width: min(200px, calc(100vw - 32px));
+    }
+
+    /* 4) Yazar / Paylaşan Kartı: Yorumlar kartının altında (order: 5), genişlik tam ekran, border yok, sağ/sol boşluk sıfır */
     .sd-company-card {
-      order: 4 !important;
+      order: 5 !important;
       margin: 0 0 10px 0 !important;
       padding: 16px 14px !important;
       width: 100% !important;
@@ -1537,8 +1936,13 @@
       box-shadow: none !important;
     }
 
-    .sd-price-card {
+    .sd-comments-card .sd-side-actions-grid {
       display: none !important;
+    }
+
+    .sd-comments-card-header {
+      padding-top: 0 !important;
+      border-top: none !important;
     }
 
     /* Full-width balanced Tabs on Mobile */
@@ -1724,6 +2128,36 @@
       color: #ffffff !important;
     }
 
+    /* Mobile Giriş Pop-up (Fiyat Geçmişi ile Birebir) */
+    .sd-auth-popup {
+      position: fixed !important;
+      left: 14px !important;
+      right: 14px !important;
+      width: calc(100% - 28px) !important;
+      max-width: 360px !important;
+      margin: 0 auto !important;
+      bottom: 80px !important;
+      top: auto !important;
+      border-radius: 18px !important;
+      box-shadow: 0 12px 42px rgba(0, 0, 0, 0.32) !important;
+      background-color: #ffffff !important;
+      background: #ffffff !important;
+      background: var(--sd-surface, #ffffff) !important;
+      border: 1px solid var(--sd-border, #e2e8f0) !important;
+      transform: translateY(16px) scale(0.96);
+    }
+
+    body.dark .sd-auth-popup {
+      background-color: #18181b !important;
+      background: #18181b !important;
+      background: var(--sd-surface, #18181b) !important;
+      border-color: #27272a !important;
+    }
+
+    .sd-auth-popup.is-open {
+      transform: translateY(0) scale(1) !important;
+    }
+
     /* Hide global bottom bar so sticky idea bar sits cleanly */
     body .mobile-fixed-menu {
       display: none !important;
@@ -1782,21 +2216,6 @@
             <li class="sd-bc-sep"><i class="fa-solid fa-chevron-right"></i></li>
             <li class="sd-bc-current" title="{{ $ideaTitle }}">{{ $ideaTitle }}</li>
           </ol>
-
-          <div class="sd-top-actions">
-            <button type="button" class="sd-icon-action-btn" onclick="shareIdeaLink(this)" title="Bağlantıyı Paylaş">
-              <i class="fa-solid fa-share-nodes"></i>
-              <span>Paylaş</span>
-            </button>
-
-            <button type="button"
-                    class="sd-icon-action-btn {{ $isLiked ? 'is-liked' : '' }}"
-                    onclick="handleIdeaLike('{{ $idea->slug }}')"
-                    title="{{ $isLiked ? 'Beğenildi' : 'Beğen' }}">
-              <i class="fa-solid fa-heart"></i>
-              <span>{{ $idea->ideaReplyLikeCount($idea->id) + $idea->ideaLikeCount($idea->id) }} Beğeni</span>
-            </button>
-          </div>
         </div>
 
         {{-- Ana 2 Kolonlu Grid (Mobilde CSS order ile Galeri -> Başlık -> Sekmeler -> Yazar sırasına dönüşür) --}}
@@ -1839,7 +2258,7 @@
                       </button>
                       <button type="button"
                               class="sd-mob-circle-btn {{ $isLiked ? 'is-liked' : '' }}"
-                              onclick="handleIdeaLike('{{ $idea->slug }}')"
+                              onclick="handleIdeaLike('{{ $idea->slug }}', this)"
                               title="Beğen"
                               aria-label="Beğen">
                         <i class="fa-solid fa-heart"></i>
@@ -1928,491 +2347,380 @@
               </div>
             </div>
 
-            {{-- 2. Özellik Rozetleri Kartı (Başlık kaldırıldı) --}}
+            {{-- 2. Özellik Rozetleri Kartı --}}
             <div class="sd-header-card">
               <div class="sd-badges-row">
                 @if($idea->category)
-                  <a href="{{ route('idea.index', ['category' => $idea->category_id]) }}" class="sd-badge">
+                  <a href="{{ route('idea.index', ['category' => $idea->category_id]) }}" class="sd-badge" title="Kategori">
                     <i class="fa-solid fa-layer-group"></i>
-                    {{ $idea->category->name }}
+                    <span>{{ $idea->category->name }}</span>
                   </a>
                 @endif
                 @if($idea->subCategory)
-                  <a href="{{ route('idea.index', ['category' => $idea->category_id, 'sub_category' => $idea->sub_category_id]) }}" class="sd-badge">
+                  <a href="{{ route('idea.index', ['category' => $idea->category_id, 'sub_category' => $idea->sub_category_id]) }}" class="sd-badge" title="Alt Kategori">
                     <i class="fa-solid fa-tag"></i>
-                    {{ $idea->subCategory->name }}
+                    <span>{{ $idea->subCategory->name }}</span>
                   </a>
                 @endif
-              </div>
-
-              {{-- Öne Çıkan Özellik Rozetleri (Quick Specs Pills) --}}
-              <div class="sd-quick-specs">
-                {{-- Kategori Kartı --}}
-                <div class="sd-spec-chip">
-                  <span class="sd-chip-dot"></span>
-                  <div class="sd-spec-chip-icon">
-                    <i class="fa-solid fa-layer-group"></i>
-                  </div>
-                  <div class="sd-spec-chip-content">
-                    <span class="sd-spec-chip-label">Kategori</span>
-                    <span class="sd-spec-chip-value" title="{{ $idea->category->name ?? 'Belirtilmemiş' }}">
-                      {{ $idea->category->name ?? 'Genel' }}
-                    </span>
-                  </div>
-                </div>
-
-                {{-- Alt Kategori Kartı (Varsa) --}}
-                @if($idea->subCategory)
-                  <div class="sd-spec-chip">
-                    <span class="sd-chip-dot"></span>
-                    <div class="sd-spec-chip-icon">
-                      <i class="fa-solid fa-tag"></i>
-                    </div>
-                    <div class="sd-spec-chip-content">
-                      <span class="sd-spec-chip-label">Alt Kategori</span>
-                      <span class="sd-spec-chip-value" title="{{ $idea->subCategory->name }}">
-                        {{ $idea->subCategory->name }}
-                      </span>
-                    </div>
-                  </div>
-                @endif
-
-                {{-- Tarih Kartı --}}
-                <div class="sd-spec-chip">
-                  <span class="sd-chip-dot"></span>
-                  <div class="sd-spec-chip-icon">
-                    <i class="fa-regular fa-calendar-days"></i>
-                  </div>
-                  <div class="sd-spec-chip-content">
-                    <span class="sd-spec-chip-label">Tarih</span>
-                    <span class="sd-spec-chip-value">
-                      {{ change_timezone($idea->created_at, 'd.m.Y') }}
-                    </span>
-                  </div>
-                </div>
-
-                {{-- Beğeni Kartı --}}
-                <div class="sd-spec-chip">
-                  <span class="sd-chip-dot"></span>
-                  <div class="sd-spec-chip-icon">
-                    <i class="fa-solid fa-heart"></i>
-                  </div>
-                  <div class="sd-spec-chip-content">
-                    <span class="sd-spec-chip-label">Beğeni</span>
-                    <span class="sd-spec-chip-value" id="spec-like-count">
-                      {{ $idea->ideaReplyLikeCount($idea->id) + $idea->ideaLikeCount($idea->id) }} Beğeni
-                    </span>
-                  </div>
-                </div>
-
-                {{-- Yorum Kartı --}}
-                <div class="sd-spec-chip">
-                  <span class="sd-chip-dot"></span>
-                  <div class="sd-spec-chip-icon">
-                    <i class="fa-regular fa-comment"></i>
-                  </div>
-                  <div class="sd-spec-chip-content">
-                    <span class="sd-spec-chip-label">Yorum</span>
-                    <span class="sd-spec-chip-value">
-                      {{ $idea->replies->count() }} Yorum
-                    </span>
-                  </div>
-                </div>
-
-                {{-- Görüntülenme Kartı --}}
-                <div class="sd-spec-chip">
-                  <span class="sd-chip-dot"></span>
-                  <div class="sd-spec-chip-icon">
-                    <i class="fa-regular fa-eye"></i>
-                  </div>
-                  <div class="sd-spec-chip-content">
-                    <span class="sd-spec-chip-label">Görüntülenme</span>
-                    <span class="sd-spec-chip-value">
-                      {{ $idea->ideaViewCount($idea->id) }}
-                    </span>
-                  </div>
-                </div>
+                <span class="sd-badge" title="Yayın Tarihi">
+                  <i class="fa-regular fa-calendar-days"></i>
+                  <span>{{ change_timezone($idea->created_at, 'd.m.Y') }}</span>
+                </span>
+                <span class="sd-badge" title="Beğeni Sayısı">
+                  <i class="fa-solid fa-heart"></i>
+                  <span id="spec-like-count">{{ $idea->ideaReplyLikeCount($idea->id) + $idea->ideaLikeCount($idea->id) }} Beğeni</span>
+                </span>
+                <a href="#sidebarCommentsCard" onclick="focusCommentInput(); return false;" class="sd-badge" title="Yorumlar">
+                  <i class="fa-regular fa-comment"></i>
+                  <span><span id="tab-comment-badge">{{ $idea->replies->count() }}</span> Yorum</span>
+                </a>
+                <span class="sd-badge" title="Görüntülenme Sayısı">
+                  <i class="fa-regular fa-eye"></i>
+                  <span>{{ $idea->ideaViewCount($idea->id) }} Görüntülenme</span>
+                </span>
               </div>
             </div>
 
-            {{-- 3. Birleştirilmiş Modern Sekmeler: İçerik & Açıklama | Yorumlar & Tartışma | Bilgiler --}}
-            <div class="sd-tabs-card" id="sdTabsCard">
-              <ul class="nav nav-tabs sd-nav-tabs" id="sdIdeaTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="id-tab-desc-btn" type="button" role="tab" aria-selected="true" data-sd-target="#id-pane-desc">
-                    <i class="fa-regular fa-file-lines"></i>
-                    <span>Açıklama</span>
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="id-tab-comments-btn" type="button" role="tab" aria-selected="false" data-sd-target="#id-pane-comments">
-                    <i class="fa-regular fa-comments"></i>
-                    <span>Yorumlar</span>
-                    <span class="sd-tab-badge" id="tab-comment-badge">{{ $idea->replies->count() }}</span>
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="id-tab-specs-btn" type="button" role="tab" aria-selected="false" data-sd-target="#id-pane-specs">
-                    <i class="fa-solid fa-list-check"></i>
-                    <span>Detaylar</span>
-                  </button>
-                </li>
-              </ul>
-
-              <div class="tab-content sd-tab-body">
-                {{-- TAB 1: Açıklama / İçerik --}}
-                <div class="tab-pane fade show active" id="id-pane-desc" role="tabpanel">
-                  <div class="sd-desc-wrapper">
-                    <p class="sd-description-text sd-clamped" id="sdDescText">{{ $idea->content }}</p>
-                    <button type="button" class="sd-desc-toggle-btn" id="sdDescToggleBtn" onclick="toggleIdeaDescription()" aria-expanded="false" style="display: none;">
-                      <span class="sd-desc-toggle-text">Daha fazla</span>
-                      <i class="fa-solid fa-chevron-down ms-1"></i>
-                    </button>
-                  </div>
-
-                  {{-- En Çok Beğeni Alan Yorum Vurgu Kartı --}}
-                  @if($mostLikedReply)
-                    <div class="sd-highlight-comment-card">
-                      <div class="sd-highlight-header">
-                        <span class="sd-highlight-title">
-                          <i class="fa-solid fa-star text-warning"></i> En Çok Beğenilen Yorum
-                        </span>
-                        <div class="sd-comment-action-btn is-liked">
-                          <i class="fa-regular fa-thumbs-up"></i>
-                          <span>{{ $mostLikedReply->likes->count() }} Beğeni</span>
-                        </div>
-                      </div>
-
-                      @php
-                        $mostLikedUser = auth_info($mostLikedReply->user_id);
-                        $mostLikedUserModel = \App\Models\User::find($mostLikedReply->user_id);
-                      @endphp
-                      <div class="sd-qa-user mb-2">
-                        <img src="{{ asset($mostLikedUser->avatar ?? 'default-avatar.png') }}" alt="{{ $mostLikedUser->name ?? 'Kullanıcı' }}">
-                        <div class="sd-qa-user-meta">
-                          <span class="sd-qa-user-name">{{ $mostLikedUser->name ?? 'Kullanıcı' }}</span>
-                          <span class="sd-qa-time">{{ change_timezone($mostLikedReply->created_at, 'd.m.Y H:i') }}</span>
-                        </div>
-                      </div>
-
-                      <p class="sd-qa-question-text">{{ $mostLikedReply->content }}</p>
-                    </div>
-                  @endif
-                </div>
-
-                {{-- TAB 2: Yorumlar & Tartışma --}}
-                <div class="tab-pane fade" id="id-pane-comments" role="tabpanel">
-                  {{-- Yorum Yazma Formu --}}
-                  @auth()
-                    <form action="{{ route('idea.reply.store') }}" method="POST" class="sd-qa-form-card" id="commentFormCard">
-                      @csrf
-                      <input type="hidden" name="idea_id" value="{{ $idea->id }}">
-                      <div class="sd-qa-form-title">
-                        <i class="fa-regular fa-comment-dots text-primary"></i>
-                        <span>Bu fikir hakkında ne düşünüyorsunuz?</span>
-                      </div>
-                      <textarea name="content"
-                                id="mainCommentTextarea"
-                                rows="3"
-                                placeholder="Deneyimlerinizi, sorularınızı veya önerilerinizi paylaşın..."
-                                class="sd-qa-textarea"
-                                required>{{ old('content') }}</textarea>
-                      <div class="sd-qa-submit-row">
-                        <button class="sd-btn-primary" type="submit">
-                          <i class="fa-regular fa-paper-plane"></i> Yorumu Paylaş
-                        </button>
-                      </div>
-                    </form>
-                  @else
-                    <div class="sd-guest-login-banner" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
-                      <span class="sd-guest-login-banner-text">
-                        <i class="fa-solid fa-lock me-2 text-primary"></i>
-                        Fikir hakkında yorum yapmak için lütfen giriş yapın.
-                      </span>
-                      <span class="sd-btn-primary sd-guest-login-banner-btn">Giriş Yap</span>
-                    </div>
-                  @endauth
-
-                  {{-- Sıralama & Toplam Başlığı --}}
-                  <div class="d-flex align-items-center justify-content-between mb-3">
-                    <span class="fw-bold" style="font-size: 14.5px; color: var(--sd-text-main);">
-                      Toplam <span id="comments-section-count">{{ $idea->replies->count() }}</span> Yorum
-                    </span>
-                    <form action="" method="GET" class="d-flex align-items-center">
-                      <select name="sort_by" class="form-select form-select-sm" style="font-size: 12.5px; border-radius: 8px;" onchange="this.closest('form').submit()">
-                        <option value="new" @selected(request()->sort_by == 'new' || !request()->sort_by)>En Yeni</option>
-                        <option value="like" @selected(request()->sort_by == 'like')>En Çok Beğenilen</option>
-                      </select>
-                    </form>
-                  </div>
-
-                  {{-- Yorum Listesi --}}
-                  <div class="sd-qa-list">
-                    @forelse($replies as $reply)
-                      @php
-                        $replyUser = auth_info($reply->user_id);
-                        $replyUserModel = \App\Models\User::find($reply->user_id);
-                        $isReplyCompany = ($replyUserModel && $replyUserModel->user_type === 'company' && $replyUserModel->company);
-                      @endphp
-                      <div class="sd-qa-item" id="reply-{{ $reply->id }}">
-                        <div class="sd-qa-header">
-                          <div class="sd-qa-user">
-                            <img src="{{ asset($replyUser->avatar ?? 'default-avatar.png') }}"
-                                 alt="{{ $replyUser->name ?? 'Kullanıcı' }}">
-                            <div class="sd-qa-user-meta">
-                              @if($isReplyCompany)
-                                <a href="{{ route('companies.show', $replyUserModel->company->slug) }}" class="sd-qa-user-name">
-                                  {{ $replyUser->name ?? 'Firma' }}
-                                  <i class="fa-solid fa-circle-check text-primary ms-1" style="font-size: 11px;"></i>
-                                </a>
-                              @else
-                                <span class="sd-qa-user-name">{{ $replyUser->name ?? 'Kullanıcı' }}</span>
-                              @endif
-                              <span class="sd-qa-time">
-                                {{ change_timezone($reply->created_at, 'd.m.Y') }} • {{ change_timezone($reply->created_at, 'H:i') }}
-                              </span>
-                            </div>
-                          </div>
-
-                          @auth()
-                            @if($reply->user_id == auth()->id() || $reply->idea->user_id == auth()->id())
-                              <a href="{{ route('idea.reply.destroy', $reply->id) }}"
-                                 class="sd-qa-delete-btn"
-                                 onclick="return confirm('Yorumu silmek istediğinize emin misiniz?')"
-                                 title="Yorumu Sil">
-                                <i class="fa-solid fa-trash-can"></i>
-                              </a>
-                            @endif
-                          @endauth
-                        </div>
-
-                        <p class="sd-qa-question-text">{{ $reply->content }}</p>
-
-                        <div class="sd-comment-actions-bar">
-                          <button type="button"
-                                  class="sd-comment-action-btn {{ $reply->like($reply->id) ? 'is-liked' : '' }}"
-                                  onclick="likeToggle({{ $reply->id }})">
-                            <i class="fa-regular fa-thumbs-up"></i>
-                            <span class="reply-like-count">{{ $reply->likes->count() }}</span>
-                          </button>
-
-                          <button type="button"
-                                  class="sd-comment-action-btn"
-                                  onclick="toggleReplyForm({{ $reply->id }})">
-                            <i class="fa-regular fa-comment"></i>
-                            <span>Yanıtla</span>
-                          </button>
-
-                          @if($reply->answers->count() > 0)
-                            <button type="button"
-                                    class="sd-comment-action-btn ms-auto text-primary"
-                                    onclick="toggleNestedAnswers({{ $reply->id }}, this)">
-                              <i class="fa-solid fa-chevron-down"></i>
-                              <span>Yanıtlar ({{ $reply->answers->count() }})</span>
-                            </button>
-                          @endif
-                        </div>
-
-                        {{-- Yanıt Gönderme Formu --}}
-                        <div class="sd-reply-form-box" id="replyFormBox-{{ $reply->id }}" style="display: none;">
-                          @auth()
-                            <form action="{{ route('idea.reply.store') }}" method="POST">
-                              @csrf
-                              <input type="hidden" name="idea_id" value="{{ $idea->id }}">
-                              <input type="hidden" name="parent_reply_id" value="{{ $reply->id }}">
-                              <input type="hidden" name="quoted_reply_id" value="{{ $reply->id }}">
-                              <div class="d-flex gap-2">
-                                <input type="text" name="content" class="form-control" style="font-size: 13.5px; border-radius: 8px;" placeholder="Yanıtınızı yazın..." required>
-                                <button type="submit" class="sd-btn-primary sd-btn-sm" style="flex-shrink: 0;">Gönder</button>
-                              </div>
-                            </form>
-                          @else
-                            <div class="text-center py-2 text-muted small">
-                              Yanıt vermek için lütfen <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModalToggle" class="text-primary fw-bold">giriş yapın</a>.
-                            </div>
-                          @endauth
-                        </div>
-
-                        {{-- İç İçe Alt Yanıtlar --}}
-                        @if($reply->answers->count() > 0)
-                          <div class="sd-nested-answers" id="nestedAnswers-{{ $reply->id }}" style="display: none;">
-                            @foreach($reply->answers as $answer)
-                              @php
-                                $answerUser = auth_info($answer->user_id);
-                                $answerUserModel = \App\Models\User::find($answer->user_id);
-                                $isAnswerCompany = ($answerUserModel && $answerUserModel->user_type === 'company' && $answerUserModel->company);
-                              @endphp
-                              <div class="sd-nested-item">
-                                <div class="sd-qa-header mb-1">
-                                  <div class="sd-qa-user">
-                                    <img src="{{ asset($answerUser->avatar ?? 'default-avatar.png') }}"
-                                         alt="{{ $answerUser->name ?? 'Kullanıcı' }}"
-                                         style="width: 30px; height: 30px;">
-                                    <div class="sd-qa-user-meta">
-                                      @if($isAnswerCompany)
-                                        <a href="{{ route('companies.show', $answerUserModel->company->slug) }}" class="sd-qa-user-name" style="font-size: 13px;">
-                                          {{ $answerUser->name ?? 'Firma' }}
-                                        </a>
-                                      @else
-                                        <span class="sd-qa-user-name" style="font-size: 13px;">{{ $answerUser->name ?? 'Kullanıcı' }}</span>
-                                      @endif
-                                      <span class="sd-qa-time" style="font-size: 11px;">
-                                        {{ change_timezone($answer->created_at, 'd.m.Y H:i') }}
-                                      </span>
-                                    </div>
-                                  </div>
-
-                                  @auth()
-                                    @if($answer->user_id == auth()->id() || $answer->idea->user_id == auth()->id())
-                                      <a href="{{ route('idea.reply.destroy', $answer->id) }}"
-                                         class="sd-qa-delete-btn"
-                                         style="width: 26px; height: 26px; font-size: 11px;"
-                                         onclick="return confirm('Yanıtı silmek istediğinize emin misiniz?')"
-                                         title="Yanıtı Sil">
-                                        <i class="fa-solid fa-trash-can"></i>
-                                      </a>
-                                    @endif
-                                  @endauth
-                                </div>
-
-                                <p class="sd-qa-question-text" style="font-size: 13.5px;">{{ $answer->content }}</p>
-
-                                <div class="d-flex align-items-center gap-2 mt-2">
-                                  <button type="button"
-                                          class="sd-comment-action-btn {{ $answer->like($answer->id) ? 'is-liked' : '' }}"
-                                          style="font-size: 12px; padding: 2px 6px;"
-                                          onclick="likeToggle({{ $answer->id }})">
-                                    <i class="fa-regular fa-thumbs-up"></i>
-                                    <span class="reply-like-count">{{ $answer->likes->count() }}</span>
-                                  </button>
-                                </div>
-                              </div>
-                            @endforeach
-                          </div>
-                        @endif
-                      </div>
-                    @empty
-                      <div class="text-center py-4 text-muted">
-                        <i class="fa-regular fa-comments fs-2 mb-2 d-block opacity-50"></i>
-                        <span>Bu fikir hakkında henüz yorum yapılmamış. İlk yorumu siz yapabilirsiniz!</span>
-                      </div>
-                    @endforelse
-                  </div>
-                </div>
-
-                {{-- TAB 3: Detaylar & Bilgiler --}}
-                <div class="tab-pane fade" id="id-pane-specs" role="tabpanel">
-                  <div class="sd-specs-grid">
-                    <div class="sd-spec-row">
-                      <span class="sd-spec-row-label">
-                        <i class="fa-solid fa-layer-group"></i> Kategori
-                      </span>
-                      <span class="sd-spec-row-val">
-                        {{ $idea->category->name ?? 'Genel' }}
-                      </span>
-                    </div>
-
-                    @if($idea->subCategory)
-                      <div class="sd-spec-row">
-                        <span class="sd-spec-row-label">
-                          <i class="fa-solid fa-tag"></i> Alt Kategori
-                        </span>
-                        <span class="sd-spec-row-val">
-                          {{ $idea->subCategory->name }}
-                        </span>
-                      </div>
-                    @endif
-
-                    <div class="sd-spec-row">
-                      <span class="sd-spec-row-label">
-                        <i class="fa-regular fa-user"></i> Paylaşan
-                      </span>
-                      <span class="sd-spec-row-val">
-                        {{ $authorName }}
-                      </span>
-                    </div>
-
-                    <div class="sd-spec-row">
-                      <span class="sd-spec-row-label">
-                        <i class="fa-regular fa-calendar-days"></i> Paylaşım Tarihi
-                      </span>
-                      <span class="sd-spec-row-val">
-                        {{ change_timezone($idea->created_at, 'd.m.Y H:i') }}
-                      </span>
-                    </div>
-
-                    <div class="sd-spec-row">
-                      <span class="sd-spec-row-label">
-                        <i class="fa-solid fa-heart"></i> Toplam Beğeni
-                      </span>
-                      <span class="sd-spec-row-val">
-                        {{ $idea->ideaReplyLikeCount($idea->id) + $idea->ideaLikeCount($idea->id) }}
-                      </span>
-                    </div>
-
-                    <div class="sd-spec-row">
-                      <span class="sd-spec-row-label">
-                        <i class="fa-regular fa-comments"></i> Toplam Yorum
-                      </span>
-                      <span class="sd-spec-row-val">
-                        {{ $idea->replies->count() }}
-                      </span>
-                    </div>
-
-                    <div class="sd-spec-row">
-                      <span class="sd-spec-row-label">
-                        <i class="fa-regular fa-eye"></i> Görüntülenme
-                      </span>
-                      <span class="sd-spec-row-val">
-                        {{ $idea->ideaViewCount($idea->id) }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+            {{-- 3. Açıklama & İçerik Alanı --}}
+            <div class="sd-desc-card" id="sdDescCard">
+              <div class="sd-desc-wrapper">
+                <p class="sd-description-text sd-clamped" id="sdDescText">{{ $idea->content }}</p>
+                <button type="button" class="sd-desc-toggle-btn" id="sdDescToggleBtn" onclick="toggleIdeaDescription()" aria-expanded="false" style="display: none;">
+                  <span class="sd-desc-toggle-text">Daha fazla</span>
+                  <i class="fa-solid fa-chevron-down ms-1"></i>
+                </button>
               </div>
+
+              {{-- En Çok Beğeni Alan Yorum Vurgu Kartı --}}
+              @if($mostLikedReply)
+                <div class="sd-highlight-comment-card" style="cursor: pointer;" onclick="document.getElementById('reply-{{ $mostLikedReply->id }}')?.scrollIntoView({behavior: 'smooth', block: 'center'});">
+                  <div class="sd-highlight-header">
+                    <span class="sd-highlight-title">
+                      <i class="fa-solid fa-star text-warning"></i> En Çok Beğenilen Yorum
+                    </span>
+                    <div class="sd-comment-action-btn is-liked">
+                      <i class="fa-regular fa-thumbs-up"></i>
+                      <span>{{ $mostLikedReply->likes->count() }} Beğeni</span>
+                    </div>
+                  </div>
+
+                  @php
+                    $mostLikedUser = auth_info($mostLikedReply->user_id);
+                    $mostLikedUserModel = \App\Models\User::find($mostLikedReply->user_id);
+                  @endphp
+                  <div class="sd-qa-user mb-2">
+                    <img src="{{ asset($mostLikedUser->avatar ?? 'default-avatar.png') }}" alt="{{ $mostLikedUser->name ?? 'Kullanıcı' }}">
+                    <div class="sd-qa-user-meta">
+                      <span class="sd-qa-user-name">{{ $mostLikedUser->name ?? 'Kullanıcı' }}</span>
+                      <span class="sd-qa-time">{{ change_timezone($mostLikedReply->created_at, 'd.m.Y H:i') }}</span>
+                    </div>
+                  </div>
+
+                  <p class="sd-qa-question-text">{{ $mostLikedReply->content }}</p>
+                </div>
+              @endif
             </div>
 
           </div>
 
-          {{-- SAĞ KOLON: İstatistik / Etkileşim Kartı & Yazar / Firma Kartı --}}
+          {{-- SAĞ KOLON: İstatistik / Etkileşim & Yorumlar & Yazar / Firma Kartı --}}
           <aside class="sd-sidebar">
 
-            {{-- Masaüstü Etkileşim & Beğeni Kartı --}}
-            <div class="sd-price-card">
-              <button type="button"
-                      class="sd-idea-like-btn {{ $isLiked ? 'is-liked' : '' }}"
-                      id="desktop-like-btn"
-                      onclick="handleIdeaLike('{{ $idea->slug }}')">
-                <i class="fa-solid fa-heart"></i>
-                <span id="desktop-like-count">{{ $idea->ideaReplyLikeCount($idea->id) + $idea->ideaLikeCount($idea->id) }}</span>
-                <span>Beğeni</span>
-              </button>
-
-              <div class="sd-idea-stats-row">
-                <span>
-                  <i class="fa-regular fa-comment text-primary"></i>
-                  <strong id="desktop-comment-count-stats">{{ $idea->replies->count() }}</strong> Yorum
-                </span>
-                <span>
-                  <i class="fa-regular fa-eye text-primary"></i>
-                  <strong>{{ $idea->ideaViewCount($idea->id) }}</strong> Görüntülenme
-                </span>
-              </div>
-
-              <div class="sd-cta-stack">
+            {{-- 1. Masaüstü Hızlı Etkileşim & Yorumlar Kartı (Birleşik Tek Kart) --}}
+            <div class="sd-comments-card" id="sidebarCommentsCard">
+              {{-- Hızlı Aksiyon Butonları --}}
+              <div class="sd-side-actions-grid">
+                {{-- 1. Beğen --}}
                 <button type="button"
-                        class="sd-btn-primary"
-                        onclick="activateIdeaTab('#id-pane-comments'); focusCommentInput();">
-                  <i class="fa-regular fa-comment-dots"></i>
-                  <span>Yorum Yaz</span>
+                        class="sd-side-action-btn sd-action-like {{ $isLiked ? 'is-liked' : '' }}"
+                        id="desktop-like-btn"
+                        onclick="handleIdeaLike('{{ $idea->slug }}', this)"
+                        title="Beğen">
+                  <i class="fa-solid fa-heart"></i>
+                  <span id="desktop-like-count">{{ $idea->ideaReplyLikeCount($idea->id) + $idea->ideaLikeCount($idea->id) }}</span>
                 </button>
 
+                {{-- 2. Yorum --}}
                 <button type="button"
-                        class="sd-btn-outline"
-                        onclick="shareIdeaLink(this)">
+                        class="sd-side-action-btn sd-action-comment"
+                        onclick="focusCommentInput();"
+                        title="Yorumlar">
+                  <i class="fa-regular fa-comment"></i>
+                  <span id="desktop-comment-count-stats">{{ $idea->replies->count() }}</span>
+                </button>
+
+                {{-- 3. Paylaş --}}
+                <button type="button"
+                        class="sd-side-action-btn sd-action-share"
+                        onclick="shareIdeaLink(this)"
+                        title="Paylaş">
                   <i class="fa-solid fa-share-nodes"></i>
                   <span>Paylaş</span>
                 </button>
+
+                {{-- 4. Görüntülenme --}}
+                <div class="sd-side-action-btn sd-action-view"
+                     title="Görüntülenme">
+                  <i class="fa-regular fa-eye"></i>
+                  <span>{{ $idea->ideaViewCount($idea->id) }}</span>
+                </div>
+              </div>
+
+              {{-- Yorumlar Başlığı & Sıralama Pop-up Menüsü (Firma Profili ile Aynı) --}}
+              <div class="sd-comments-card-header">
+                <span class="sd-comments-title">
+                  <i class="fa-regular fa-comments text-primary"></i>
+                  <span>Yorumlar (<span id="comments-section-count">{{ $idea->replies->count() }}</span>)</span>
+                </span>
+
+                @php
+                  $currentSort = request()->sort_by ?? 'new';
+                  $isCustomSort = ($currentSort === 'like');
+                  $sortLabels = [
+                    'new' => 'En Yeni',
+                    'like' => 'En Çok Beğenilen',
+                  ];
+                  $currentLabel = $sortLabels[$currentSort] ?? 'En Yeni';
+                @endphp
+
+                <div class="sd-sort-wrapper" id="sortCommentsWrapper">
+                  <button type="button" 
+                          class="sd-sort-trigger-btn {{ $isCustomSort ? 'is-active' : '' }}" 
+                          id="sortCommentsTriggerBtn" 
+                          aria-expanded="false" 
+                          aria-haspopup="true" 
+                          title="Sıralama: {{ $currentLabel }}" 
+                          aria-label="Sıralama: {{ $currentLabel }}">
+                    <i class="fa-solid fa-arrow-down-wide-short sd-sort-icon"></i>
+                    @if($isCustomSort)
+                      <span class="sd-sort-active-dot"></span>
+                    @endif
+                  </button>
+
+                  <!-- Direk Butonun Altında Açılan Sıralama Pop-up Menüsü -->
+                  <div class="sd-sort-popup" id="sortCommentsPopup" role="menu">
+                    <form action="{{ url()->current() }}" method="GET" id="sortCommentsForm" class="m-0">
+                      {{-- Mevcut filtre ve parametreleri koru (sort_by hariç) --}}
+                      @foreach(request()->except(['sort_by']) as $k => $v)
+                        @if(is_array($v))
+                          @foreach($v as $sv)
+                            <input type="hidden" name="{{ $k }}[]" value="{{ $sv }}">
+                          @endforeach
+                        @else
+                          <input type="hidden" name="{{ $k }}" value="{{ $v }}">
+                        @endif
+                      @endforeach
+
+                      <input type="hidden" name="sort_by" id="sortCommentsInput" value="{{ $currentSort }}">
+
+                      <div class="sd-sort-options-list">
+                        @php
+                          $sortOptions = [
+                            ['value' => 'new',  'label' => 'En Yeni',           'icon' => 'fa-regular fa-clock'],
+                            ['value' => 'like', 'label' => 'En Çok Beğenilen', 'icon' => 'fa-regular fa-heart'],
+                          ];
+                        @endphp
+
+                        @foreach($sortOptions as $opt)
+                          @php
+                            $isSelected = ($currentSort === $opt['value']);
+                          @endphp
+                          <div class="sd-sort-option-item {{ $isSelected ? 'is-selected' : '' }}" 
+                               data-value="{{ $opt['value'] }}"
+                               role="menuitem"
+                               tabindex="0">
+                            <i class="{{ $opt['icon'] }} me-2" style="font-size: 13px; opacity: 0.85;"></i>
+                            <span class="sd-sort-option-name">{{ $opt['label'] }}</span>
+                            @if($isSelected)
+                              <i class="fa-solid fa-check ms-auto text-primary" style="font-size: 11px;"></i>
+                            @endif
+                          </div>
+                        @endforeach
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              {{-- Yorum Yazma Formu --}}
+              @auth()
+                <form action="{{ route('idea.reply.store') }}" method="POST" class="sd-qa-form-card" id="commentFormCard">
+                  @csrf
+                  <input type="hidden" name="idea_id" value="{{ $idea->id }}">
+                  <textarea name="content"
+                            id="mainCommentTextarea"
+                            rows="2"
+                            placeholder="Bu fikir hakkında bir yorum yazın..."
+                            class="sd-qa-textarea"
+                            required>{{ old('content') }}</textarea>
+                  <div class="sd-qa-submit-row">
+                    <button class="sd-btn-primary sd-btn-sm" type="submit">
+                      <i class="fa-regular fa-paper-plane"></i> Gönder
+                    </button>
+                  </div>
+                </form>
+              @else
+                <div class="sd-guest-login-banner" data-bs-toggle="modal" data-bs-target="#exampleModalToggle">
+                  <span class="sd-guest-login-banner-text">
+                    <i class="fa-solid fa-lock me-1 text-primary"></i> Yorum yapmak için giriş yapın.
+                  </span>
+                  <span class="sd-btn-primary sd-guest-login-banner-btn">Giriş</span>
+                </div>
+              @endauth
+
+              {{-- Kaydırılabilir Yorum Listesi --}}
+              <div class="sd-comments-scroll-area">
+                <div class="sd-qa-list">
+                  @forelse($replies as $reply)
+                    @php
+                      $replyUser = auth_info($reply->user_id);
+                      $replyUserModel = \App\Models\User::find($reply->user_id);
+                      $isReplyCompany = ($replyUserModel && $replyUserModel->user_type === 'company' && $replyUserModel->company);
+                    @endphp
+                    <div class="sd-qa-item" id="reply-{{ $reply->id }}">
+                      <div class="sd-qa-header">
+                        <div class="sd-qa-user">
+                          <img src="{{ asset($replyUser->avatar ?? 'default-avatar.png') }}"
+                               alt="{{ $replyUser->name ?? 'Kullanıcı' }}">
+                          <div class="sd-qa-user-meta">
+                            @if($isReplyCompany)
+                              <a href="{{ route('companies.show', $replyUserModel->company->slug) }}" class="sd-qa-user-name">
+                                {{ $replyUser->name ?? 'Firma' }}
+                                <i class="fa-solid fa-circle-check text-primary ms-1" style="font-size: 11px;"></i>
+                              </a>
+                            @else
+                              <span class="sd-qa-user-name">{{ $replyUser->name ?? 'Kullanıcı' }}</span>
+                            @endif
+                            <span class="sd-qa-time">
+                              {{ change_timezone($reply->created_at, 'd.m.Y') }} • {{ change_timezone($reply->created_at, 'H:i') }}
+                            </span>
+                          </div>
+                        </div>
+
+                        @auth()
+                          @if($reply->user_id == auth()->id() || $reply->idea->user_id == auth()->id())
+                            <a href="{{ route('idea.reply.destroy', $reply->id) }}"
+                               class="sd-qa-delete-btn"
+                               onclick="return confirm('Yorumu silmek istediğinize emin misiniz?')"
+                               title="Yorumu Sil">
+                              <i class="fa-solid fa-trash-can"></i>
+                            </a>
+                          @endif
+                        @endauth
+                      </div>
+
+                      <p class="sd-qa-question-text">{{ $reply->content }}</p>
+
+                      <div class="sd-comment-actions-bar">
+                        <button type="button"
+                                class="sd-comment-action-btn {{ $reply->like($reply->id) ? 'is-liked' : '' }}"
+                                onclick="likeToggle({{ $reply->id }}, this)">
+                          <i class="fa-regular fa-thumbs-up"></i>
+                          <span class="reply-like-count">{{ $reply->likes->count() }}</span>
+                        </button>
+
+                        <button type="button"
+                                class="sd-comment-action-btn"
+                                onclick="toggleReplyForm({{ $reply->id }})">
+                          <i class="fa-regular fa-comment"></i>
+                          <span>Yanıtla</span>
+                        </button>
+
+                        @if($reply->answers->count() > 0)
+                          <button type="button"
+                                  class="sd-comment-action-btn ms-auto text-primary"
+                                  onclick="toggleNestedAnswers({{ $reply->id }}, this)">
+                            <i class="fa-solid fa-chevron-down"></i>
+                            <span>Yanıtlar ({{ $reply->answers->count() }})</span>
+                          </button>
+                        @endif
+                      </div>
+
+                      {{-- Yanıt Gönderme Formu --}}
+                      <div class="sd-reply-form-box" id="replyFormBox-{{ $reply->id }}" style="display: none;">
+                        @auth()
+                          <form action="{{ route('idea.reply.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="idea_id" value="{{ $idea->id }}">
+                            <input type="hidden" name="parent_reply_id" value="{{ $reply->id }}">
+                            <input type="hidden" name="quoted_reply_id" value="{{ $reply->id }}">
+                            <div class="d-flex gap-2">
+                              <input type="text" name="content" class="form-control" style="font-size: 13px; border-radius: 8px;" placeholder="Yanıtınızı yazın..." required>
+                              <button type="submit" class="sd-btn-primary sd-btn-sm" style="flex-shrink: 0; padding: 6px 12px; font-size: 12px;">Gönder</button>
+                            </div>
+                          </form>
+                        @else
+                          <div class="text-center py-2 text-muted small">
+                            Yanıt vermek için lütfen <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModalToggle" class="text-primary fw-bold">giriş yapın</a>.
+                          </div>
+                        @endauth
+                      </div>
+
+                      {{-- İç İçe Alt Yanıtlar --}}
+                      @if($reply->answers->count() > 0)
+                        <div class="sd-nested-answers" id="nestedAnswers-{{ $reply->id }}" style="display: none;">
+                          @foreach($reply->answers as $answer)
+                            @php
+                              $answerUser = auth_info($answer->user_id);
+                              $answerUserModel = \App\Models\User::find($answer->user_id);
+                              $isAnswerCompany = ($answerUserModel && $answerUserModel->user_type === 'company' && $answerUserModel->company);
+                            @endphp
+                            <div class="sd-nested-item">
+                              <div class="sd-qa-header mb-1">
+                                <div class="sd-qa-user">
+                                  <img src="{{ asset($answerUser->avatar ?? 'default-avatar.png') }}"
+                                       alt="{{ $answerUser->name ?? 'Kullanıcı' }}"
+                                       style="width: 28px; height: 28px;">
+                                  <div class="sd-qa-user-meta">
+                                    @if($isAnswerCompany)
+                                      <a href="{{ route('companies.show', $answerUserModel->company->slug) }}" class="sd-qa-user-name" style="font-size: 12.5px;">
+                                        {{ $answerUser->name ?? 'Firma' }}
+                                      </a>
+                                    @else
+                                      <span class="sd-qa-user-name" style="font-size: 12.5px;">{{ $answerUser->name ?? 'Kullanıcı' }}</span>
+                                    @endif
+                                    <span class="sd-qa-time" style="font-size: 11px;">
+                                      {{ change_timezone($answer->created_at, 'd.m.Y H:i') }}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                @auth()
+                                  @if($answer->user_id == auth()->id() || $answer->idea->user_id == auth()->id())
+                                    <a href="{{ route('idea.reply.destroy', $answer->id) }}"
+                                       class="sd-qa-delete-btn"
+                                       style="width: 24px; height: 24px; font-size: 10px;"
+                                       onclick="return confirm('Yanıtı silmek istediğinize emin misiniz?')"
+                                       title="Yanıtı Sil">
+                                      <i class="fa-solid fa-trash-can"></i>
+                                    </a>
+                                  @endif
+                                @endauth
+                              </div>
+
+                              <p class="sd-qa-question-text" style="font-size: 13px;">{{ $answer->content }}</p>
+
+                              <div class="d-flex align-items-center gap-2 mt-2">
+                                <button type="button"
+                                        class="sd-comment-action-btn {{ $answer->like($answer->id) ? 'is-liked' : '' }}"
+                                        style="font-size: 11.5px; padding: 2px 6px;"
+                                        onclick="likeToggle({{ $answer->id }}, this)">
+                                  <i class="fa-regular fa-thumbs-up"></i>
+                                  <span class="reply-like-count">{{ $answer->likes->count() }}</span>
+                                </button>
+                              </div>
+                            </div>
+                          @endforeach
+                        </div>
+                      @endif
+                    </div>
+                  @empty
+                    <div class="text-center py-4 text-muted">
+                      <i class="fa-regular fa-comments fs-3 mb-2 d-block opacity-50"></i>
+                      <span style="font-size: 13px;">Bu fikir hakkında henüz yorum yapılmamış.<br>İlk yorumu siz yazın!</span>
+                    </div>
+                  @endforelse
+                </div>
               </div>
             </div>
 
@@ -2559,14 +2867,14 @@
   <div class="sd-mob-stats-col">
     <div class="sd-mob-stat-item {{ $isLiked ? 'is-liked' : '' }}"
          id="mobile-like-btn"
-         onclick="handleIdeaLike('{{ $idea->slug }}')"
+         onclick="handleIdeaLike('{{ $idea->slug }}', this)"
          title="Beğen">
       <i class="fa-solid fa-heart"></i>
       <span id="mobile-like-count">{{ $idea->ideaReplyLikeCount($idea->id) + $idea->ideaLikeCount($idea->id) }}</span>
     </div>
 
     <div class="sd-mob-stat-item"
-         onclick="activateIdeaTab('#id-pane-comments'); document.getElementById('sdTabsCard')?.scrollIntoView({behavior: 'smooth'});"
+         onclick="focusCommentInput(); document.getElementById('sidebarCommentsCard')?.scrollIntoView({behavior: 'smooth'});"
          title="Yorumlar">
       <i class="fa-regular fa-comment"></i>
       <span id="mobile-comment-count">{{ $idea->replies->count() }}</span>
@@ -2576,6 +2884,35 @@
       <i class="fa-regular fa-eye"></i>
       <span>{{ $idea->ideaViewCount($idea->id) }}</span>
     </div>
+  </div>
+</div>
+
+{{-- Modern Giriş Yap Pop-up Uyarısı (Fiyat Geçmişi Tasarımı ile Birebir) --}}
+<div class="sd-auth-popup-backdrop" id="sdAuthPopupBackdrop" onclick="closeLoginPopup()"></div>
+<div class="sd-auth-popup" id="sdAuthPopup" role="dialog" aria-modal="true" aria-labelledby="sdAuthPopupTitle">
+  <div class="sd-auth-popup-header">
+    <h5 class="sd-auth-popup-title" id="sdAuthPopupTitle">
+      <i class="fa-solid fa-lock text-primary" id="sdAuthPopupHeaderIcon"></i>
+      <span id="sdAuthPopupTitleText">Giriş Yapmalısınız</span>
+    </h5>
+    <button type="button" class="sd-auth-popup-close" onclick="closeLoginPopup()" aria-label="Kapat">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+  <div class="sd-auth-popup-body">
+    <div class="fg-guest-icon">
+      <i class="fa-solid fa-lock" id="sdAuthPopupBodyIcon"></i>
+    </div>
+    <p class="fg-guest-text" id="sdAuthPopupMessage">
+      Bu fikri beğenmek için lütfen giriş yapın.
+    </p>
+    <button type="button" class="fg-guest-btn" onclick="openLoginModalFromAuthPopup()">
+      <i class="fa-solid fa-arrow-right-to-bracket"></i>
+      <span>Giriş Yap</span>
+    </button>
   </div>
 </div>
 @endsection
@@ -2611,7 +2948,7 @@
     const mainEl = document.querySelector('.sd-main-swiper');
     if (mainEl) {
       const slideCount = mainEl.querySelectorAll('.swiper-slide').length;
-      new Swiper('.sd-main-swiper', {
+      window.sdMainSwiper = new Swiper('.sd-main-swiper', {
         slidesPerView: 1,
         spaceBetween: 10,
         loop: false,
@@ -2631,45 +2968,118 @@
           }
         }
       });
+      window.addEventListener('resize', function() {
+        if (window.sdMainSwiper) {
+          window.sdMainSwiper.update();
+        }
+      });
     }
 
-    // 2. Birleştirilmiş Modern Sekme Geçişleri
-    const tabButtons = document.querySelectorAll('#sdIdeaTabs .nav-link[data-sd-target]');
-    const tabPanes = document.querySelectorAll('.sd-tabs-card .tab-pane');
-
+    // 2. Geriye dönük uyumluluk için sekme yönlendirici
     window.activateIdeaTab = function(targetSelector) {
-      const targetPane = document.querySelector(targetSelector);
-      const targetBtn = document.querySelector(`#sdIdeaTabs .nav-link[data-sd-target="${targetSelector}"]`);
-      if (!targetPane || !targetBtn) return;
-
-      tabButtons.forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-selected', 'false');
-      });
-      tabPanes.forEach(p => {
-        p.classList.remove('show', 'active');
-      });
-
-      targetBtn.classList.add('active');
-      targetBtn.setAttribute('aria-selected', 'true');
-      targetPane.classList.add('show', 'active');
-
-      if (targetSelector === '#id-pane-desc') {
-        setTimeout(initIdeaDescClamp, 30);
+      if (targetSelector === '#id-pane-comments' || targetSelector === '#sidebarCommentsCard') {
+        const commentsCard = document.getElementById('sidebarCommentsCard');
+        if (commentsCard) {
+          commentsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          focusCommentInput();
+        }
+      } else if (targetSelector === '#id-pane-desc' || targetSelector === '#sdDescCard') {
+        const descCard = document.getElementById('sdDescCard');
+        if (descCard) {
+          descCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }
     };
 
-    tabButtons.forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        activateIdeaTab(this.getAttribute('data-sd-target'));
-      });
-    });
+    // 2.1 Yorumlar Sıralama Pop-up Menüsü (Firma Profili ile Aynı Davranış)
+    const sortCommentsWrapper = document.getElementById('sortCommentsWrapper');
+    const sortCommentsTriggerBtn = document.getElementById('sortCommentsTriggerBtn');
+    const sortCommentsPopup = document.getElementById('sortCommentsPopup');
+    const sortCommentsForm = document.getElementById('sortCommentsForm');
+    const sortCommentsInput = document.getElementById('sortCommentsInput');
 
-    // URL'de ?comment=show veya #id-pane-comments varsa otomatik Yorumlar sekmesini aç
+    if (sortCommentsTriggerBtn && sortCommentsPopup) {
+      const hasCustomSort = sortCommentsTriggerBtn.classList.contains('is-active');
+
+      function openSortCommentsPopup() {
+        sortCommentsPopup.classList.add('show');
+        sortCommentsTriggerBtn.classList.add('is-active');
+        sortCommentsTriggerBtn.setAttribute('aria-expanded', 'true');
+      }
+
+      function closeSortCommentsPopup() {
+        sortCommentsPopup.classList.remove('show');
+        if (!hasCustomSort) {
+          sortCommentsTriggerBtn.classList.remove('is-active');
+        }
+        sortCommentsTriggerBtn.setAttribute('aria-expanded', 'false');
+      }
+
+      function toggleSortCommentsPopup() {
+        if (sortCommentsPopup.classList.contains('show')) {
+          closeSortCommentsPopup();
+        } else {
+          openSortCommentsPopup();
+        }
+      }
+
+      sortCommentsTriggerBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleSortCommentsPopup();
+      });
+
+      sortCommentsPopup.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+
+      document.addEventListener('click', function(e) {
+        if (sortCommentsWrapper && !sortCommentsWrapper.contains(e.target)) {
+          closeSortCommentsPopup();
+        }
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && sortCommentsPopup.classList.contains('show')) {
+          closeSortCommentsPopup();
+        }
+      });
+
+      if (sortCommentsForm && sortCommentsInput) {
+        const sortOptionItems = sortCommentsPopup.querySelectorAll('.sd-sort-option-item');
+
+        sortOptionItems.forEach(item => {
+          item.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const val = this.getAttribute('data-value') || '';
+            sortOptionItems.forEach(el => el.classList.remove('is-selected'));
+            this.classList.add('is-selected');
+            sortCommentsInput.value = val;
+
+            setTimeout(() => {
+              sortCommentsForm.submit();
+            }, 100);
+          });
+
+          item.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              this.click();
+            }
+          });
+        });
+      }
+    }
+
+    // URL'de ?comment=show veya #sidebarCommentsCard veya sort_by varsa yorum alanına kaydır
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('comment') === 'show' || window.location.hash === '#id-pane-comments' || urlParams.has('sort_by')) {
-      activateIdeaTab('#id-pane-comments');
+    if (urlParams.get('comment') === 'show' || window.location.hash === '#sidebarCommentsCard' || window.location.hash === '#id-pane-comments' || urlParams.has('sort_by')) {
+      const sidebarComments = document.getElementById('sidebarCommentsCard');
+      if (sidebarComments) {
+        setTimeout(() => sidebarComments.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+      }
+      if (urlParams.get('comment') === 'show') {
+        focusCommentInput();
+      }
     }
 
     // 3. Mobil Açıklama Metni Kırpma (3 Satır) ve "Daha fazla / Daha az" Butonu
@@ -2745,10 +3155,110 @@
     }
   }
 
+  // Modern Giriş Yap Pop-up Fonksiyonları (Fiyat Geçmişi Tasarımı ile Birebir)
+  window.showLoginPopup = function(message, triggerEl, title) {
+    const popup = document.getElementById('sdAuthPopup');
+    const backdrop = document.getElementById('sdAuthPopupBackdrop');
+    const msgEl = document.getElementById('sdAuthPopupMessage');
+    const titleEl = document.getElementById('sdAuthPopupTitleText');
+    if (!popup) return;
+
+    if (message && msgEl) {
+      msgEl.textContent = message;
+    }
+    if (title && titleEl) {
+      titleEl.textContent = title;
+    }
+
+    const isMobile = window.innerWidth <= 991;
+
+    popup.style.display = 'block';
+
+    if (isMobile) {
+      popup.style.top = '';
+      popup.style.left = '';
+      popup.style.transform = '';
+    } else if (triggerEl && typeof triggerEl.getBoundingClientRect === 'function') {
+      const rect = triggerEl.getBoundingClientRect();
+      const popupWidth = popup.offsetWidth || 320;
+      const popupHeight = popup.offsetHeight || 220;
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      let left = rect.left + (rect.width / 2) - (popupWidth / 2);
+      if (left < 14) left = 14;
+      if (left + popupWidth > windowWidth - 14) left = windowWidth - popupWidth - 14;
+
+      let top = rect.bottom + 10;
+      if (top + popupHeight > windowHeight - 14) {
+        top = Math.max(14, rect.top - popupHeight - 10);
+      }
+
+      popup.style.left = left + 'px';
+      popup.style.top = top + 'px';
+      popup.style.transform = '';
+    } else {
+      popup.style.left = '50%';
+      popup.style.top = '50%';
+      popup.style.transform = 'translate(-50%, -50%)';
+    }
+
+    setTimeout(() => {
+      if (backdrop) backdrop.classList.add('is-open');
+      popup.classList.add('is-open');
+    }, 10);
+
+    document.addEventListener('keydown', handleAuthPopupEscape);
+  };
+
+  window.closeLoginPopup = function() {
+    const popup = document.getElementById('sdAuthPopup');
+    const backdrop = document.getElementById('sdAuthPopupBackdrop');
+
+    if (popup) {
+      popup.classList.remove('is-open');
+      setTimeout(() => {
+        popup.style.display = 'none';
+        popup.style.top = '';
+        popup.style.left = '';
+        popup.style.transform = '';
+      }, 200);
+    }
+    if (backdrop) {
+      backdrop.classList.remove('is-open');
+    }
+
+    document.removeEventListener('keydown', handleAuthPopupEscape);
+  };
+
+  function handleAuthPopupEscape(e) {
+    if (e.key === 'Escape') {
+      closeLoginPopup();
+    }
+  }
+
+  window.openLoginModalFromAuthPopup = function() {
+    closeLoginPopup();
+    setTimeout(function() {
+      var modalEl = document.getElementById("exampleModalToggle");
+      if (modalEl) {
+        if (window.bootstrap && bootstrap.Modal) {
+          var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+          modal.show();
+        } else if (window.$ && $.fn.modal) {
+          $("#exampleModalToggle").modal("show");
+        }
+      } else {
+        window.location.href = "{{ route('login') }}";
+      }
+    }, 150);
+  };
+
   // Fikri Beğen / Beğeniden Çıkar (Desktop + Mobile Senkron)
-  function handleIdeaLike(slug) {
+  function handleIdeaLike(slug, el) {
+    const triggerEl = el || (typeof event !== 'undefined' ? (event?.currentTarget || event?.target) : null);
     @guest()
-      showLoginPopup('Beğenmek için giriş yapmalısınız!', event.currentTarget);
+      showLoginPopup('Bu fikri beğenmek için lütfen giriş yapın.', triggerEl, 'Fikri Beğen');
       return false;
     @else
       fetch("/idea/like/" + slug, {
@@ -2787,9 +3297,10 @@
   }
 
   // Yorum Beğeni Fonksiyonu
-  function likeToggle(id) {
+  function likeToggle(id, el) {
+    const triggerEl = el || (typeof event !== 'undefined' ? (event?.currentTarget || event?.target) : null);
     @guest()
-      showLoginPopup('Beğenmek için giriş yapmalısınız!', event.currentTarget);
+      showLoginPopup('Yorumu beğenmek için lütfen giriş yapın.', triggerEl, 'Yorumu Beğen');
       return false;
     @else
       const btn = event.currentTarget;

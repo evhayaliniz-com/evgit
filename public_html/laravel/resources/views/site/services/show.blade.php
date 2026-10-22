@@ -1113,19 +1113,55 @@
     display: none;
   }
 
+  /* --- İletişim Bilgileri Popup Backdrop (Fiyat Geçmişi ile birebir aynı) --- */
+  .iletisim-popup-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 100008;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+  }
+
+  .iletisim-popup-backdrop.show {
+    display: block;
+    opacity: 1;
+  }
+
   /* --- İletişim Bilgileri Popup Stilleri --- */
   .iletisim-popup {
     position: fixed;
     padding: 0 !important;
-    background: var(--sd-surface, #fff);
-    border: 1px solid var(--sd-border, #e2e8f0);
-    border-radius: 14px;
-    box-shadow: 0 14px 36px rgba(15, 23, 42, 0.22);
-    z-index: 1060;
-    min-width: 280px;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.22) !important;
+    z-index: 100010 !important;
+    min-width: 290px;
     max-width: 340px;
     overflow: hidden !important;
     box-sizing: border-box !important;
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease !important;
+  }
+
+  .iletisim-popup.is-open {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+  }
+
+  body.dark .iletisim-popup {
+    background: #18181b !important;
+    border-color: #27272a !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7) !important;
+    color: #f4f4f5 !important;
   }
 
   .iletisim-popup-header {
@@ -1135,19 +1171,37 @@
     width: 100% !important;
     margin: 0 !important;
     box-sizing: border-box !important;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--sd-border, #e9ecef);
-    background: var(--sd-bg, #f8f9fa);
+    padding: 13px 18px;
+    border-bottom: 1px solid #e9ecef !important;
+    background: #f8f9fa !important;
+  }
+
+  body.dark .iletisim-popup-header {
+    background: #121215 !important;
+    border-bottom-color: #27272a !important;
   }
 
   .iletisim-popup-title {
     margin: 0;
     font-size: 14.5px;
     font-weight: 700;
-    color: var(--sd-text-main, #0f172a);
+    color: #0f172a !important;
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+
+  .iletisim-popup-title i {
+    color: #2563eb !important;
+    font-size: 15px;
+  }
+
+  body.dark .iletisim-popup-title {
+    color: #f4f4f5 !important;
+  }
+
+  body.dark .iletisim-popup-title i {
+    color: #60a5fa !important;
   }
 
   .iletisim-popup-close {
@@ -1155,16 +1209,109 @@
     border: none;
     padding: 4px;
     cursor: pointer;
-    color: var(--sd-text-muted, #64748b);
+    color: #64748b !important;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: color 0.2s;
   }
 
+  .iletisim-popup-close:hover {
+    color: #0f172a !important;
+  }
+
+  body.dark .iletisim-popup-close {
+    color: #a1a1aa !important;
+  }
+
+  body.dark .iletisim-popup-close:hover {
+    color: #ffffff !important;
+  }
+
   .iletisim-popup-body {
-    padding: 16px;
+    padding: 18px 20px;
     text-align: center;
+  }
+
+  .iletisim-popup-body .iletisim-auth-label {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  body.dark .iletisim-popup-body .iletisim-auth-label {
+    color: #a1a1aa !important;
+  }
+
+  .iletisim-popup-body .iletisim-auth-name {
+    margin: 4px 0 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f172a !important;
+  }
+
+  body.dark .iletisim-popup-body .iletisim-auth-name {
+    color: #f4f4f5 !important;
+  }
+
+  /* Ara butonu açılır popup - Telefon Arama Butonu */
+  .iletisim-call-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+    padding: 13px 20px !important;
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    font-size: 15.5px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+    border: none !important;
+    outline: none !important;
+    margin-top: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  .iletisim-call-btn:hover {
+    background: #1d4ed8 !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45) !important;
+  }
+
+  .iletisim-call-btn:active {
+    transform: translateY(0) !important;
+  }
+
+  .iletisim-call-btn i {
+    font-size: 16px !important;
+    color: #ffffff !important;
+    flex-shrink: 0 !important;
+  }
+
+  .iletisim-call-btn span {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.3px !important;
+  }
+
+  body.dark .iletisim-call-btn {
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4) !important;
+  }
+
+  body.dark .iletisim-call-btn:hover {
+    background: #2563eb !important;
+    color: #ffffff !important;
   }
 
   /* Fiyat Geçmişi Trigger Modern Stili */
@@ -1856,25 +2003,6 @@
     body .mobile-fixed-menu {
       display: none !important;
     }
-
-    /* Center Cloned Price History Popup cleanly on Mobile */
-    .fiyat-gecmisi-area.cloned:not(#login-popup) {
-      position: fixed !important;
-      top: 50% !important;
-      left: 50% !important;
-      right: auto !important;
-      transform: translate(-50%, -50%) !important;
-      margin-top: 0 !important;
-      width: min(90vw, 340px) !important;
-      padding: 16px !important;
-      border-radius: 14px !important;
-      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.35) !important;
-      z-index: 99999 !important;
-    }
-
-    .fiyat-gecmisi-area.cloned:not(#login-popup) .bottomarrow {
-      display: none !important;
-    }
   }
 </style>
 @endsection
@@ -2558,11 +2686,14 @@
   </div>
 </div>
 
+{{-- İletişim Bilgileri Popup Backdrop (Fiyat Geçmişi ile aynı karartma) --}}
+<div id="iletisimPopupBackdrop" class="iletisim-popup-backdrop" style="display: none;" onclick="closeIletisimPopup()"></div>
+
 {{-- İletişim Bilgileri Popup --}}
 <div id="iletisimBilgileriPopup" class="iletisim-popup" style="display: none;">
   <div class="iletisim-popup-header">
     <h5 class="iletisim-popup-title">
-      <i class="fa-solid fa-headset text-primary"></i>
+      <i class="fa-solid fa-headset"></i>
       <span>İletişim Bilgileri</span>
     </h5>
     <button type="button" class="iletisim-popup-close" onclick="closeIletisimPopup()" aria-label="Kapat">
@@ -2573,16 +2704,25 @@
     </button>
   </div>
   <div class="iletisim-popup-body">
-    <p style="margin: 0; font-size: 13px; color: var(--sd-text-muted, #64748b);">Yetkili Kişi / Firma</p>
-    <p style="margin: 2px 0 0; font-size: 15.5px; color: var(--sd-text-main, #0f172a);">
-      <strong>{{ $service->company->authorized ?: $service->company->name }}</strong>
+    @php
+      $companyPhone = $service->company->mobile_phone ?: $service->company->fixed_phone;
+      $authorizedName = $service->company->authorized ?: $service->company->name;
+    @endphp
+    <p class="iletisim-auth-label">Yetkili Kişi / Firma</p>
+    <p class="iletisim-auth-name">
+      {{ $authorizedName }}
     </p>
-    <a href="tel:{{ $service->company->mobile_phone }}"
-       class="sd-btn-primary mt-3 w-100"
-       style="text-decoration: none;">
-      <i class="fa-solid fa-phone-volume"></i>
-      <span>{{ $service->company->mobile_phone }}</span>
-    </a>
+    @if($companyPhone)
+      <a href="tel:{{ $companyPhone }}"
+         class="iletisim-call-btn">
+        <i class="fa-solid fa-phone-volume"></i>
+        <span>{{ $companyPhone }}</span>
+      </a>
+    @else
+      <div class="mt-3 p-2" style="font-size: 13.5px; color: #64748b;">
+        <i class="fa-solid fa-phone-slash me-1"></i> Telefon numarası bulunamadı
+      </div>
+    @endif
   </div>
 </div>
 
@@ -2855,10 +2995,19 @@
   // İletişim Bilgileri Popup Fonksiyonları
   function showIletisimPopup(buttonElement) {
     const popup = document.getElementById('iletisimBilgileriPopup');
+    const backdrop = document.getElementById('iletisimPopupBackdrop');
     if (!popup || !buttonElement) return;
+
+    if (popup.classList.contains('is-open')) {
+      closeIletisimPopup();
+      return;
+    }
 
     const rect = buttonElement.getBoundingClientRect();
     popup.style.display = 'block';
+    if (backdrop) {
+      backdrop.style.display = 'block';
+    }
 
     const popupHeight = popup.offsetHeight;
     const popupWidth = popup.offsetWidth;
@@ -2879,15 +3028,31 @@
     popup.style.top = top + 'px';
 
     setTimeout(() => {
+      if (backdrop) backdrop.classList.add('show');
+      popup.classList.add('is-open');
+    }, 10);
+
+    setTimeout(() => {
       document.addEventListener('click', closeIletisimPopupOnOutsideClick);
     }, 50);
   }
 
   function closeIletisimPopup() {
     const popup = document.getElementById('iletisimBilgileriPopup');
+    const backdrop = document.getElementById('iletisimPopupBackdrop');
+
     if (popup) {
-      popup.style.display = 'none';
+      popup.classList.remove('is-open');
     }
+    if (backdrop) {
+      backdrop.classList.remove('show');
+    }
+
+    setTimeout(() => {
+      if (popup) popup.style.display = 'none';
+      if (backdrop) backdrop.style.display = 'none';
+    }, 200);
+
     document.removeEventListener('click', closeIletisimPopupOnOutsideClick);
   }
 
@@ -2910,5 +3075,11 @@
       closeIletisimPopup();
     }
   }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      closeIletisimPopup();
+    }
+  });
 </script>
 @endsection
