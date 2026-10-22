@@ -6,8 +6,8 @@
             <div class="tum-hizmetler">
                 <div class="tum-hizmetler-box index-right">
                     {{-- Header Altı İnce (Leaderboard) Reklam Alanı --}}
-                    <div class="tum-hizmetler-slider tum-hizmetler-top header-leaderboard-ad text-center mb-3">
-                        <x-ad-slot format="horizontal" class="leaderboard-ad-top" />
+                    <div class="tum-hizmetler-slider tum-hizmetler-top header-leaderboard-ad text-center mb-2">
+                        <x-ad-slot format="" :responsive="false" class="leaderboard-ad-top" />
                     </div>
 
                     <h5 class="mobile-small-title" style="top: 16px">Hizmetler</h5>

@@ -12,9 +12,9 @@
          style="{{ $style }}"
          data-ad-client="ca-pub-8168100361388093"
          @if(!empty($slotId)) data-ad-slot="{{ $slotId }}" @endif
-         data-ad-format="{{ $format }}"
+         @if(!empty($format)) data-ad-format="{{ $format }}" @endif
          @if(!empty($layoutKey)) data-ad-layout-key="{{ $layoutKey }}" @endif
-         data-full-width-responsive="{{ $responsive }}"></ins>
+         @if(!empty($responsive) && $responsive !== 'false' && $responsive !== false) data-full-width-responsive="{{ $responsive }}" @endif></ins>
     <script>
          (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
