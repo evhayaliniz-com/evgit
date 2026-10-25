@@ -2173,6 +2173,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const popoverTrigger = document.getElementById('user-notif-trigger2');
+        if (!popoverTrigger) return;
+
         const popover = new bootstrap.Popover(popoverTrigger, {
             trigger: 'manual', // elle kontrol ediyoruz
             html: true

@@ -49,7 +49,11 @@ class ServiceController extends Controller
         }
 
         if ($request->sub_category) {
-            $services = $services->where('sub_category_id', $request->sub_category);
+            $subCategories = is_array($request->sub_category) ? $request->sub_category : explode(',', (string)$request->sub_category);
+            $subCategories = array_values(array_filter($subCategories));
+            if (!empty($subCategories)) {
+                $services = $services->whereIn('sub_category_id', $subCategories);
+            }
         }
 
         if ($request->province) {
@@ -57,15 +61,25 @@ class ServiceController extends Controller
         }
 
         if ($request->district) {
-            $services = $services->where('province_id', $request->province)->where('district_id', $request->district);
+            $districts = is_array($request->district) ? $request->district : explode(',', (string)$request->district);
+            $districts = array_values(array_filter($districts));
+            if (!empty($districts)) {
+                $services = $services->whereIn('district_id', $districts);
+            }
         }
 
         if ($request->min_price) {
-            $services = $services->where('price', '>=', $request->min_price);
+            $minPrice = str_replace(['.', ' ', ','], '', $request->min_price);
+            if (is_numeric($minPrice)) {
+                $services = $services->where('price', '>=', $minPrice);
+            }
         }
 
         if ($request->max_price) {
-            $services = $services->where('price', '<=', $request->max_price);
+            $maxPrice = str_replace(['.', ' ', ','], '', $request->max_price);
+            if (is_numeric($maxPrice)) {
+                $services = $services->where('price', '<=', $maxPrice);
+            }
         }
 
         if ($request->min_sqm) {

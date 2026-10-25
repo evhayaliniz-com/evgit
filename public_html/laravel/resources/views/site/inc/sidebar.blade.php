@@ -21,7 +21,7 @@
 {{-- =========================================================================
      1. MİNİ SİDEBAR (DESKTOP COLLAPSED / DARALTILMIŞ MENÜ - 76px)
      ========================================================================= --}}
-<aside class="menu-min-web modern-mini-sidebar @if(!$isHome) menumin-mobil-hide show @endif @if($isExcludedRoute) d-none @endif" id="menu-min-web" aria-label="Kompakt Menü">
+<aside class="menu-min-web modern-mini-sidebar @if(!$isHome) menumin-mobil-hide show @endif @if($isExcludedRoute || Route::is('services.index')) d-none @endif" id="menu-min-web" aria-label="Kompakt Menü">
     <div class="mini-sidebar-inner">
         {{-- Üst Navigasyon İkonları --}}
         <div class="menu-min-top">

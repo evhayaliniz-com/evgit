@@ -963,7 +963,7 @@
             </a>
         </li>
         <li @class(['actived'=> Route::is('services.index')])>
-            <a href="{{route('services.index')}}">
+            <a @if(Route::is('services.index')) href="javascript:void(0)" data-bs-toggle="offcanvas" data-bs-target="#servicesFilterDrawer" role="button" aria-controls="servicesFilterDrawer" class="mobile-nav-services-trigger" @else href="{{route('services.index')}}" @endif>
                 <i class="fa-solid fa-business-time"></i>
                 <span>
                     Hizmetler

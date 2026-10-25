@@ -66,17 +66,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const headerTableContainer = document.getElementById('headerTableContainer');
     
     // Table body scroll olduğunda header'ı senkronize et
-    tableBody.addEventListener('scroll', function() {
+    if (tableBody && headerTableContainer) {
+        tableBody.addEventListener('scroll', function() {
         const scrollLeft = tableBody.scrollLeft;
         headerTableContainer.style.transform = `translateX(-${scrollLeft}px)`;
     });
+    }
 });
 
 document.addEventListener('DOMContentLoaded', function() {
             const headerScroll = document.getElementById('headerScroll');
             const tableBody = document.getElementById('tableBody');
             const scrollContent = document.getElementById('scrollContent');
+            if (!tableBody || !headerScroll || !scrollContent) return;
             const table = tableBody.querySelector('table');
+            if (!table) return;
             
             // Table genişliğini scroll content'e aktar
             function updateScrollWidth() {
