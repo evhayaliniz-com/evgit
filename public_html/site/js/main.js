@@ -1,164 +1,32 @@
-// URL kontrol fonksiyonu
-function checkURLAndApplyStyles() {
-    // Mevcut sayfanın URL'ini kontrol et
-    const currentURL = window.location.pathname;
-    
-    // URL '/company/services' ile bitiyorsa stilleri uygula
-    if (currentURL.endsWith('/company/services')) {
-        
-        // .menu-min-web elementlerini bul ve gizle
-        const menuElements = document.querySelectorAll('.menu-min-web');
-        menuElements.forEach(element => {
-            element.style.setProperty('display', 'none', 'important');
-        });
-        
-        // .main elementlerini bul ve padding-left'i 0 yap
-        const mainElements = document.querySelectorAll('.main');
-        mainElements.forEach(element => {
-            element.style.setProperty('padding-left', '0', 'important');
-        });
-        
-        console.log('Stiller uygulandı - URL /company/services ile bitiyor');
-    } else {
-        console.log('URL /company/services ile bitmiyor, stiller uygulanmadı');
-    }
-}
-
-// Header left menu click event handler
-function setupHeaderMenuClick() {
-    const headerLeftMenu = document.getElementById('header-left-menu');
-    
-    if (headerLeftMenu) {
-        headerLeftMenu.addEventListener('click', function() {
-            // .main elementlerinin padding-left stilini kaldır
-            const mainElements = document.querySelectorAll('.main');
-            mainElements.forEach(element => {
-                element.style.removeProperty('padding-left');
-            });
-            
-            // .menu-min-web elementlerinin display stilini kaldır
-            const menuElements = document.querySelectorAll('.menu-min-web');
-            menuElements.forEach(element => {
-                element.style.removeProperty('display');
-            });
-            
-            console.log('Header left menu tıklandı - padding-left ve display stilleri kaldırıldı');
-        });
-    }
-}
-
-// DOM yüklendiğinde fonksiyonları çalıştır
-document.addEventListener('DOMContentLoaded', function() {
-    checkURLAndApplyStyles();
-    setupHeaderMenuClick();
-});
-
-// Sayfa değişikliklerini yakalamak için (SPA uygulamalar için)
-window.addEventListener('popstate', checkURLAndApplyStyles);
-
-// SPA (Single Page Application) için URL değişikliklerini dinle
-window.addEventListener('popstate', checkURLAndApplyStyles);
-
-
-
+// Hizmetlerim sayfası eski scroll senkronizasyonu (yalnızca eski tablo yapısı mevcutsa çalışır)
 document.addEventListener('DOMContentLoaded', function() {
     const tableBody = document.getElementById('tableBody');
     const headerTableContainer = document.getElementById('headerTableContainer');
-    
-    // Table body scroll olduğunda header'ı senkronize et
+    const headerScroll = document.getElementById('headerScroll');
+    const scrollContent = document.getElementById('scrollContent');
+
     if (tableBody && headerTableContainer) {
         tableBody.addEventListener('scroll', function() {
-        const scrollLeft = tableBody.scrollLeft;
-        headerTableContainer.style.transform = `translateX(-${scrollLeft}px)`;
-    });
+            const scrollLeft = tableBody.scrollLeft;
+            headerTableContainer.style.transform = `translateX(-${scrollLeft}px)`;
+        });
     }
-});
 
-document.addEventListener('DOMContentLoaded', function() {
-            const headerScroll = document.getElementById('headerScroll');
-            const tableBody = document.getElementById('tableBody');
-            const scrollContent = document.getElementById('scrollContent');
-            if (!tableBody || !headerScroll || !scrollContent) return;
-            const table = tableBody.querySelector('table');
-            if (!table) return;
-            
-            // Table genişliğini scroll content'e aktar
+    if (tableBody && headerScroll && scrollContent) {
+        const table = tableBody.querySelector('table');
+        if (table) {
             function updateScrollWidth() {
-                const tableWidth = table.scrollWidth;
-                scrollContent.style.width = tableWidth + 'px';
+                scrollContent.style.width = table.scrollWidth + 'px';
             }
-            
-            // İlk yüklemede genişliği ayarla
             updateScrollWidth();
-            
-            // Window resize olduğunda genişliği güncelle
             window.addEventListener('resize', updateScrollWidth);
-            
-            // Header scroll ile table body scroll'u senkronize et
             headerScroll.addEventListener('scroll', function() {
                 tableBody.scrollLeft = headerScroll.scrollLeft;
             });
-            
-            // Table body scroll ile header scroll'u senkronize et
             tableBody.addEventListener('scroll', function() {
                 headerScroll.scrollLeft = tableBody.scrollLeft;
             });
-        });
-
-
-// En yakın fiyat box'ı bulma fonksiyonu
-function findClosestFiyatBox(element) {
-    // 1. Önce closest() ile yukarı doğru ara
-    let fiyatBox = element.closest('.tumhizmetlerfiyatbox');
-    if (fiyatBox) return fiyatBox;
-    
-    // 2. Parent içinde ara
-    fiyatBox = element.parentElement?.querySelector('.tumhizmetlerfiyatbox');
-    if (fiyatBox) return fiyatBox;
-    
-    // 3. Kardeş elementlerde ara
-    fiyatBox = element.nextElementSibling?.classList.contains('tumhizmetlerfiyatbox') ? 
-               element.nextElementSibling : null;
-    if (fiyatBox) return fiyatBox;
-    
-    fiyatBox = element.previousElementSibling?.classList.contains('tumhizmetlerfiyatbox') ? 
-               element.previousElementSibling : null;
-    if (fiyatBox) return fiyatBox;
-    
-    // 4. Grandparent'ta ara
-    fiyatBox = element.parentElement?.parentElement?.querySelector('.tumhizmetlerfiyatbox');
-    return fiyatBox;
-}
-
-// Trigger elementine tıklanınca show class'ını ekle
-document.addEventListener('click', function(event) {
-    // tumhizmetlerfiyattrigger class'ına tıklanırsa
-    if (event.target.classList.contains('tumhizmetlerfiyattrigger')) {
-        // Önce tüm açık boxları kapat
-        document.querySelectorAll('.tumhizmetlerfiyatbox.show').forEach(function(openBox) {
-            openBox.classList.remove('show');
-        });
-        
-        // Tıklanan elementin en yakın .tumhizmetlerfiyatbox'ını bul
-        const fiyatBox = findClosestFiyatBox(event.target);
-        
-        if (fiyatBox) {
-            fiyatBox.classList.add('show');
         }
-    }
-    
-    // tumhizmetler-closed veya tumhizmetler-update class'ına tıklanırsa
-    if (event.target.classList.contains('tumhizmetler-closed') || 
-        event.target.classList.contains('tumhizmetler-update')) {
-        // Tıklanan elementin en yakın .tumhizmetlerfiyatbox'ını bul
-        const fiyatBox = findClosestFiyatBox(event.target);
-        
-        if (fiyatBox) {
-            fiyatBox.classList.remove('show');
-        }
-        
-        // Event'in bubbling yapmasını engelle
-        event.stopPropagation();
     }
 });
 

@@ -203,9 +203,34 @@
             document.getElementById("uploadedFiles").value = uploadedFileNames.join(",");
         }
 
+        function getSubCategories() {
+            const categorySelect = document.querySelector('select[name="category_id"]');
+            const subCategorySelect = document.getElementById('sub-category-select');
+            if (!categorySelect || !subCategorySelect) return;
+
+            const categoryId = categorySelect.value;
+            if (!categoryId) {
+                subCategorySelect.innerHTML = '<option value="">Alt Kategori</option>';
+                return;
+            }
+
+            fetch(`/get-sub-categories/${categoryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    let options = '<option value="">Alt Kategori</option>';
+                    data.forEach(subCategory => {
+                        options += `<option value="${subCategory.id}">${subCategory.name}</option>`;
+                    });
+                    subCategorySelect.innerHTML = options;
+                })
+                .catch(error => {
+                    console.error('Alt kategoriler yüklenirken hata:', error);
+                });
+        }
+
         // 2) checkFileUpload fonksiyonu: Dropzone üzerinden kontrol yapıyor
         function checkFileUpload(e) {
-            const dz = window.myDropzone;
+            const dz = myDropzone;
             if (!dz) return true; // Dropzone yoksa normal gönder
 
             // Kabul edilmiş dosya sayısı

@@ -1131,7 +1131,15 @@
             flex-direction: column !important;
             align-items: flex-start !important;
             gap: 6px !important;
-            overflow: hidden !important;
+            overflow: visible !important;
+        }
+
+        /* Mobil Yatay Hızlı Filtre Çubuğu: gap-2 sıfırlama (Masaüstünü etkilemez) */
+        .services-toolbar .gap-2,
+        .services-mobile-filter-bar .gap-2,
+        .services-toolbar-header.gap-2,
+        .services-toolbar .st-left.gap-2 {
+            gap: 0rem !important;
         }
 
         /* Mobil Yatay Filtre Çubuğu (Sabit İkonlar + Sağa/Sola Kaydırılabilir Filtreler) */
@@ -1140,9 +1148,9 @@
             align-items: center !important;
             width: 100% !important;
             max-width: 100% !important;
-            overflow: hidden !important;
+            overflow: visible !important;
             position: relative !important;
-            padding: 1px 0 !important;
+            padding: 3px 0 2px 0 !important;
             gap: 0 !important;
         }
 
@@ -1191,6 +1199,7 @@
             position: relative !important;
             transition: all 0.15s ease !important;
             cursor: pointer !important;
+            overflow: visible !important;
         }
 
         .services-toolbar-filter-btn {
@@ -1211,14 +1220,22 @@
             position: absolute !important;
             top: -4px !important;
             right: -4px !important;
+            min-width: 17px !important;
+            height: 17px !important;
             font-size: 9.5px !important;
             font-weight: 700 !important;
-            padding: 1px 4.5px !important;
+            line-height: 1 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0 3.5px !important;
             border-radius: 999px !important;
             background: #2563eb !important;
             color: #ffffff !important;
             box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
             border: 1.5px solid #ffffff !important;
+            box-sizing: border-box !important;
+            pointer-events: none !important;
         }
 
         body.dark .services-toolbar-filter-btn {
@@ -1797,7 +1814,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
         }
 
-        /* Aktif Filtre Çipleri: Mobilde Kart İçi Ayracı & Yatay Kayan Çipler */
+        /* Aktif Filtre Çipleri: Mobilde Kart İçi Ayracı & Yatay Kayan Çipler (Tek Satır: Sol İkon, Orta Scroll, Sağ Temizle İkonu) */
         .services-active-chips-bar {
             display: block !important;
             width: 100% !important;
@@ -1814,75 +1831,61 @@
 
         .services-active-chips-bar .active-chips-container {
             display: flex !important;
-            flex-wrap: wrap !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
             align-items: center !important;
             justify-content: space-between !important;
             width: 100% !important;
             margin-bottom: 0 !important;
-            padding: 0 2px !important;
-            gap: 6px 0 !important;
+            padding: 0 1px !important;
+            gap: 7px !important;
         }
 
+        /* 1. Sol: Sadece İkon Kalan Seçili Filtreler Rozeti */
         .services-active-chips-bar .active-chips-label {
             order: 1 !important;
-            font-size: 12.5px !important;
-            font-weight: 600 !important;
-            color: #475569 !important;
-            margin: 0 !important;
-            width: auto !important;
+            width: 28px !important;
+            height: 28px !important;
+            min-width: 28px !important;
+            max-width: 28px !important;
             display: inline-flex !important;
             align-items: center !important;
-            gap: 6px !important;
+            justify-content: center !important;
+            border-radius: 7px !important;
+            background: #eff6ff !important;
+            border: 1px solid #dbeafe !important;
+            color: #2563eb !important;
+            font-size: 12px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            flex: 0 0 auto !important;
+            box-shadow: 0 1px 2px rgba(37, 99, 235, 0.05) !important;
+        }
+
+        .services-active-chips-bar .active-chips-label .active-chips-label-text {
+            display: none !important;
         }
 
         body.dark .services-active-chips-bar .active-chips-label {
-            color: #94a3b8 !important;
+            background: rgba(37, 99, 235, 0.16) !important;
+            border-color: #3b82f6 !important;
+            color: #93c5fa !important;
+            box-shadow: none !important;
         }
 
-        .services-active-chips-bar .btn-clear-active-filters,
-        .services-active-chips-bar .btn-clear-active-filters-mobile {
-            order: 2 !important;
-            font-size: 12px !important;
-            font-weight: 600 !important;
-            color: #ef4444 !important;
-            text-decoration: none !important;
-            line-height: 1 !important;
-            padding: 4px 6px !important;
-            border-radius: 6px !important;
-            transition: all 0.15s ease !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            white-space: nowrap !important;
-            margin-left: auto !important;
-        }
-
-        .services-active-chips-bar .btn-clear-active-filters:hover,
-        .services-active-chips-bar .btn-clear-active-filters:active,
-        .services-active-chips-bar .btn-clear-active-filters-mobile:hover,
-        .services-active-chips-bar .btn-clear-active-filters-mobile:active {
-            color: #dc2626 !important;
-            background: rgba(239, 68, 68, 0.08) !important;
-        }
-
-        body.dark .services-active-chips-bar .btn-clear-active-filters,
-        body.dark .services-active-chips-bar .btn-clear-active-filters-mobile {
-            color: #f87171 !important;
-        }
-
-        body.dark .services-active-chips-bar .btn-clear-active-filters:hover,
-        body.dark .services-active-chips-bar .btn-clear-active-filters:active,
-        body.dark .services-active-chips-bar .btn-clear-active-filters-mobile:hover,
-        body.dark .services-active-chips-bar .btn-clear-active-filters-mobile:active {
-            color: #fca5a5 !important;
-            background: rgba(239, 68, 68, 0.15) !important;
-        }
-
+        /* 2. Orta: Seçili Filtreler Scroll Alanı (İki İkon Arasında Esneyen Kayan Çipler) */
         .services-active-chips-bar .active-chips-wrapper {
-            order: 3 !important;
-            width: 100% !important;
-            flex: 0 0 100% !important;
+            order: 2 !important;
+            flex: 1 1 0% !important;
+            min-width: 0 !important;
+            width: auto !important;
+            margin: 0 !important;
             position: relative !important;
-            margin-top: 2px !important;
+            overflow: hidden !important;
+        }
+
+        .services-active-chips-bar .chips-nav-btn {
+            display: none !important;
         }
 
         .services-active-chips-bar .active-chips-scroll-track {
@@ -1893,8 +1896,8 @@
             -webkit-overflow-scrolling: touch !important;
             scrollbar-width: none !important;
             -ms-overflow-style: none !important;
-            gap: 8px !important;
-            padding: 2px 2px 4px 2px !important;
+            gap: 6px !important;
+            padding: 2px 1px !important;
             width: 100% !important;
         }
 
@@ -1909,11 +1912,12 @@
             white-space: nowrap !important;
             max-width: none !important;
             box-sizing: border-box !important;
-            font-size: 11.5px !important;
-            padding: 4px 10px !important;
+            font-size: 11px !important;
+            padding: 3px 8px !important;
             display: inline-flex !important;
             align-items: center !important;
-            gap: 6px !important;
+            gap: 5px !important;
+            border-radius: 6px !important;
         }
 
         .services-active-chips-bar .filter-chip .chip-text {
@@ -1921,6 +1925,256 @@
             text-overflow: clip !important;
             white-space: nowrap !important;
             max-width: none !important;
+        }
+
+        /* 3. Sağ: Mobilde Sadece İkon Olan Filtreleri Temizle Butonu */
+        .services-active-chips-bar .btn-clear-active-filters,
+        .services-active-chips-bar .btn-clear-active-filters-mobile {
+            order: 3 !important;
+            width: 28px !important;
+            height: 28px !important;
+            min-width: 28px !important;
+            max-width: 28px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 7px !important;
+            background: #fef2f2 !important;
+            border: 1px solid #fee2e2 !important;
+            color: #ef4444 !important;
+            font-size: 12px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            flex: 0 0 auto !important;
+            line-height: 1 !important;
+            cursor: pointer !important;
+            box-shadow: 0 1px 2px rgba(239, 68, 68, 0.05) !important;
+            transition: all 0.15s ease !important;
+        }
+
+        .services-active-chips-bar .btn-clear-active-filters .clear-btn-text,
+        .services-active-chips-bar .btn-clear-active-filters-mobile .clear-btn-text {
+            display: none !important;
+        }
+
+        .services-active-chips-bar .btn-clear-active-filters:hover,
+        .services-active-chips-bar .btn-clear-active-filters:active,
+        .services-active-chips-bar .btn-clear-active-filters-mobile:hover,
+        .services-active-chips-bar .btn-clear-active-filters-mobile:active {
+            background: #fee2e2 !important;
+            color: #dc2626 !important;
+            border-color: #fecaca !important;
+        }
+
+        body.dark .services-active-chips-bar .btn-clear-active-filters,
+        body.dark .services-active-chips-bar .btn-clear-active-filters-mobile {
+            background: rgba(239, 68, 68, 0.16) !important;
+            border-color: rgba(239, 68, 68, 0.3) !important;
+            color: #f87171 !important;
+            box-shadow: none !important;
+        }
+
+        /* Mobil Filtreleri Temizle Onay Pop-up'ı (Sitedeki Pop-up Tasarımıyla Birebir) */
+        .mrf-popup-backdrop {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            background: rgba(15, 23, 42, 0.48) !important;
+            backdrop-filter: blur(4px) !important;
+            -webkit-backdrop-filter: blur(4px) !important;
+            z-index: 100050 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 16px !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            transition: opacity 0.22s ease, visibility 0.22s ease !important;
+        }
+
+        .mrf-popup-backdrop.is-open {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+
+        .mrf-popup-card {
+            background: #ffffff !important;
+            border-radius: 18px !important;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.2) !important;
+            width: 100% !important;
+            max-width: 330px !important;
+            border: 1px solid #e2e8f0 !important;
+            transform: scale(0.92) translateY(8px) !important;
+            transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            overflow: hidden !important;
+            text-align: center !important;
+            padding: 0 !important;
+        }
+
+        .mrf-popup-backdrop.is-open .mrf-popup-card {
+            transform: scale(1) translateY(0) !important;
+        }
+
+        body.dark .mrf-popup-card {
+            background: #1e2430 !important;
+            border-color: #334155 !important;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55) !important;
+        }
+
+        .mrf-popup-header {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            padding: 14px 16px 12px 16px !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+        }
+
+        body.dark .mrf-popup-header {
+            border-bottom-color: #283344 !important;
+        }
+
+        .mrf-popup-title {
+            font-size: 13.5px !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 7px !important;
+        }
+
+        body.dark .mrf-popup-title {
+            color: #f8fafc !important;
+        }
+
+        .mrf-popup-close-btn {
+            background: transparent !important;
+            border: none !important;
+            color: #94a3b8 !important;
+            width: 26px !important;
+            height: 26px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            font-size: 14px !important;
+            transition: all 0.15s ease !important;
+            padding: 0 !important;
+        }
+
+        .mrf-popup-close-btn:hover {
+            background: #f1f5f9 !important;
+            color: #334155 !important;
+        }
+
+        body.dark .mrf-popup-close-btn:hover {
+            background: #334155 !important;
+            color: #f8fafc !important;
+        }
+
+        .mrf-popup-body {
+            padding: 20px 18px 16px 18px !important;
+        }
+
+        .mrf-popup-icon-wrap {
+            width: 50px !important;
+            height: 50px !important;
+            border-radius: 50% !important;
+            background: #fef2f2 !important;
+            color: #ef4444 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 20px !important;
+            margin-bottom: 12px !important;
+            box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.08) !important;
+        }
+
+        body.dark .mrf-popup-icon-wrap {
+            background: rgba(239, 68, 68, 0.18) !important;
+            box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.12) !important;
+            color: #f87171 !important;
+        }
+
+        .mrf-popup-heading {
+            font-size: 15px !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            margin-bottom: 6px !important;
+        }
+
+        body.dark .mrf-popup-heading {
+            color: #f8fafc !important;
+        }
+
+        .mrf-popup-desc {
+            font-size: 12.5px !important;
+            color: #64748b !important;
+            line-height: 1.45 !important;
+            margin: 0 !important;
+        }
+
+        body.dark .mrf-popup-desc {
+            color: #94a3b8 !important;
+        }
+
+        .mrf-popup-actions {
+            display: flex !important;
+            gap: 10px !important;
+            padding: 0 18px 18px 18px !important;
+        }
+
+        .mrf-btn-cancel {
+            flex: 1 !important;
+            background: #f1f5f9 !important;
+            color: #475569 !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 10px !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            padding: 9px 12px !important;
+            cursor: pointer !important;
+            transition: all 0.15s ease !important;
+        }
+
+        .mrf-btn-cancel:hover {
+            background: #e2e8f0 !important;
+            color: #1e293b !important;
+        }
+
+        body.dark .mrf-btn-cancel {
+            background: #283344 !important;
+            border-color: #334155 !important;
+            color: #cbd5e1 !important;
+        }
+
+        body.dark .mrf-btn-cancel:hover {
+            background: #334155 !important;
+            color: #ffffff !important;
+        }
+
+        .mrf-btn-confirm {
+            flex: 1 !important;
+            background: #ef4444 !important;
+            color: #ffffff !important;
+            border: 1px solid #ef4444 !important;
+            border-radius: 10px !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            padding: 9px 12px !important;
+            cursor: pointer !important;
+            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25) !important;
+            transition: all 0.15s ease !important;
+        }
+
+        .mrf-btn-confirm:hover {
+            background: #dc2626 !important;
+            border-color: #dc2626 !important;
+            color: #ffffff !important;
         }
 
         /* Kart İçi Düzenlemeler */
@@ -2324,6 +2578,7 @@
             transition: all 0.15s ease !important;
             display: inline-flex !important;
             align-items: center !important;
+            gap: 5px !important;
             white-space: nowrap !important;
             cursor: pointer !important;
             flex: 0 0 auto !important;
@@ -2893,7 +3148,10 @@
                         @if($hasActiveFilters)
                             <div class="services-active-chips-bar services-active-filters">
                                 <div class="active-chips-container d-flex align-items-center">
-                                    <span class="active-chips-label m-0 flex-shrink-0"><i class="fa-solid fa-sliders text-primary"></i> Seçili Filtreler:</span>
+                                    <span class="active-chips-label m-0 flex-shrink-0" title="Seçili Filtreler">
+                                        <i class="fa-solid fa-sliders text-primary"></i>
+                                        <span class="active-chips-label-text">Seçili Filtreler:</span>
+                                    </span>
 
                                     <div class="active-chips-wrapper position-relative">
                                         <button type="button" class="chips-nav-btn chips-nav-prev" onclick="scrollActiveChips(-240)" aria-label="Geri Kaydır">
@@ -3023,8 +3281,9 @@
                                     </button>
                                 </div>
 
-                                <a href="{{ route('services.index') }}" class="btn-clear-active-filters btn-clear-active-filters-mobile text-danger text-decoration-none fw-semibold flex-shrink-0">
-                                    Filtreleri Temizle
+                                <a href="{{ route('services.index') }}" class="btn-clear-active-filters btn-clear-active-filters-mobile text-danger text-decoration-none fw-semibold flex-shrink-0" onclick="handleClearFiltersClick(event)" title="Tüm Filtreleri Temizle">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                    <span class="clear-btn-text">Filtreleri Temizle</span>
                                 </a>
                             </div>
                         </div>
@@ -3199,6 +3458,40 @@
             <i class="fa-solid fa-arrow-down-short-wide"></i>
             <span>Sırala</span>
         </button>
+    </div>
+
+    {{-- ========================================================
+         MOBİL FİLTRELERİ TEMİZLE ONAY POP-UP'I (Modal Confirmation)
+         ======================================================== --}}
+    <div id="mobileResetFiltersBackdrop" class="mrf-popup-backdrop d-lg-none" onclick="closeMobileResetFiltersPopup(event)">
+        <div class="mrf-popup-card" onclick="event.stopPropagation()">
+            <div class="mrf-popup-header">
+                <div class="mrf-popup-title">
+                    <i class="fa-solid fa-filter-circle-xmark text-danger"></i>
+                    <span>Filtreleri Temizle</span>
+                </div>
+                <button type="button" class="mrf-popup-close-btn" onclick="closeMobileResetFiltersPopup()" aria-label="Kapat">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="mrf-popup-body">
+                <div class="mrf-popup-icon-wrap">
+                    <i class="fa-solid fa-trash-can"></i>
+                </div>
+                <h6 class="mrf-popup-heading">Tüm filtreler kaldırılsın mı?</h6>
+                <p class="mrf-popup-desc">
+                    Seçili tüm filtreleriniz temizlenecek ve tüm hizmetler varsayılan sıralama ile yeniden listelenecektir.
+                </p>
+            </div>
+            <div class="mrf-popup-actions">
+                <button type="button" class="btn mrf-btn-cancel" onclick="closeMobileResetFiltersPopup()">
+                    Vazgeç
+                </button>
+                <button type="button" class="btn mrf-btn-confirm" onclick="confirmMobileResetFilters(event)">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Evet, Temizle
+                </button>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -4113,6 +4406,55 @@
             });
         }
 
+        // Mobil Filtreleri Temizle Onay Pop-up Yönetimi
+        function handleClearFiltersClick(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (window.innerWidth <= 991) {
+                openMobileResetFiltersPopup();
+                return false;
+            }
+            resetAllFilters(e);
+        }
+
+        function openMobileResetFiltersPopup() {
+            const backdrop = document.getElementById('mobileResetFiltersBackdrop');
+            if (backdrop) {
+                backdrop.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeMobileResetFiltersPopup(e) {
+            if (e && e.target && e.target !== e.currentTarget && !e.target.closest('.mrf-popup-close-btn') && !e.target.closest('.mrf-btn-cancel')) {
+                return;
+            }
+            const backdrop = document.getElementById('mobileResetFiltersBackdrop');
+            if (backdrop) {
+                backdrop.classList.remove('is-open');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function confirmMobileResetFilters(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            const backdrop = document.getElementById('mobileResetFiltersBackdrop');
+            if (backdrop) {
+                backdrop.classList.remove('is-open');
+                document.body.style.overflow = '';
+            }
+            resetAllFilters(e);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const backdrop = document.getElementById('mobileResetFiltersBackdrop');
+                if (backdrop && backdrop.classList.contains('is-open')) {
+                    backdrop.classList.remove('is-open');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+
         // Tüm filtreleri sıfırlar ve sayfayı anlık AJAX ile varsayılan listelemeye döndürür
         function resetAllFilters(e) {
             if (e && e.preventDefault) e.preventDefault();
@@ -4961,10 +5303,14 @@
                 }
 
                 // 3. İçerik Alanı İçindeki Filtre Temizleme Butonları
-                const clearAllLink = e.target.closest('.services-active-chips-bar a.text-danger, .btn-clear-active-filters, .btn-clear-active-filters-mobile, .btn-clear-active-filters-desktop, .services-hero-head a.btn-outline-danger, .services-empty-state a.btn-primary');
+                const clearAllLink = e.target.closest('.services-active-chips-bar a.text-danger, .services-active-chips-bar .btn-clear-active-filters, .btn-clear-active-filters, .btn-clear-active-filters-mobile, .btn-clear-active-filters-desktop, .services-hero-head a.btn-outline-danger, .services-empty-state a.btn-primary');
                 if (clearAllLink) {
                     e.preventDefault();
-                    resetAllFilters(e);
+                    if (window.innerWidth <= 991 && (clearAllLink.closest('.services-active-chips-bar') || clearAllLink.classList.contains('btn-clear-active-filters-mobile'))) {
+                        openMobileResetFiltersPopup();
+                    } else {
+                        resetAllFilters(e);
+                    }
                     return;
                 }
 

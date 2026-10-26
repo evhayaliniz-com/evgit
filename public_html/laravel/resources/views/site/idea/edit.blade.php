@@ -22,14 +22,13 @@
         <div class="col-lg-12 col-md-12 col-sm-12 pr-0 col-12 mobile-pl-0 pl-0" id="index-right-area">
             <div class="hakkimizda fikir-olustur" style="background-color: #f0f7ff;">
                 <div class="container">
-                    <form action="{{route('idea.update', $idea->id)}}" method="POST" enctype="multipart/form-data"
-                          onsubmit="checkFileUpload()">
+                    <form action="{{route('idea.update', $idea->id)}}" method="POST" enctype="multipart/form-data">
                         @method('PUT')
 
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="hakkimizda-box fikir-olustur-box mx-auto">
-                                    <h1>Fikir Oluştur</h1>
+                                    <h1>Fikir Düzenle</h1>
                                     <div class="vision-mission-box fikir-olustur-box bg-white">
                                         <x-input-error-site/>
 
@@ -142,7 +141,7 @@
 
                                             <input type="hidden" id="uploadedFiles" name="uploaded_files">
                                             <input type="hidden" id="oldUploadedFiles" name="old_uploaded_files"
-                                                   value="{{implode(',', json_decode($idea->path))}}">
+                                                   value="{{ is_array(json_decode($idea->path ?? '', true)) ? implode(',', json_decode($idea->path, true)) : '' }}">
                                         </div>
 
                                         @csrf
@@ -199,7 +198,7 @@
         let uploadedFileNames = [];
 
         let myDropzone = new Dropzone(".dropzone", {
-            url: "{{ route('company.services.image-upload') }}",
+            url: "{{ route('idea.image-upload') }}",
             maxFilesize: 10,
             maxFiles: countNewlyUploadedFiles(),
             acceptedFiles: "image/jpeg,image/jpg,image/png,image/webp",
@@ -268,6 +267,32 @@
         function updateHiddenInput() {
             document.getElementById("uploadedFiles").value = uploadedFileNames.join(",");
         }
+
+        function getSubCategories() {
+            const categorySelect = document.querySelector('select[name="category_id"]');
+            const subCategorySelect = document.getElementById('sub-category-select');
+            if (!categorySelect || !subCategorySelect) return;
+
+            const categoryId = categorySelect.value;
+            if (!categoryId) {
+                subCategorySelect.innerHTML = '<option value="">Alt Kategori</option>';
+                return;
+            }
+
+            fetch(`/get-sub-categories/${categoryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    let options = '<option value="">Alt Kategori</option>';
+                    data.forEach(subCategory => {
+                        const selected = subCategory.id == {{ (int) $idea->sub_category_id }} ? 'selected' : '';
+                        options += `<option value="${subCategory.id}" ${selected}>${subCategory.name}</option>`;
+                    });
+                    subCategorySelect.innerHTML = options;
+                })
+                .catch(error => {
+                    console.error('Alt kategoriler yüklenirken hata:', error);
+                });
+        }
     </script>
 
 
@@ -275,6 +300,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const container = document.getElementById('old-files-container');
             const hiddenInput = document.getElementById('oldUploadedFiles');
+            if (!container || !hiddenInput) return;
 
             new Sortable(container, {
                 animation: 150,

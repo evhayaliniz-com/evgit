@@ -32,7 +32,7 @@
                     <div class="profili-duzenle-form">
                         <div class="pdf-form-right w-100">
                             <form action="{{route('company.services.store')}}" method="POST"
-                                  enctype="multipart/form-data" onsubmit="checkFileUpload()">
+                                  enctype="multipart/form-data">
                                 <x-input-error-site/>
 
                                 <div class="pdf-form-inputs d-flex login-modal-box">
@@ -53,6 +53,9 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <!-- Dinamik Parametreler -->
+                                <div id="dynamic-parameters" style="display: none;"></div>
 
                                 <div class="pdf-form-inputs d-flex login-modal-box full-width ps-0 ps-md-2">
                                     <div class="form-group required full-width width-edit ms-0 ms-md-2">

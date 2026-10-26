@@ -26,7 +26,6 @@ class IdeaController extends Controller
      */
     public function index(Request $request)
     {
-
         $ideas = Idea::query();
 
         // Filtreleme işlemleri
@@ -35,20 +34,69 @@ class IdeaController extends Controller
         }
 
         if ($request->sub_category) {
-            $ideas = $ideas->where('sub_category_id', $request->sub_category);
+            $subCategories = is_array($request->sub_category) ? $request->sub_category : explode(',', (string)$request->sub_category);
+            $subCategories = array_values(array_filter($subCategories));
+            if (!empty($subCategories)) {
+                $ideas = $ideas->whereIn('sub_category_id', $subCategories);
+            }
+        }
+
+        if ($request->author_type) {
+            if ($request->author_type === 'company') {
+                $ideas = $ideas->whereHas('user', function ($query) {
+                    $query->where('user_type', 'company');
+                });
+            } elseif ($request->author_type === 'user') {
+                $ideas = $ideas->whereHas('user', function ($query) {
+                    $query->where('user_type', '!=', 'company');
+                });
+            }
         }
 
         if ($request->q) {
-            $ideas = $ideas->where('content', 'LIKE', '%' . $request->q . '%');
+            $searchTerm = trim($request->q);
+            $ideas = $ideas->where(function ($query) use ($searchTerm) {
+                $query->where('content', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('title', 'LIKE', '%' . $searchTerm . '%');
+            });
         }
 
-        $ideaCount = $ideas->active()->confirmed()->count();
+        $ideaCount = (clone $ideas)->active()->confirmed()->count();
+
         $ideas = $ideas->active()->confirmed()
             ->with(['category', 'subCategory', 'user.company', 'user.informations'])
-            ->orderByDesc('id')
-            ->paginate(8)
-            ->withQueryString();
+            ->withCount([
+                'views as view_count' => function ($q) {
+                    $q->where('type', 'idea');
+                },
+                'likes as like_count',
+                'replies as reply_count'
+            ]);
 
+        // Akıllı sıralama işlemi
+        if ($request->order_by) {
+            switch ($request->order_by) {
+                case 'views_desc':
+                    $ideas = $ideas->orderByDesc('view_count')->orderByDesc('id');
+                    break;
+                case 'likes_desc':
+                    $ideas = $ideas->orderByDesc('like_count')->orderByDesc('id');
+                    break;
+                case 'comments_desc':
+                    $ideas = $ideas->orderByDesc('reply_count')->orderByDesc('id');
+                    break;
+                case 'oldest':
+                    $ideas = $ideas->orderBy('id', 'ASC');
+                    break;
+                default:
+                    $ideas = $ideas->orderByDesc('id');
+                    break;
+            }
+        } else {
+            $ideas = $ideas->orderByDesc('id');
+        }
+
+        $ideas = $ideas->paginate(20)->withQueryString();
 
         return view('site.idea.index', compact('ideas', 'ideaCount'));
     }
@@ -338,39 +386,138 @@ class IdeaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        Idea::whereId($id)->where('user_id', auth()->user()->id)->delete();
+        $userId = auth()->user()->id;
+        Idea::whereId($id)->where('user_id', $userId)->delete();
 
         // Cache'i temizle
         CacheHelper::clearIdeaCache();
 
-        return redirect()->route('idea.profile.index')->withSucces('İşlem tamamlandı.');
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Fikir başarıyla silindi.',
+                'stats' => $this->getUserIdeaStats($userId)
+            ]);
+        }
+
+        return redirect()->route('idea.profile.index')->withSuccess('İşlem tamamlandı.');
     }
 
+    private function getUserIdeaStats(int $userId): array
+    {
+        $baseQuery = Idea::where('user_id', $userId);
+
+        return [
+            'total' => (clone $baseQuery)->count(),
+            'published' => (clone $baseQuery)->where('status', 1)->where('is_confirmed', 1)->count(),
+            'active' => (clone $baseQuery)->where('status', 1)->count(),
+            'pending' => (clone $baseQuery)->where('is_confirmed', 0)->count(),
+            'passive' => (clone $baseQuery)->where('status', 0)->count(),
+        ];
+    }
+
+    private function buildUserIdeasQuery(Request $request, int $userId)
+    {
+        $query = Idea::where('user_id', $userId);
+
+        if ($request->filled('search')) {
+            $searchTerm = trim($request->search);
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('content', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('title', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('id', ltrim($searchTerm, '#'));
+            });
+        }
+
+        if ($request->filled('status')) {
+            if ($request->status === 'aktif') {
+                $query->where('status', 1);
+            } elseif ($request->status === 'pasif') {
+                $query->where('status', 0);
+            } elseif ($request->status === 'onay_bekleyen') {
+                $query->where('is_confirmed', 0);
+            } elseif ($request->status === 'yayinda') {
+                $query->where('status', 1)->where('is_confirmed', 1);
+            }
+        }
+
+        $sortBy = $request->sort_by;
+        $sortOrder = $request->sort_order && in_array($request->sort_order, ['asc', 'desc']) ? $request->sort_order : 'desc';
+
+        $query->withCount([
+            'views as view_count' => function ($q) {
+                $q->where('type', 'idea');
+            },
+            'likes as like_count',
+            'replies as reply_count'
+        ])->with(['category', 'subCategory']);
+
+        if ($sortBy && in_array($sortBy, ['id', 'view_count', 'like_count', 'reply_count', 'created_at'])) {
+            $query->orderBy($sortBy, $sortOrder);
+        } else {
+            $query->orderByDesc('id');
+        }
+
+        return $query;
+    }
 
     public function profileIndex(Request $request)
     {
-        // Kullanıcı profilinde kendi oluşturmuş olduğu fikirleri listeliyoruz.
+        $userId = auth()->user()->id;
+        $perPage = $request->per_page && in_array((int) $request->per_page, [10, 20, 50, 100]) ? (int) $request->per_page : 20;
 
-        if ($request->status && in_array($request->status, ['aktif', 'pasif'])) {
-            $status = $request->status == 'aktif' ? 1 : 0;
-            $ideas = Idea::where('user_id', auth()->user()->id)->where('status', $status)->orderByDesc('id')->paginate(15);
-        } else {
-            $ideas = Idea::where('user_id', auth()->user()->id)->orderByDesc('id')->paginate(15);
-        }
+        $ideas = $this->buildUserIdeasQuery($request, $userId)
+            ->paginate($perPage)
+            ->withQueryString();
 
-        return view('site.idea.profile-index', compact('ideas'));
+        $ideaStats = $this->getUserIdeaStats($userId);
+
+        return view('site.idea.profile-index', compact('ideas', 'ideaStats'));
     }
 
-
-    public function status($id)
+    public function profileSearch(Request $request)
     {
-        $idea = Idea::whereId($id)->where('user_id', auth()->user()->id)->firstOrFail();
+        $userId = auth()->user()->id;
+        $perPage = $request->per_page && in_array((int) $request->per_page, [10, 20, 50, 100]) ? (int) $request->per_page : 20;
+
+        $ideas = $this->buildUserIdeasQuery($request, $userId)
+            ->paginate($perPage);
+        $ideas->withPath(route('idea.profile.index'));
+
+        $ideaStats = $this->getUserIdeaStats($userId);
+
+        return response()->json([
+            'success' => true,
+            'html' => view('site.idea.partials.ideas-table', compact('ideas'))->render(),
+            'pagination' => $ideas->links()->render(),
+            'total' => $ideas->total(),
+            'stats' => $ideaStats
+        ]);
+    }
+
+    public function status(Request $request, $id)
+    {
+        $userId = auth()->user()->id;
+        $idea = Idea::whereId($id)->where('user_id', $userId)->firstOrFail();
 
         // Fikrin durumunu aktifse pasif, pasifse aktif yapıyoruz.
-        $idea->status = !$idea->status;
+        $idea->status = $idea->status ? 0 : 1;
         $idea->save();
+
+        // Cache'i temizle
+        CacheHelper::clearIdeaCache();
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'new_status' => (int) $idea->status,
+                'is_confirmed' => (int) $idea->is_confirmed,
+                'message' => $idea->status ? 'Fikir aktif edildi.' : 'Fikir pasife alındı.',
+                'stats' => $this->getUserIdeaStats($userId)
+            ]);
+        }
 
         return redirect()->back()->withSuccess('İşlem tamamlandı.');
     }

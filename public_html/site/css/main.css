@@ -224,7 +224,7 @@ body.dark .tooltipp .tooltiptext {
 
 
 .tumhizmetlernewtable.table-responsive td:hover {
-    background: red;
+    background: rgba(67, 97, 238, 0.05);
 }
 
 .tumhizmetlernewtable.table-responsive tr:hover td {
@@ -14908,7 +14908,7 @@ body.dark .copyright-sub {
         opacity: 0 !important;
     }
 }
-
+
 
 
 /* ==========================================================================

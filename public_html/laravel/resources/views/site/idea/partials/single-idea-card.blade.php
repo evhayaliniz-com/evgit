@@ -74,7 +74,7 @@
         <div class="mic-author-row">
             @php
                 $user = auth_info($idea->user_id);
-                $ideaUserModel = \App\Models\User::find($idea->user_id);
+                $ideaUserModel = $idea->relationLoaded('user') ? $idea->user : \App\Models\User::find($idea->user_id);
                 $avatar = $user && !empty($user->avatar) ? $user->avatar : 'site/images/default-avatar.png';
                 $name = $user && $user->name ? $user->name : 'Anonim';
                 $isCompany = $ideaUserModel && $ideaUserModel->user_type === 'company' && $ideaUserModel->company;
@@ -101,7 +101,7 @@
 
             <div class="mic-views" title="Görüntülenme">
                 <i class="fa-regular fa-eye"></i>
-                <span>{{ $idea->ideaViewCount($idea->id) }}</span>
+                <span>{{ $idea->view_count ?? $idea->ideaViewCount($idea->id) }}</span>
             </div>
         </div>
 
@@ -118,7 +118,7 @@
                 </button>
                 <a href="{{ route('idea.show', $idea->slug) }}?comment=show" class="mic-action-btn-item mic-btn-comment" title="Yorumlar">
                     <i class="fa-regular fa-comment-dots"></i>
-                    <span>{{ $idea->replies->count() }}</span>
+                    <span>{{ $idea->reply_count ?? $idea->replies->count() }}</span>
                 </a>
                 <button type="button"
                         class="mic-action-btn-item mic-btn-share"

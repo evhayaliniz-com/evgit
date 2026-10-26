@@ -701,7 +701,7 @@ Route::middleware('lastSeen')->group(function () {
         // Servisler
         Route::resource('services', ServiceController::class)->except(['show']);
         Route::post('/services/image-upload', [ServiceController::class, 'imageUpload'])->name('services.image-upload');
-        Route::get('/services/{id}/status', [ServiceController::class, 'status'])->name('services.status');
+        Route::match(['get', 'post'], '/services/{id}/status', [ServiceController::class, 'status'])->name('services.status');
         Route::post('/services/{id}/update-price', [ServiceController::class, 'updatePrice'])->name('services.update-price');
         Route::post('/services/search', [ServiceController::class, 'search'])->name('services.search');
         Route::get('/services/rights/{id}', [ServiceController::class, 'getRights'])->name('services.rights');
@@ -772,7 +772,8 @@ Route::middleware('lastSeen')->group(function () {
 
     // Fikir İşlemleri
     Route::get('idea/list', [IdeaController::class, 'profileIndex'])->name('idea.profile.index')->middleware('auth');
-    Route::get('idea/{id}/status', [IdeaController::class, 'status'])->name('idea.profile.status')->middleware('auth');
+    Route::post('idea/list/search', [IdeaController::class, 'profileSearch'])->name('idea.profile.search')->middleware('auth');
+    Route::match(['get', 'post'], 'idea/{id}/status', [IdeaController::class, 'status'])->name('idea.profile.status')->middleware('auth');
     Route::resource('idea', IdeaController::class)->except(['index', 'show'])->middleware('auth');
     Route::get('/idea/like/{slug}', [IdeaController::class, 'ideaLike'])->middleware('auth')->name('like');
     Route::get('/idea/{slug}', [IdeaController::class, 'show'])->name('idea.show');

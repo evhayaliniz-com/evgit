@@ -147,24 +147,50 @@ class ServiceController extends Controller
     }
 
 
+    // Firmanın hizmet istatistiklerini hesapla
+    private function getCompanyServiceStats(int $companyId): array
+    {
+        $baseQuery = Service::where('company_id', $companyId);
+
+        return [
+            'total' => (clone $baseQuery)->count(),
+            'published' => (clone $baseQuery)->where('status', 1)->where('is_confirmed', 1)->count(),
+            'active' => (clone $baseQuery)->where('status', 1)->count(),
+            'pending' => (clone $baseQuery)->where('is_confirmed', 0)->count(),
+            'passive' => (clone $baseQuery)->where('status', 0)->count(),
+        ];
+    }
+
     // Firmanın kendi servislerini profilde listeleme
     public function index(Request $request)
     {
-        $query = Service::where('company_id', auth()->user()->company->id);
+        $companyId = auth()->user()->company->id;
+        $query = Service::where('company_id', $companyId);
 
         // Arama işlemi
-        if ($request->search) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+        if ($request->filled('search')) {
+            $searchTerm = trim($request->search);
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('id', $searchTerm);
+            });
         }
 
         // Durum filtreleme
-        if ($request->status && in_array($request->status, ['aktif', 'pasif'])) {
-            $status = $request->status == 'aktif' ? 1 : 0;
-            $query->where('status', $status);
+        if ($request->filled('status')) {
+            if ($request->status === 'aktif') {
+                $query->where('status', 1);
+            } elseif ($request->status === 'pasif') {
+                $query->where('status', 0);
+            } elseif ($request->status === 'onay_bekleyen') {
+                $query->where('is_confirmed', 0);
+            } elseif ($request->status === 'yayinda') {
+                $query->where('status', 1)->where('is_confirmed', 1);
+            }
         }
 
         // Sayfalama limiti
-        $perPage = $request->per_page && in_array($request->per_page, [10, 20, 50, 100]) ? $request->per_page : 20;
+        $perPage = $request->per_page && in_array((int) $request->per_page, [10, 20, 50, 100]) ? (int) $request->per_page : 20;
 
         // Sıralama işlemi
         $sortBy = $request->sort_by;
@@ -180,7 +206,7 @@ class ServiceController extends Controller
             ->with(['category', 'subCategory', 'province', 'district', 'photos']);
 
         // Sıralama uygula
-        if ($sortBy && in_array($sortBy, ['price', 'view_count', 'saved_count', 'created_at'])) {
+        if ($sortBy && in_array($sortBy, ['id', 'price', 'view_count', 'saved_count', 'created_at'])) {
             $services = $services->orderBy($sortBy, $sortOrder);
         } else {
             $services = $services->orderByDesc('id');
@@ -189,16 +215,16 @@ class ServiceController extends Controller
         $services = $services->paginate($perPage)
             ->withQueryString();
 
-        // Kaydetme sayısı artık withCount ile geliyor, manuel hesaplama gereksiz
+        $serviceStats = $this->getCompanyServiceStats($companyId);
 
-        return view('site.services.profile-index', compact('services'));
+        return view('site.services.profile-index', compact('services', 'serviceStats'));
     }
 
     public function updatePrice(Request $request, $id)
     {
         try {
             $request->validate([
-                'price' => 'required|numeric|min:0'
+                'price' => 'required|numeric|min:1'
             ]);
 
             $service = Service::whereId($id)->where('company_id', auth()->user()->company->id)->firstOrFail();
@@ -212,10 +238,14 @@ class ServiceController extends Controller
             $service->price = $request->price;
             $service->save();
 
+            // Cache'i temizle
+            CacheHelper::clearServiceCache();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Fiyat başarıyla güncellendi.',
-                'new_price' => number_format($request->price, 0, ',', '.')
+                'new_price' => number_format($service->price, 0, ',', '.'),
+                'raw_price' => intval($service->price)
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -227,21 +257,33 @@ class ServiceController extends Controller
 
     public function search(Request $request)
     {
-        $query = Service::where('company_id', auth()->user()->company->id);
+        $companyId = auth()->user()->company->id;
+        $query = Service::where('company_id', $companyId);
 
         // Arama işlemi
-        if ($request->search) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+        if ($request->filled('search')) {
+            $searchTerm = trim($request->search);
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('id', $searchTerm);
+            });
         }
 
         // Durum filtreleme
-        if ($request->status && in_array($request->status, ['aktif', 'pasif'])) {
-            $status = $request->status == 'aktif' ? 1 : 0;
-            $query->where('status', $status);
+        if ($request->filled('status')) {
+            if ($request->status === 'aktif') {
+                $query->where('status', 1);
+            } elseif ($request->status === 'pasif') {
+                $query->where('status', 0);
+            } elseif ($request->status === 'onay_bekleyen') {
+                $query->where('is_confirmed', 0);
+            } elseif ($request->status === 'yayinda') {
+                $query->where('status', 1)->where('is_confirmed', 1);
+            }
         }
 
         // Sayfalama limiti
-        $perPage = $request->per_page && in_array($request->per_page, [10, 20, 50, 100]) ? $request->per_page : 20;
+        $perPage = $request->per_page && in_array((int) $request->per_page, [10, 20, 50, 100]) ? (int) $request->per_page : 20;
 
         // Sıralama işlemi
         $sortBy = $request->sort_by;
@@ -257,21 +299,23 @@ class ServiceController extends Controller
             ->with(['category', 'subCategory', 'province', 'district', 'photos']);
 
         // Sıralama uygula
-        if ($sortBy && in_array($sortBy, ['price', 'view_count', 'saved_count', 'created_at'])) {
+        if ($sortBy && in_array($sortBy, ['id', 'price', 'view_count', 'saved_count', 'created_at'])) {
             $services = $services->orderBy($sortBy, $sortOrder);
         } else {
             $services = $services->orderByDesc('id');
         }
 
         $services = $services->paginate($perPage);
+        $services->withPath(route('company.services.index'));
 
-        // Kaydetme sayısı artık withCount ile geliyor, manuel hesaplama gereksiz
+        $serviceStats = $this->getCompanyServiceStats($companyId);
 
         return response()->json([
             'success' => true,
             'html' => view('site.services.partials.services-table', compact('services'))->render(),
             'pagination' => $services->links()->render(),
-            'total' => $services->total()
+            'total' => $services->total(),
+            'stats' => $serviceStats
         ]);
     }
 
@@ -663,45 +707,6 @@ class ServiceController extends Controller
                 ServiceImage::insert($photos);
             }
 
-            //            if (!empty($request->sub_categories)) {
-            //                $subCategories = [];
-            //                foreach ($request->sub_categories as $subCategory) {
-            //                    // Alt kategoriler seçilen üst kategoriye ait değilse hata mesajı döndürüyoruz.
-            //                    // Kategoriye aitse verileri array içerisinde tutuyoruz.
-            //
-            //                    if (!Category::whereId($subCategory)->where('parent_id', $request->category_id)->first()) {
-            //                        return redirect()->route('company.services.edit', $id)->withError('Kategori bulunamadı.');
-            //                    }
-            //
-            //                    $subCategories[] = ['category_id' => $subCategory, 'service_id' => $id];
-            //                }
-            //
-            //                // Alt kategorileri güncelliyoruz.
-            //                ServiceCategory::where('service_id', $id)->delete();
-            //                ServiceCategory::insert($subCategories);
-            //            }
-
-
-            // Diğer dosyalar dropzone ile yüklendiği için sadece isimlerini düzenleyip veritabanına ekliyoruz
-            $photos = [];
-            foreach (explode(',', $request->uploaded_files) as $photo) {
-                if ($photo) {
-                    $photos[] = ['path' => $photo, 'service_id' => $id];
-                    //                    "storage/services/$photo"
-                }
-            }
-
-
-            // Güncellemeden önce yüklenmiş olan ek dosyalar varsa yeni dosyalar ile beraber saklıyoruz
-            foreach (explode(',', $request->old_uploaded_files) as $photo2) {
-                if ($photo2) {
-                    $photos[] = ['path' => $photo2, 'service_id' => $id];
-                }
-            }
-
-            ServiceImage::where('service_id', $id)->delete();
-            ServiceImage::insert($photos);
-
             // Kategori parametrelerini güncelle (eğer tablo varsa)
             if ($request->has('parameters') && is_array($request->parameters)) {
                 // Tabloların varlığını kontrol et
@@ -791,12 +796,21 @@ class ServiceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        Service::whereId($id)->where('company_id', auth()->user()->company->id)->delete();
+        $companyId = auth()->user()->company->id;
+        Service::whereId($id)->where('company_id', $companyId)->delete();
 
         // Cache'i temizle
         CacheHelper::clearServiceCache();
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Hizmet başarıyla silindi.',
+                'stats' => $this->getCompanyServiceStats($companyId)
+            ]);
+        }
 
         return redirect()->route('company.services.index')->withSuccess('İşlem tamamlandı.');
     }
@@ -956,12 +970,26 @@ class ServiceController extends Controller
     }
 
 
-    public function status($id)
+    public function status(Request $request, $id)
     {
-        $services = Service::whereId($id)->where('company_id', auth()->user()->company->id)->firstOrFail();
+        $companyId = auth()->user()->company->id;
+        $services = Service::whereId($id)->where('company_id', $companyId)->firstOrFail();
 
         $services->status = $services->status ? 0 : 1;
         $services->save();
+
+        // Cache'i temizle
+        CacheHelper::clearServiceCache();
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'new_status' => (int) $services->status,
+                'is_confirmed' => (int) $services->is_confirmed,
+                'message' => $services->status ? 'Hizmet aktif edildi.' : 'Hizmet pasife alındı.',
+                'stats' => $this->getCompanyServiceStats($companyId)
+            ]);
+        }
 
         return redirect()->back()->withSuccess('İşlem Tamamlandı.');
     }

@@ -43,7 +43,7 @@
                     <div class="profili-duzenle-form">
                         <div class="pdf-form-right w-100">
                             <form action="{{route('company.services.update', $service->id)}}" method="POST"
-                                  enctype="multipart/form-data" onsubmit="checkFileUpload()">
+                                  enctype="multipart/form-data">
                                 @method('PUT')
                                 <x-input-error-site/>
 
@@ -65,7 +65,7 @@
                                         <select name="sub_category_id" class="form-select"
                                                 id="sub-category-select" required>
                                             @foreach(get_sub_categories($service->category_id) as $subCategory)
-                                                <option value="{{$subCategory->id}}" @selected($service->category_id == $subCategory->id)>
+                                                <option value="{{$subCategory->id}}" @selected($service->sub_category_id == $subCategory->id)>
                                                     {{$subCategory->name}}
                                                 </option>
                                             @endforeach
