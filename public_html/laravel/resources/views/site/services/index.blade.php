@@ -1298,6 +1298,30 @@
             height: 0 !important;
         }
 
+        /* JS yüklenmeden önce ham HTML select kutularının eski kutu olarak parlamasını (FOUC) kesinlikle engelle */
+        .services-mobile-scroll-track select.filter-select,
+        .services-toolbar .sort-selector-wrapper select.filter-select {
+            display: none !important;
+        }
+
+        /* Özel selectbox DOM'a yerleşene kadar buton yer tutucusu (Layout Shift ve sıçramayı engeller) */
+        .services-mobile-scroll-track .mobile-track-select-wrap:not(:has(.custom-select-wrapper)) {
+            display: inline-flex !important;
+            align-items: center !important;
+            height: 33px !important;
+            min-height: 33px !important;
+            min-width: 84px !important;
+            border-radius: 8px !important;
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            box-sizing: border-box !important;
+        }
+
+        body.dark .services-mobile-scroll-track .mobile-track-select-wrap:not(:has(.custom-select-wrapper)) {
+            background: #141b25 !important;
+            border-color: #334155 !important;
+        }
+
         /* Yatay Hızlı Filtre Çubuğu: Custom Select Elemanları */
         .services-mobile-scroll-track .mobile-track-select-wrap {
             flex-shrink: 0 !important;
@@ -4732,6 +4756,13 @@
             root.querySelectorAll('select.filter-select').forEach(select => {
                 initCustomSelect(select);
             });
+        }
+
+        // Sayfa HTML'i yukarıda zaten hazır olduğu için DOMContentLoaded beklemeden ilk custom select'leri hemen başlat (Zero-FOUC)
+        try {
+            initAllCustomSelects();
+        } catch (e) {
+            console.error('Custom select initialisation error:', e);
         }
 
         // Sayfa yüklendiğinde mevcut kullanıcı tercihlerini ve dinamik dinleyicileri bağla
