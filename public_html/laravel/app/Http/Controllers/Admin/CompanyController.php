@@ -457,37 +457,102 @@ class CompanyController extends Controller
 
     public function companiesIndex(Request $request)
     {
-        $companies = Company::query()->withCount(['ratings as average_rating' => function($query) {
-            $query->select(DB::raw('coalesce(avg(rating), 0)'));
-        }]);
+        $companies = Company::query()->withCount([
+            'ratings as average_rating' => function ($query) {
+                $query->where('is_approved', true)->select(DB::raw('coalesce(avg(rating), 0)'));
+            },
+            'ratings as ratings_count' => function ($query) {
+                $query->where('is_approved', true);
+            },
+        ]);
 
-
-        // Filtreleme işlemleri
-        if ($request->category) {
-            $companies = $companies->where('category_id', $request->category);
+        // 1. Kategori Filtresi
+        if ($request->filled('category')) {
+            $companies->where('category_id', $request->category);
         }
 
-        if ($request->sub_category) {
-            $companies = $companies->where('category_id', $request->category)->where('sub_category_id', $request->sub_category);
+        // 2. Alt Kategori Filtresi (Çoklu Seçim & Tekil Desteği)
+        if ($request->filled('sub_category')) {
+            $subCategoryInput = $request->sub_category;
+            if (is_string($subCategoryInput) && str_contains($subCategoryInput, ',')) {
+                $subCategoryIds = explode(',', $subCategoryInput);
+            } else {
+                $subCategoryIds = is_array($subCategoryInput) ? $subCategoryInput : [$subCategoryInput];
+            }
+            $subCategoryIds = array_values(array_filter(array_map('intval', $subCategoryIds)));
+
+            if (!empty($subCategoryIds)) {
+                $companies->whereIn('sub_category_id', $subCategoryIds);
+            }
         }
 
-        if ($request->province) {
-            $companies = $companies->where('province', $request->province);
+        // 3. İl (Şehir) Filtresi
+        if ($request->filled('province')) {
+            $companies->where('province', $request->province);
         }
 
-        if ($request->district) {
-            $companies = $companies->where('province', $request->province)->where('district', $request->district);
+        // 4. İlçe Filtresi (Çoklu Seçim & Tekil Desteği)
+        if ($request->filled('district')) {
+            $districtInput = $request->district;
+            if (is_string($districtInput) && str_contains($districtInput, ',')) {
+                $districtIds = explode(',', $districtInput);
+            } else {
+                $districtIds = is_array($districtInput) ? $districtInput : [$districtInput];
+            }
+            $districtIds = array_values(array_filter(array_map('intval', $districtIds)));
+
+            if (!empty($districtIds)) {
+                $companies->whereIn('district', $districtIds);
+            }
         }
 
-        if ($request->q) {
-            $companies = $companies->where('name', 'LIKE', '%' . $request->q . '%');
+        // 5. Firma Durumu (Onaylı / Standart) Filtresi
+        if ($request->filled('is_verified') && in_array((string) $request->is_verified, ['1', '0'], true)) {
+            $companies->where('is_verified', (int) $request->is_verified);
         }
 
-        $companyCount = $companies->active()->count();
+        // 6. Kelime ile Arama (Firma Adı veya Hakkında)
+        if ($request->filled('q')) {
+            $searchTerm = trim($request->q);
+            $companies->where(function ($query) use ($searchTerm) {
+                $query->where('name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('about', 'LIKE', '%' . $searchTerm . '%');
+            });
+        }
+
+        $companyCount = (clone $companies)->active()->count();
+
+        // 7. Akıllı Sıralama Seçenekleri
+        switch ($request->order_by) {
+            case 'rating_desc':
+                $companies->orderByDesc('average_rating')->orderByDesc('ratings_count')->orderByDesc('id');
+                break;
+
+            case 'reviews_desc':
+                $companies->orderByDesc('ratings_count')->orderByDesc('average_rating')->orderByDesc('id');
+                break;
+
+            case 'verified_desc':
+                $companies->orderByDesc('is_verified')->orderByDesc('average_rating')->orderByDesc('id');
+                break;
+
+            case 'name_asc':
+                $companies->orderBy('name', 'ASC');
+                break;
+
+            case 'oldest':
+                $companies->orderBy('id', 'ASC');
+                break;
+
+            default:
+                $companies->orderByDesc('id');
+                break;
+        }
+
         $companies = $companies->active()
             ->with(['ratings', 'provinceInfo', 'districtInfo', 'category', 'subCategory'])
-            ->orderByDesc('id')
-            ->paginate(16);
+            ->paginate(20)
+            ->withQueryString();
 
         return view('site.company.index', compact('companyCount', 'companies'));
     }
