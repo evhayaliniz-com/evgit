@@ -5,8 +5,31 @@
   /* ==========================================================================
      Modern Service Detail Page (Desktop 2-Column & Mobile Half-Screen Redesign)
      ========================================================================== */
+  body > .container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  body > .container-fluid > .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .main,
+  .main.sidebar {
+    transition: padding-left 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
   .main.sidebar {
     padding-left: 0 !important;
+  }
+
+  #index-right-area {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
   }
 
   .plus {

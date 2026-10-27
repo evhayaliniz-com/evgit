@@ -1,6 +1,6 @@
 @php
     $isHome = Route::is('site.home');
-    $isExcludedRoute = Route::is('company.profile.edit') 
+    $isMiniSidebarExcluded = Route::is('company.profile.edit') 
         || Route::is('user.profile.edit') 
         || Route::is('company.services.create')
         || Route::is('company.services.edit') 
@@ -10,6 +10,19 @@
         || Route::is('password.request') 
         || Route::is('password.reset')
         || Route::is('idea.show') 
+        || Route::is('payment.index')
+        || Route::is('services.index') 
+        || Route::is('idea.index') 
+        || Route::is('companies.index');
+
+    $isFullSidebarExcluded = Route::is('company.profile.edit') 
+        || Route::is('user.profile.edit') 
+        || Route::is('company.services.create')
+        || Route::is('company.services.edit') 
+        || Route::is('idea.create') 
+        || Route::is('idea.edit')
+        || Route::is('password.request') 
+        || Route::is('password.reset')
         || Route::is('payment.index');
 @endphp
 
@@ -21,7 +34,7 @@
 {{-- =========================================================================
      1. MİNİ SİDEBAR (DESKTOP COLLAPSED / DARALTILMIŞ MENÜ - 76px)
      ========================================================================= --}}
-<aside class="menu-min-web modern-mini-sidebar @if(!$isHome) menumin-mobil-hide show @endif @if($isExcludedRoute || Route::is('services.index') || Route::is('idea.index') || Route::is('companies.index')) d-none @endif" id="menu-min-web" aria-label="Kompakt Menü">
+<aside class="menu-min-web modern-mini-sidebar @if(!$isHome) menumin-mobil-hide show @endif @if($isMiniSidebarExcluded) d-none @endif" id="menu-min-web" aria-label="Kompakt Menü">
     <div class="mini-sidebar-inner">
         {{-- Üst Navigasyon İkonları --}}
         <div class="menu-min-top">
@@ -90,7 +103,7 @@
 {{-- =========================================================================
      2. GENİŞLETİLMİŞ SİDEBAR & MOBİL OFFCANVAS DRAWER (250px)
      ========================================================================= --}}
-<div class="web-menu-col modern-sidebar-col @if(!$isHome) menuminshow hide @endif @if($isExcludedRoute) d-none @endif" id="menu-trigger-web">
+<div class="web-menu-col modern-sidebar-col @if(!$isHome) menuminshow hide @endif @if($isFullSidebarExcluded) d-none @endif" id="menu-trigger-web">
     <aside class="index-menu-fixed modern-sidebar-panel" id="modern-sidebar-panel" aria-label="Ana Menü">
         
         {{-- Mobil Başlık Alanı (Sadece < 992px ekranlarda görünür) --}}
